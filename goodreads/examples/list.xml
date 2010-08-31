@@ -1,0 +1,1552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GoodreadsResponse>
+        <Request>
+                <authentication>true</authentication>
+                                <key><![CDATA[TLey0TZmYGr63axfIJZEQA]]></key>
+                    <method><![CDATA[author_list]]></method>
+        </Request>
+        <author>
+  <id>1221</id>
+  <name><![CDATA[Ted O'Hare]]></name>
+  <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    
+  <books start="1" end="48" total="48">
+        <book>
+  <id type="integer">3685266</id>
+  <isbn>1595151494</isbn>
+  <isbn13>9781595151490</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Rattlesnakes]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1266825837m/3685266.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1266825837s/3685266.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/3685266.Rattlesnakes</link>
+  <num_pages>24</num_pages>
+  <average_rating>3.00</average_rating>
+  <ratings_count>1</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2004</published>
+</book>
+
+
+        <book>
+  <id type="integer">5389003</id>
+  <isbn>1595153047</isbn>
+  <isbn13>9781595153043</isbn13>
+  <text_reviews_count type="integer">1</text_reviews_count>
+  <title>
+    <![CDATA[Vanishing Rain Forest]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/5389003-vanishing-rain-forest</link>
+  <num_pages>24</num_pages>
+  <average_rating>3.00</average_rating>
+  <ratings_count>1</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197262</id>
+  <isbn>1595156887</isbn>
+  <isbn13>9781595156884</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Insectos]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197262.Insectos</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2006</published>
+</book>
+
+
+        <book>
+  <id type="integer">6825040</id>
+  <isbn>1424213460</isbn>
+  <isbn13>9781424213467</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Cesar Chavez]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6825040-cesar-chavez</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">4442806</id>
+  <isbn>1595156313</isbn>
+  <isbn13>9781595156310</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Invertebrados: Invertebrates]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/4442806-invertebrados</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">7975137</id>
+  <isbn>1424214114</isbn>
+  <isbn13>9781424214112</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Sharp Teeth]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/7975137-sharp-teeth</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">617512</id>
+  <isbn>1595153039</isbn>
+  <isbn13>9781595153036</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Rain Forest At Night]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/617512.Rain_Forest_At_Night</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">5861551</id>
+  <isbn>1424213487</isbn>
+  <isbn13>9781424213481</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Henry Ford]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/5861551-henry-ford</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">4634994</id>
+  <isbn>1595156305</isbn>
+  <isbn13>9781595156303</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Insectos: Insects]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/4634994-insectos</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">3514712</id>
+  <isbn>1595156321</isbn>
+  <isbn13>9781595156327</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Mamiferos: Mammals]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/3514712.Mamiferos</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">5123162</id>
+  <isbn>159515633X</isbn>
+  <isbn13>9781595156334</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Reptiles: Reptiles]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/5123162-reptiles</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">1300360</id>
+  <isbn>1595156925</isbn>
+  <isbn13>9781595156921</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Vertebrados]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1182605625m/1300360.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1182605625s/1300360.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1300360.Vertebrados</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155620</id>
+  <isbn>1595153128</isbn>
+  <isbn13>9781595153128</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Pythons]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155620-pythons</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155621</id>
+  <isbn>142421386X</isbn>
+  <isbn13>9781424213863</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Tundra]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155621-tundra</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155622</id>
+  <isbn>0613839110</isbn>
+  <isbn13>9780613839112</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Weather & Us]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155622-weather-us</link>
+  <num_pages></num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2003</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155623</id>
+  <isbn>1595156844</isbn>
+  <isbn13>9781595156846</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Que Es Un Animal? Set]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155623-que-es-un-animal-set</link>
+  <num_pages></num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155624</id>
+  <isbn>1604720867</isbn>
+  <isbn13>9781604720860</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Insectos / Insects]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155624-insectos-insects</link>
+  <num_pages></num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2008</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197256</id>
+  <isbn>1595157352</isbn>
+  <isbn13>9781595157355</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Reptiles]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1181803002m/1197256.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1181803002s/1197256.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197256.Reptiles</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155626</id>
+  <isbn>1595156267</isbn>
+  <isbn13>9781595156266</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[What Is an Animal? Discovery Library]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155626-what-is-an-animal-discovery-library</link>
+  <num_pages>192</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197257</id>
+  <isbn>1595156895</isbn>
+  <isbn13>9781595156891</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Los Invertebrados]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1181803004m/1197257.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1181803004s/1197257.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197257.Los_Invertebrados</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197259</id>
+  <isbn>1589525728</isbn>
+  <isbn13>9781589525726</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Storms: Weather Report]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197259.Storms</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2002</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197260</id>
+  <isbn>1595151532</isbn>
+  <isbn13>9781595151537</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[People of the Rain Forest]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1266742044m/1197260.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1266742044s/1197260.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197260.People_of_the_Rain_Forest</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2004</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155629</id>
+  <isbn>1424214009</isbn>
+  <isbn13>9781424214006</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Earthquakes]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155629-earthquakes</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197261</id>
+  <isbn>1595151540</isbn>
+  <isbn13>9781595151544</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Plants of the Rain Forest: Rain Forests Today]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1266742045m/1197261.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1266742045s/1197261.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197261.Plants_of_the_Rain_Forest</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2004</published>
+</book>
+
+
+        <book>
+  <id type="integer">6825038</id>
+  <isbn>1424214068</isbn>
+  <isbn13>9781424214068</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Useful Tails]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6825038-useful-tails</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197263</id>
+  <isbn>1589525736</isbn>
+  <isbn13>9781589525733</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Studying Weather: Weather Report]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197263.Studying_Weather</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2002</published>
+</book>
+
+
+        <book>
+  <id type="integer">3914458</id>
+  <isbn>1595154159</isbn>
+  <isbn13>9781595154156</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Amphibians]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1267046384m/3914458.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1267046384s/3914458.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/3914458-amphibians</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2006</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197264</id>
+  <isbn>1595151559</isbn>
+  <isbn13>9781595151551</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Rain Forest at Night: Rain Forests Today]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1266742047m/1197264.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1266742047s/1197264.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197264.Rain_Forest_at_Night</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2004</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155633</id>
+  <isbn>061394402X</isbn>
+  <isbn13>9780613944021</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Rain, Snow & Ice]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155633-rain-snow-ice</link>
+  <num_pages></num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2003</published>
+</book>
+
+
+        <book>
+  <id type="integer">1197265</id>
+  <isbn>1589527690</isbn>
+  <isbn13>9781589527690</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Clouds]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1197265.Clouds</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2003</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155635</id>
+  <isbn>0613944038</isbn>
+  <isbn13>9780613944038</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Storms]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155635-storms</link>
+  <num_pages></num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2003</published>
+</book>
+
+
+        <book>
+  <id type="integer">6155636</id>
+  <isbn>1595151435</isbn>
+  <isbn13>9781595151438</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Boas]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1266543241m/6155636.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1266543241s/6155636.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6155636-boas</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2004</published>
+</book>
+
+
+        <book>
+  <id type="integer">1300361</id>
+  <isbn>1595157336</isbn>
+  <isbn13>9781595157331</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Invertebrates]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1300361.Invertebrates</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">1827</id>
+  <isbn>1595152997</isbn>
+  <isbn13>9781595152992</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Amazing Rain Forest]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/1827.Amazing_Rain_Forest</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2004</published>
+</book>
+
+
+        <book>
+  <id type="integer">4379593</id>
+  <isbn>1424213517</isbn>
+  <isbn13>9781424213511</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Thomas Edison]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/4379593-thomas-edison</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">4333179</id>
+  <isbn>1595154183</isbn>
+  <isbn13>9781595154187</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Insects]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1266665957m/4333179.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1266665957s/4333179.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/4333179-insects</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">9049140</id>
+  <isbn>159515728X</isbn>
+  <isbn13>9781595157287</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[What Is an Animal? Set]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/9049140-what-is-an-animal-set</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">9049142</id>
+  <isbn>1595154213</isbn>
+  <isbn13>9781595154217</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Reptiles]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/9049142-reptiles</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">5389004</id>
+  <isbn>1595151567</isbn>
+  <isbn13>9781595151568</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Vanishing Rain Forests: Rain Forests Today]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1267415805m/5389004.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1267415805s/5389004.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/5389004-vanishing-rain-forests</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2004</published>
+</book>
+
+
+        <book>
+  <id type="integer">4986692</id>
+  <isbn>1595156348</isbn>
+  <isbn13>9781595156341</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Vertebrados: Vertebrates]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1267239633m/4986692.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1267239633s/4986692.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/4986692-vertebrados</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">3853245</id>
+  <isbn>1595156283</isbn>
+  <isbn13>9781595156280</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Aves: Birds]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1266987754m/3853245.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1266987754s/3853245.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/3853245-aves</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">3632491</id>
+  <isbn>1595154205</isbn>
+  <isbn13>9781595154200</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Mammals]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1266776082m/3632491.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1266776082s/3632491.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/3632491.Mammals</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">3986451</id>
+  <isbn>1595154175</isbn>
+  <isbn13>9781595154170</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Fish]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1267115703m/3986451.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1267115703s/3986451.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/3986451-fish</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2006</published>
+</book>
+
+
+        <book>
+  <id type="integer">4933208</id>
+  <isbn>1595154167</isbn>
+  <isbn13>9781595154163</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Birds]]>
+  </title>
+  <image_url>http://photo.goodreads.com/books/1267037644m/4933208.jpg</image_url>
+  <small_image_url>http://photo.goodreads.com/books/1267037644s/4933208.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/4933208-birds</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2005</published>
+</book>
+
+
+        <book>
+  <id type="integer">6825033</id>
+  <isbn>1424213827</isbn>
+  <isbn13>9781424213825</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Coral Reefs]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6825033-coral-reefs</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">6825034</id>
+  <isbn>142421405X</isbn>
+  <isbn13>9781424214051</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Wildfires]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6825034-wildfires</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">6825035</id>
+  <isbn>1424213851</isbn>
+  <isbn13>9781424213856</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Rain Forests]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6825035-rain-forests</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+        <book>
+  <id type="integer">6825036</id>
+  <isbn>1424213835</isbn>
+  <isbn13>9781424213832</isbn13>
+  <text_reviews_count type="integer">0</text_reviews_count>
+  <title>
+    <![CDATA[Deserts]]>
+  </title>
+  <image_url>http://www.goodreads.com/images/nocover-111x148.jpg</image_url>
+  <small_image_url>http://www.goodreads.com/images/nocover-60x80.jpg</small_image_url>
+  <link>http://www.goodreads.com/book/show/6825036-deserts</link>
+  <num_pages>24</num_pages>
+  <average_rating>0.0</average_rating>
+  <ratings_count>0</ratings_count>
+  <description>
+    <![CDATA[]]>
+  </description>
+<authors>
+    <author>
+    <id>1221</id>
+        <name><![CDATA[Ted O'Hare]]></name>
+    <image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-200x266.jpg]]></image_url>
+    <small_image_url><![CDATA[http://www.goodreads.com/images/nophoto/nophoto-U-50x66.jpg]]></small_image_url>
+    <link><![CDATA[http://www.goodreads.com/author/show/1221.Ted_O_Hare]]></link>
+    <average_rating>3.00</average_rating>
+    <ratings_count>2</ratings_count>
+    <text_reviews_count>1</text_reviews_count>
+  </author>
+  </authors>  <published>2007</published>
+</book>
+
+
+      </books>
+</author>
+</GoodreadsResponse>
