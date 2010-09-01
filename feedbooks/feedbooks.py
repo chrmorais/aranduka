@@ -19,17 +19,22 @@ class Catalog(QtGui.QDialog):
         for entry in data.entries:
             i = QtGui.QTreeWidgetItem(parent, [entry.title])
             i.url = entry.links[0].href
-            #self.catalog.addTopLevelItem(i)
-
-    def on_catalog_itemActivated(self, item, column):
-        url=getattr(item,'url',None)
-        if url:
-            if url.split('/')[-1].isdigit():
+            if i.url.split('/')[-1].isdigit():
                 # It's a book
-                self.web.load(QtCore.QUrl(url))
+                i.setChildIndicatorPolicy(i.DontShowIndicator)
             else:
                 # It's a catalog
-                self.addBranch(item, url)
+                i.setChildIndicatorPolicy(i.ShowIndicator)
+
+    def on_catalog_itemExpanded(self, item):
+        if item.childCount()==0:
+            self.addBranch(item, item.url)
+
+    def on_catalog_itemActivated(self, item, column):
+        url=item.url
+        if url.split('/')[-1].isdigit():
+            # It's a book
+            self.web.load(QtCore.QUrl(url))
         
 def main():
     app = QtGui.QApplication(sys.argv)
