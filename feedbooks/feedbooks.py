@@ -24,7 +24,12 @@ class Catalog(QtGui.QDialog):
     def on_catalog_itemActivated(self, item, column):
         url=getattr(item,'url',None)
         if url:
-            self.addBranch(item, url)
+            if url.split('/')[-1].isdigit():
+                # It's a book
+                self.web.load(QtCore.QUrl(url))
+            else:
+                # It's a catalog
+                self.addBranch(item, url)
         
 def main():
     app = QtGui.QApplication(sys.argv)
