@@ -59,6 +59,28 @@ class GoodReadsClient():
                             access_token['oauth_token_secret'])
         return token
 
+    def users_shelf(self, user_id, page=1):
+        """Lists shelves for a user
+        
+        url: http://www.goodreads.com/shelf/list.xml   (sample url) 
+        http method: GET 
+        params:
+         * user_id: Goodreads user id
+         * page: 1-N (default 1)"""
+        
+        body = urllib.urlencode({'key': self.key,
+                                 'user_id': user_id,
+                                 'page': page})
+        headers = {'content-type': 'application/x-www-form-urlencoded'}
+        response, content = self.client.request('%s/shelf/list.xml' % self.url,
+                                                'GET', body, headers)
+        import ipdb;ipdb.set_trace()
+
+        if response['status'] != '200':
+            raise Exception('Cannot create resource: %s' % response['status'])
+        else:
+            return response, content
+
     def authors_books(self, id, page=1):
         """Get an xml file with a paginated list of an authors books.
         
@@ -78,3 +100,7 @@ class GoodReadsClient():
             raise Exception('Cannot create resource: %s' % response['status'])
         else:
             return response, content
+
+
+    def generic_request(self, url_method, args):
+        """"""
