@@ -1,6 +1,6 @@
 from feedparser import parse
 from PyQt4 import QtGui, QtCore, uic
-import sys, os
+import sys, os, pprint
 
 # This gets the main catalog from manybooks.
 
@@ -16,27 +16,34 @@ class Catalog(QtGui.QDialog):
 
     def addBranch(self, parent, url):
         data = parse(url)
-        print data
+        print pprint.pprint(data)
         print '--------------'
         for entry in data.entries:
+            book = False
+            for l in entry.links:
+                if l.rel == u'http://opds-spec.org/acquisition':
+                    book = True
             i = QtGui.QTreeWidgetItem(parent, [entry.title])
             i.url = entry.links[0].href
-            if i.url.split('/')[-1].isdigit():
+            if book:
                 # It's a book
                 i.setChildIndicatorPolicy(i.DontShowIndicator)
+                i.__entry = entry
             else:
                 # It's a catalog
                 i.setChildIndicatorPolicy(i.ShowIndicator)
+                i.__entry = None
 
     def on_catalog_itemExpanded(self, item):
         if item.childCount()==0:
             self.addBranch(item, item.url)
 
     def on_catalog_itemActivated(self, item, column):
-        url=item.url
-        if url.split('/')[-1].isdigit():
+        if item.__entry:
             # It's a book
-            self.web.load(QtCore.QUrl(url))
+            self.web.setHtml(str(item.__entry))
+        else:
+            self.web.setHtml("")
         
 def main():
     app = QtGui.QApplication(sys.argv)
