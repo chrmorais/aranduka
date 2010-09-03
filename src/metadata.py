@@ -12,13 +12,13 @@ def get_metadata(query, service='google_books'):
     if service == 'google_books':
         result = google_books.search(query)
         if result.entry:
-            datos = result.entry[0].to_dict()
-            return BookMetadata(title=datos['title'],
-                                thumbnail=datos['thumbnail'],
-                                date=datos['date'],
-                                subjects=datos['subjects'],
-                                authors=datos['authors'],
-                                description=datos['description'])
+            data = result.entry[0].to_dict()
+            return BookMetadata(title=data['title'],
+                                thumbnail=data['thumbnail'],
+                                date=data['date'],
+                                subjects=data['subjects'],
+                                authors=data['authors'],
+                                description=data['description'])
         else:
             return None
     elif service == 'service_x':
