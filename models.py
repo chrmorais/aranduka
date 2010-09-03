@@ -38,6 +38,6 @@ class File (Entity):
     file_size = Field(Unicode(30))
     book = ManyToOne('Book')
 
-    def _repr__(self):
+    def __repr__(self):
         return '<file>%s</file>' %(self.file_name)
 
