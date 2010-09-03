@@ -14,7 +14,7 @@ class GBooks(QtGui.QMainWindow, form_class):
         super(GBooks, self).__init__(*args)
         self.setupUi(self)
         
-    def buscarLibro():
+    def buscarLibro(self):
         """
         Busca un libro por ISBN en GoogleBooks y devuelve un dict con todos los datos.
         """
@@ -25,8 +25,8 @@ class GBooks(QtGui.QMainWindow, form_class):
 
     def on_actionBuscarLibro_triggered(self, checked = None):
         if checked == None: return
-        datos = buscarLibro()
-        if resultado:
+        datos = self.buscarLibro()
+        if datos:
             self.tituloLibro.setText(datos['title'])
             self.fechaLibro.setText(datos['date'])
             self.generosLibro.setText(', '.join(datos['subjects']))
