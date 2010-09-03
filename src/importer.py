@@ -18,6 +18,10 @@ def import_file(fname):
     the database with metadata from Google"""
     
     print fname
+    extension = fname.split('.')[-1].lower()
+    if extension not in ['fb2','mobi','pdf','txt','lit','html']:
+        print "Not an ebook"
+        return 
     f = models.File.get_by(file_name = fname)
     if f:
         # Already imported
@@ -26,22 +30,29 @@ def import_file(fname):
     # First try the clean name as-is
     data={}
     try:
+        print "Fetching"
         data = get_metadata('TITLE ' + p)
+        print data
+        print '--------------\n\n'
+        time.sleep(2)
     except Exception, e:
         print e
     if data:
-        # FIXME: should check by other identifier?
-        b = models.Book.get_by(title = data.title)
-        if not b:
-            # TODO: add more metadata
-            b = models.Book(
-                title = data.title,
-            )
-        f = models.File(file_name=fname, book=b)
-        models.session.commit()
-    else:
-        #TODO Keep trying in other ways
-        print 'No data'
+        # Does it look valid?
+        if data.title.lower() in p:
+
+            # FIXME: should check by other identifier?
+            b = models.Book.get_by(title = data.title)
+            if not b:
+                # TODO: add more metadata
+                b = models.Book(
+                    title = data.title,
+                )
+            f = models.File(file_name=fname, book=b)
+            models.session.commit()
+            return
+    #TODO Keep trying in other ways
+    print 'No data, or it looks bad'
 
 def import_folder(dname):
     """Given a folder, imports all files recursively"""
@@ -50,7 +61,6 @@ def import_folder(dname):
         for fname in data[2]:
             fullpath = os.path.join(data[0],fname)
             import_file(fullpath)
-            time.sleep(2)
 
 def main():
     if len(sys.argv) < 2:
