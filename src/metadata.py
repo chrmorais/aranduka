@@ -1,6 +1,5 @@
 import collections
 import gdata.books.service
-import sys
 
 BookMetadata = collections.namedtuple('BookMetadata', 'title thumbnail date subjects authors description')
 
