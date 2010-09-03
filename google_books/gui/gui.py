@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin -*-
 
-import sys
+import sys, urllib2
 from PyQt4 import QtCore, QtGui, uic
 from gdata.books.service import BookService
 servicio = BookService()
@@ -26,6 +26,9 @@ class GBooks(QtGui.QMainWindow, form_class):
     def on_actionBuscarLibro_triggered(self, checked = None):
         if checked == None: return
         datos = self.buscarLibro()
+        identifiers = dict(datos['identifiers'])
+        print datos['identifiers']
+        print identifiers
         if datos:
             self.tituloLibro.setText(datos['title'])
             self.fechaLibro.setText(datos['date'])
@@ -35,15 +38,15 @@ class GBooks(QtGui.QMainWindow, form_class):
             
             #Merengue para bajar la thumbnail porque QPixmap
             #no levanta desde una url :(
-            #urlImg = QtCore.QUrl(datos['thumbnail'])
-            #http = QtCore.QHttp( urlImg.host() )
-            #tmpFile = QtCore.QTemporaryFile()
-            #http.get(urlImg.path(),tmpFile)
-            #self.tapaLibro.setPixmap(QtGui.QPixmap(tmpFile.fileName()))
-            #http.close()
-            #tmpFile.close()
+
+            thumbdata = urllib2.urlopen('http://covers.openlibrary.org/b/isbn/%s-M.jpg'%identifiers['ISBN']).read()
+            thumb = QtGui.QPixmap()
+            # FIXME: en realidad habría que guardarlo
+            thumb.loadFromData(thumbdata)
+            self.tapaLibro.setPixmap(thumb)
+            
         else:
-            print 'No encotre ese ISBN :('
+            print 'No encontre ese ISBN :('
 
 
 if __name__ == '__main__':
