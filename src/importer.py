@@ -26,12 +26,15 @@ def import_file(fname):
     print p
     data = get_metadata('TITLE ' + p)
     if data:
-        if not f:
+        # FIXME: should check by other identifier?
+        b = models.Book.get_by(title = data.title)
+        if not b:
+            # TODO: add more metadata
             b = models.Book(
                 title = data.title,
             )
-            f = models.File(file_name=fname, book=b)
-            models.session.commit()
+        f = models.File(file_name=fname, book=b)
+        models.session.commit()
     else:
         #TODO Keep trying in other ways
         print 'No data'
