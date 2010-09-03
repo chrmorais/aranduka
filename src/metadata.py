@@ -1,6 +1,6 @@
 import collections
 import gdata.books.service
-
+import sys
 
 BookMetadata = collections.namedtuple('BookMetadata', 'title thumbnail date subjects authors description')
 
@@ -14,8 +14,16 @@ def get_metadata(query, service='google_books'):
         result = google_books.search(query)
         if result.entry:
             datos = result.entry[0].to_dict()
-            return BookMetadata(**datos)
+            return BookMetadata(title=datos['title'],
+                                thumbnail=datos['thumbnail'],
+                                date=datos['date'],
+                                subjects=datos['subjects'],
+                                authors=datos['authors'],
+                                description=datos['description'])
         else:
             return None
     elif service == 'service_x':
         return None
+
+
+
