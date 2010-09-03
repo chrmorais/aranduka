@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+from models import *
 
 def createDataBase():
-    if os.path.isfile("./books.sqlite"):
-        prints "looks like the database all ready exists."
+    setup_all()
+    if os.path.isfile("books.sqlite"):
+        print "looks like the database all ready exists."
         return False
     print "This file will create the schema"
 
-    from models import *
-    setup_all()
     create_all()
     return True
 
