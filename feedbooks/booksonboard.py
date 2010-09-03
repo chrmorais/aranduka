@@ -41,7 +41,12 @@ class Catalog(QtGui.QDialog):
     def on_catalog_itemActivated(self, item, column):
         if item.__entry:
             # It's a book
-            self.web.setHtml(str(item.__entry))
+            self.web.setHtml("""
+            <h1>%s</h1>
+            %s
+            """%(item.__entry.title,
+            item.__entry.subtitle,
+            ))
         else:
             self.web.setHtml("")
         
