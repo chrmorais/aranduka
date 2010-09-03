@@ -51,7 +51,10 @@ def import_file(fname):
             models.session.commit()
             return
     #TODO Keep trying in other ways
-    print 'No data, or it looks bad'
+    print 'Importing as-is'
+    b = models.Book.get_by(title = p)
+    f = models.File(file_name=fname, book=b)
+    models.session.commit()
 
 def import_folder(dname):
     """Given a folder, imports all files recursively"""
