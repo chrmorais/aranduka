@@ -14,7 +14,7 @@ def get_metadata(query, service='google_books'):
         if result.entry:
             data = result.entry[0].to_dict()
             return BookMetadata(title=data['title'],
-                                thumbnail=data['thumbnail'],
+                                thumbnail=data.get('thumbnail',''),
                                 date=data['date'],
                                 subjects=data.get('subjects',[]),
                                 authors=data.get('authors',[]),
