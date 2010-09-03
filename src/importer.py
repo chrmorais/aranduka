@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, time
 
 from create_schema import createDataBase
 import models
@@ -17,14 +17,17 @@ def import_file(fname):
     """Given a filename, tries to import it into
     the database with metadata from Google"""
     
+    print fname
     f = models.File.get_by(file_name = fname)
     if f:
         # Already imported
         return
     p = clean_name(fname)
     # First try the clean name as-is
-    print p
-    data = get_metadata('TITLE ' + p)
+    try:
+        data = get_metadata('TITLE ' + p)
+    except Exception, e:
+        print e
     if data:
         # FIXME: should check by other identifier?
         b = models.Book.get_by(title = data.title)
@@ -46,6 +49,7 @@ def import_folder(dname):
         for fname in data[2]:
             fullpath = os.path.join(data[0],fname)
             import_file(fullpath)
+            time.sleep(10)
 
 def main():
     if len(sys.argv) < 2:

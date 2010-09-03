@@ -7,7 +7,7 @@
 from elixir import *
 
 metadata.bind = "sqlite:///books.sqlite"
-metadata.bind.echo = True
+metadata.bind.echo = False
 
 class Book (Entity):
     title = Field(Unicode(40))
