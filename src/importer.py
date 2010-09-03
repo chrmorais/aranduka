@@ -24,6 +24,7 @@ def import_file(fname):
         return
     p = clean_name(fname)
     # First try the clean name as-is
+    data={}
     try:
         data = get_metadata('TITLE ' + p)
     except Exception, e:
@@ -49,7 +50,7 @@ def import_folder(dname):
         for fname in data[2]:
             fullpath = os.path.join(data[0],fname)
             import_file(fullpath)
-            time.sleep(10)
+            time.sleep(2)
 
 def main():
     if len(sys.argv) < 2:
