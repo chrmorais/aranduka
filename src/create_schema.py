@@ -7,7 +7,7 @@ from models import *
 def createDataBase():
     setup_all()
     if os.path.isfile("books.sqlite"):
-        print "looks like the database all ready exists."
+        print "looks like the database already exists."
         return False
     print "This file will create the schema"
 
