@@ -16,9 +16,9 @@ def get_metadata(query, service='google_books'):
             return BookMetadata(title=data['title'],
                                 thumbnail=data['thumbnail'],
                                 date=data['date'],
-                                subjects=data['subjects'],
-                                authors=data['authors'],
-                                description=data['description'])
+                                subjects=data.get('subjects',[]),
+                                authors=data.get('authors',[]),
+                                description=data.get('description',''))
         else:
             return None
     elif service == 'service_x':
