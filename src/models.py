@@ -34,7 +34,7 @@ class Tag (Entity):
         return '<tag>%s: %s</Tag>' % (self.name, self.value)
 
 class File (Entity):
-    file_name = Field(Unicode(30))
+    file_name = Field(Unicode(300))
     file_size = Field(Unicode(30))
     book = ManyToOne('Book')
 
