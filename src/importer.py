@@ -17,16 +17,21 @@ def import_file(fname):
     """Given a filename, tries to import it into
     the database with metadata from Google"""
     
+    f = models.File.get_by(file_name = fname)
+    if f:
+        # Already imported
+        return
     p = clean_name(fname)
     # First try the clean name as-is
     print p
     data = get_metadata('TITLE ' + p)
     if data:
-        b = models.Book(
-            title = data.title,
-        )
-        f = models.File(file_name=fname, book=b)
-        models.session.commit()
+        if not f:
+            b = models.Book(
+                title = data.title,
+            )
+            f = models.File(file_name=fname, book=b)
+            models.session.commit()
     else:
         #TODO Keep trying in other ways
         print 'No data'
