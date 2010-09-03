@@ -28,19 +28,17 @@ def import_file(fname):
         return
     p = clean_name(fname)
     # First try the clean name as-is
-    data={}
+    metadata=[]
     try:
         print "Fetching"
-        data = get_metadata('TITLE ' + p)
-        print data
-        print '--------------\n\n'
+        metadata = get_metadata('TITLE ' + p) or []
+        print "Candidates:", [d.title for d in metadata]
         time.sleep(2)
     except Exception, e:
         print e
-    if data:
+    for data in metadata:
         # Does it look valid?
         if data.title.lower() in p:
-
             # FIXME: should check by other identifier?
             b = models.Book.get_by(title = data.title)
             if not b:
@@ -48,6 +46,7 @@ def import_file(fname):
                 b = models.Book(
                     title = data.title,
                 )
+            print "Accepted: ", data.title
             f = models.File(file_name=fname, book=b)
             models.session.commit()
             return
