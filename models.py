@@ -11,24 +11,41 @@ metadata.bind.echo = True
 
 class Book (Entity):
     title = Field(Unicode(40))
-    author = Field(Unicode(40))
-    serie_number = Field(Unicode(40))
     volumen = Field(Integer)
     url = Field(Unicode(40))
     cover = Field(Unicode(40))
     comments = Field(UnicodeText)
     # Relationships
+    authors = OneToMany('Author')
     files = OneToMany('File')
+    identifiers = OneToMany('Identifier')
     tags = ManyToMany('Tag')
 
     def __repr__(self):
         return '<book>%s - %s</book>' % (self.title, self.author)
 
+class Identifier (Entity):
+    key = Field(Unicode(30))
+    value = Field(Unicode(30))
+    # Relationships
+    book = ManyToOne('Book')
+
+    def __repr__(self):
+        return '<identifier>%s: %s</identifier>' % (self.key, self.value)
+
+class Author (Entity):
+    name = Field(Unicode(30))
+    # Relationships
+    books = ManyToOne('Book')
+
+    def __repr__(self):
+        return '<author>%s</author>' % (self.name)
+
 class Tag (Entity):
     name = Field(Unicode(30))
     value = Field(Unicode(30))
     # Relationships
-    books = ManyToMany('Book')
+    book = ManyToMany('Book')
 
     def __repr__(self):
         return '<tag>%s: %s</Tag>' % (self.name, self.value)

@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 
 def createDataBase():
     if os.path.isfile("./books.sqlite"):
-        prints "looks like the database all ready exists."
+        print "looks like the database all ready exists."
         return False
     print "This file will create the schema"
 
