@@ -16,13 +16,25 @@ class GBooks(QtGui.QMainWindow, form_class):
 
     def validaISBN(self,isbn):
         """
-        Validar codigo ISBN
+        Validar codigo ISBN. Devuelve el ISBN ó 0 si no es válido.
         """
         #TODO: deberia validar el ISBN con la cuenta
 
         #isbn.replace("-","") #Por ahora, lo mas sencillo
 
-        return ''.join(c for c in isbn if c.isdigit())
+        isbn = ''.join(c for c in isbn if c.isdigit())
+
+        #Intento de validación de ISBN según artículo de Paenza en Pag.12
+        #ref: http://www.pagina12.com.ar/diario/contratapa/13-113285-2008-10-14.html
+        #Aparentemente se podría corregir el error pero me dio fiaca..:)
+        total = 0
+        for i,n in enumerate(isbn):
+            total = total + (i+1) * int(n)
+
+        if total % 11 == 0:
+            return isbn
+        else:
+            return False
 
 
     def buscarLibro(self):
@@ -30,13 +42,24 @@ class GBooks(QtGui.QMainWindow, form_class):
         Busca un libro por ISBN en GoogleBooks y devuelve un dict con todos los datos.
         """
         isbn = self.validaISBN(str(self.isbnEdit.text()))
-        resultado = servicio.search('ISBN' + isbn)
-        if resultado.entry:
-            return resultado.entry[0].to_dict()
+        if isbn:
+            resultado = servicio.search('ISBN' + isbn)
+            if resultado.entry:
+                return resultado.entry[0].to_dict()
 
     def on_actionBuscarLibro_triggered(self, checked = None):
         if checked == None: return
+
         datos = self.buscarLibro()
+
+        if not datos:
+            QtGui.QMessageBox.critical(self,
+                                       self.trUtf8("Error"),
+                                       self.trUtf8("Por favor revise el ISBN, parece ser erróneo."),
+                                       QtGui.QMessageBox.StandardButtons(QtGui.QMessageBox.Ok)
+                                       )
+            return
+
         identifiers = dict(datos['identifiers'])
         print datos['identifiers']
         print identifiers
