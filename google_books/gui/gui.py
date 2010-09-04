@@ -34,7 +34,7 @@ class GBooks(QtGui.QMainWindow, form_class):
         if total % 11 == 0:
             return isbn
         else:
-            return False
+            return 0
 
 
     def buscarLibro(self):
