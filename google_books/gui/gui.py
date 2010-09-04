@@ -14,13 +14,16 @@ class GBooks(QtGui.QMainWindow, form_class):
         super(GBooks, self).__init__(*args)
         self.setupUi(self)
 
-    def validaISBN(self,isbn):  
+    def validaISBN(self,isbn):
         """
         Validar codigo ISBN
         """
-        #TODO: deberia tambien filtrar caracteres no numericos
+        #TODO: deberia validar el ISBN con la cuenta
 
-        return isbn.replace("-","") #Por ahora, lo mas sencillo
+        #isbn.replace("-","") #Por ahora, lo mas sencillo
+
+        return ''.join(c for c in isbn if c.isdigit())
+
 
     def buscarLibro(self):
         """
