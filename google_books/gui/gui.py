@@ -49,9 +49,10 @@ class GBooks(QtGui.QMainWindow, form_class):
 
     def on_actionBuscarLibro_triggered(self, checked = None):
         if checked == None: return
-
+        #Vaciar imagen siempre
+        thumb = QtGui.QPixmap()
+        self.tapaLibro.setPixmap(thumb)
         datos = self.buscarLibro()
-
         if not datos:
             QtGui.QMessageBox.critical(self,
                                        self.trUtf8("Error"),
@@ -60,10 +61,10 @@ class GBooks(QtGui.QMainWindow, form_class):
                                        )
             return
 
-        identifiers = dict(datos['identifiers'])
-        print datos['identifiers']
-        print identifiers
         if datos:
+            identifiers = dict(datos['identifiers'])
+            print datos['identifiers']
+            print identifiers
             self.tituloLibro.setText(datos['title'])
             self.fechaLibro.setText(datos['date'])
             self.generosLibro.setText(', '.join(datos['subjects']))
@@ -80,6 +81,11 @@ class GBooks(QtGui.QMainWindow, form_class):
             self.tapaLibro.setPixmap(thumb)
             
         else:
+            self.tituloLibro.setText('')
+            self.fechaLibro.setText('')
+            self.generosLibro.setText('')
+            self.autoresLibro.setText('')
+            self.descripcionLibro.setText('')
             print 'No encontre ese ISBN :('
 
 
