@@ -20,7 +20,7 @@
       <item>
        <widget class="QLineEdit" name="isbnEdit">
         <property name="text">
-         <string>950-644-094-8</string>
+         <string>978-0-306-40615-7</string>
         </property>
        </widget>
       </item>

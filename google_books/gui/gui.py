@@ -28,14 +28,32 @@ class GBooks(QtGui.QMainWindow, form_class):
         #ref: http://www.pagina12.com.ar/diario/contratapa/13-113285-2008-10-14.html
         #Aparentemente se podría corregir el error pero me dio fiaca..:)
         total = 0
-        for i,n in enumerate(isbn):
-            total = total + (i+1) * int(n)
-
-        if total % 11 == 0:
-            return isbn
+        if len(isbn) == 10:
+            for i,n in enumerate(isbn):
+                total = total + (i+1) * int(n)
+            if total % 11 == 0:
+                return isbn
+            else:
+                return 0
+        #El chequeo para ISBN de 13 digitos sale de:
+        #ref: http://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-13
+        elif len(isbn) == 13:
+            i = 1
+            for n in isbn[:-1]:
+                print i, "*", n, "=",
+                total = total + i * int(n)
+                print total
+                if i == 1: i = 3
+                else: i = 1
+            check = 10 - ( total % 10 )
+            if check == int(isbn[-1]):
+                return isbn
+            else:
+                return 0
         else:
+            print "El ISBN Tiene que ser de 10 o 13 dígitos unicamente"
             return 0
-
+                        
 
     def buscarLibro(self):
         """
