@@ -40,9 +40,7 @@ class GBooks(QtGui.QMainWindow, form_class):
         elif len(isbn) == 13:
             i = 1
             for n in isbn[:-1]:
-                print i, "*", n, "=",
                 total = total + i * int(n)
-                print total
                 if i == 1: i = 3
                 else: i = 1
             check = 10 - ( total % 10 )
@@ -51,6 +49,7 @@ class GBooks(QtGui.QMainWindow, form_class):
             else:
                 return 0
         else:
+            #Deberíamos devolver otro código de error acá?
             print "El ISBN Tiene que ser de 10 o 13 dígitos unicamente"
             return 0
                         
