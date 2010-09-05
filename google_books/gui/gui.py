@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: latin -*-
+# -*- coding: utf-8 -*-
 
 import sys, urllib2
 from PyQt4 import QtCore, QtGui, uic
@@ -39,29 +39,34 @@ class GBooks(QtGui.QMainWindow, form_class):
 
     def buscarLibro(self):
         """
-        Busca un libro por ISBN en GoogleBooks y devuelve un dict con todos los datos.
+        Busca un libro por ISBN en GoogleBooks y devuelve un dict con todos los datos o -1 si no valido el ISBN.
         """
         isbn = self.validaISBN(str(self.isbnEdit.text()))
         if isbn:
             resultado = servicio.search('ISBN' + isbn)
             if resultado.entry:
                 return resultado.entry[0].to_dict()
+        else:
+            return -1
 
     def on_actionBuscarLibro_triggered(self, checked = None):
         if checked == None: return
-        #Vaciar imagen siempre
-        thumb = QtGui.QPixmap()
-        self.tapaLibro.setPixmap(thumb)
+        
         datos = self.buscarLibro()
-        if not datos:
+
+        if datos == -1:
             QtGui.QMessageBox.critical(self,
                                        self.trUtf8("Error"),
                                        self.trUtf8("Por favor revise el ISBN, parece ser erróneo."),
                                        QtGui.QMessageBox.StandardButtons(QtGui.QMessageBox.Ok)
                                        )
-            return
+            
+        elif datos:
 
-        if datos:
+            #Vaciar imagen siempre
+            thumb = QtGui.QPixmap("sintapa.png")
+            self.tapaLibro.setPixmap(thumb)
+
             identifiers = dict(datos['identifiers'])
             print datos['identifiers']
             print identifiers
@@ -79,15 +84,13 @@ class GBooks(QtGui.QMainWindow, form_class):
             # FIXME: en realidad habría que guardarlo
             thumb.loadFromData(thumbdata)
             self.tapaLibro.setPixmap(thumb)
-            
+
         else:
             self.tituloLibro.setText('')
             self.fechaLibro.setText('')
             self.generosLibro.setText('')
             self.autoresLibro.setText('')
             self.descripcionLibro.setText('')
-            print 'No encontre ese ISBN :('
-
 
 if __name__ == '__main__':
     ventana = GBooks()

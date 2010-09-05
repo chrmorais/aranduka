@@ -6,28 +6,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>438</width>
-    <height>328</height>
+    <width>396</width>
+    <height>288</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Buscar en GoogleBooks por ISBN</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,0">
+     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
       <item>
        <widget class="QLineEdit" name="isbnEdit">
         <property name="text">
-         <string>9506440948</string>
+         <string>950-644-094-8</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="buscarBoton">
         <property name="text">
-         <string>Buscar ISBN</string>
+         <string>&amp;Buscar ISBN</string>
         </property>
        </widget>
       </item>
@@ -54,14 +54,17 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>../../mockups/tapa1.jpeg</pixmap>
+         <pixmap>sintapa.png</pixmap>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
-         <string>Datos del Libro</string>
+         <string>Datos del Libro:</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
         </property>
         <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
          <item row="0" column="0">
@@ -168,7 +171,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>438</width>
+     <width>396</width>
      <height>21</height>
     </rect>
    </property>
@@ -189,12 +192,28 @@
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>44</y>
+     <x>212</x>
+     <y>57</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>isbnEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>buscarBoton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>142</x>
+     <y>44</y>
     </hint>
    </hints>
   </connection>
