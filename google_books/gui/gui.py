@@ -53,7 +53,7 @@ class GBooks(QtGui.QMainWindow, form_class):
 
             identifiers = dict(datos['identifiers'])
             #print datos['identifiers']
-            #print identifiers
+
             if 'title' in datos:
                self.tituloLibro.setText(datos['title'])
             if 'date' in datos:
@@ -67,8 +67,13 @@ class GBooks(QtGui.QMainWindow, form_class):
 
             #Merengue para bajar la thumbnail porque QPixmap
             #no levanta desde una url :(
+            
+            # TODO
+            # Si no tenemos la tapa en covers.openlibrary, deberia leerlo desde google.books.
+            # El dato clave estaría en datos['thumbnail']
 
             thumbdata = urllib2.urlopen('http://covers.openlibrary.org/b/isbn/%s-M.jpg'%identifiers['ISBN']).read()
+
             thumb = QtGui.QPixmap()
             # FIXME: en realidad habrÃ­a que guardarlo
             thumb.loadFromData(thumbdata)
