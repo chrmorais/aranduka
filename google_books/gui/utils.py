@@ -3,9 +3,9 @@
 import string
 
 
-def valida_ISBN10(isbn):
+def validate_ISBN10(isbn):
     """
-    Validar codigo ISBN 10. Devuelve el ISBN ó False si no es válido.
+    Validate ISBN10 code. Returns the ISBN or False if is not valid.
     """
     isbn = isbn.replace("-", "").replace(" ", "")
 
@@ -21,9 +21,9 @@ def valida_ISBN10(isbn):
         else:
             return False
 
-def valida_ISBN13(isbn):
+def validate_ISBN13(isbn):
     """
-    Validar codigo ISBN 13. Devuelve el ISBN ó False si no es válido.
+    Validate ISBN13 code. Returns the ISBN or False if is not valid.
     """
     #El chequeo para ISBN de 13 digitos sale de:
     #ref: http://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-13
@@ -43,8 +43,8 @@ def valida_ISBN13(isbn):
         else:
             return False
 
-def valida_ISBN(isbn):
+def validate_ISBN(isbn):
     """
-    Validar codigo ISBN 10 o 13. Devuelve el ISBN ó False si no es válido.
+    Validate ISBN13 or ISBN10 code. Returns the ISBN or False if any is valid.
     """
-    return valida_ISBN10(isbn) or valida_ISBN13(isbn)
+    return validate_ISBN10(isbn) or validate_ISBN13(isbn)

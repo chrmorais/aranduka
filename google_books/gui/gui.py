@@ -6,7 +6,7 @@ import sys, urllib2
 from gdata.books.service import BookService
 from PyQt4 import QtCore, QtGui, uic
 
-from utils import valida_ISBN
+from utils import validate_ISBN
 
 
 servicio = BookService()
@@ -25,7 +25,7 @@ class GBooks(QtGui.QMainWindow, form_class):
         """
         Busca un libro por ISBN en GoogleBooks y devuelve un dict con todos los datos o -1 si no valido el ISBN.
         """
-        isbn = valida_ISBN(str(self.isbnEdit.text()))
+        isbn = validate_ISBN(str(self.isbnEdit.text()))
         if isbn:
             resultado = servicio.search('ISBN' + isbn)
             if resultado.entry:
