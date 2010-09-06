@@ -52,13 +52,18 @@ class GBooks(QtGui.QMainWindow, form_class):
             self.tapaLibro.setPixmap(thumb)
 
             identifiers = dict(datos['identifiers'])
-            print datos['identifiers']
-            print identifiers
-            self.tituloLibro.setText(datos['title'])
-            self.fechaLibro.setText(datos['date'])
-            self.generosLibro.setText(', '.join(datos['subjects']))
-            self.autoresLibro.setText(', '.join(datos['authors']))
-            self.descripcionLibro.setText(datos['description'])
+            #print datos['identifiers']
+            #print identifiers
+            if 'title' in datos:
+               self.tituloLibro.setText(datos['title'])
+            if 'date' in datos:
+               self.fechaLibro.setText(datos['date'])
+            if 'subjects' in datos:
+               self.generosLibro.setText(', '.join(datos['subjects']))
+            if 'authors' in datos:
+               self.autoresLibro.setText(', '.join(datos['authors']))
+            if 'description' in datos:
+               self.descripcionLibro.setText(datos['description'])
 
             #Merengue para bajar la thumbnail porque QPixmap
             #no levanta desde una url :(
