@@ -7,8 +7,6 @@ def valida_ISBN10(isbn):
     """
     Validar codigo ISBN 10. Devuelve el ISBN ó False si no es válido.
     """
-    #TODO: deberia validar el ISBN con la cuenta
-    # No entiendo este TODO
     isbn = isbn.replace("-", "").replace(" ", "")
 
     if len(isbn) == 10 and not [x for x in isbn if x not in (
