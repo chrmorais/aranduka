@@ -55,36 +55,42 @@ class GBooks(QtGui.QMainWindow, form_class):
             #print datos['identifiers']
 
             if 'title' in datos:
-               self.tituloLibro.setText(datos['title'])
+               self.tituloLibro.setText(datos['title'].decode('utf-8'))
             if 'date' in datos:
-               self.fechaLibro.setText(datos['date'])
+               self.fechaLibro.setText(datos['date'].decode('utf-8'))
             if 'subjects' in datos:
-               self.generosLibro.setText(', '.join(datos['subjects']))
+               self.generosLibro.setText(', '.join(datos['subjects']).decode('utf-8'))
             if 'authors' in datos:
-               self.autoresLibro.setText(', '.join(datos['authors']))
+               self.autoresLibro.setText(', '.join(datos['authors']).decode('utf-8'))
             if 'description' in datos:
-               self.descripcionLibro.setText(datos['description'])
+               self.descripcionLibro.setText(datos['description'].decode('utf-8'))
 
             #Merengue para bajar la thumbnail porque QPixmap
             #no levanta desde una url :(
             
             # TODO
             # Si no tenemos la tapa en covers.openlibrary, deberia leerlo desde google.books.
-            # El dato clave estar�a en datos['thumbnail']
+            # El dato clave estaría en datos['thumbnail']
 
             thumbdata = urllib2.urlopen('http://covers.openlibrary.org/b/isbn/%s-M.jpg'%identifiers['ISBN']).read()
-
+            
             thumb = QtGui.QPixmap()
-            # FIXME: en realidad habría que guardarlo
+            # FIXME: en realidad habrí­a que guardarlo
             thumb.loadFromData(thumbdata)
             self.tapaLibro.setPixmap(thumb)
 
         else:
+            # El ISBN es válido pero GBooks no lo tiene, ej: 950-665-191-4
             self.tituloLibro.setText('')
             self.fechaLibro.setText('')
             self.generosLibro.setText('')
             self.autoresLibro.setText('')
             self.descripcionLibro.setText('')
+            QtGui.QMessageBox.critical(self,
+                                       self.trUtf8("Error"),
+                                       self.trUtf8("El ISBN parece ser válido, pero no se encontró libro con el número indicado."),
+                                       QtGui.QMessageBox.StandardButtons(QtGui.QMessageBox.Ok)
+                                       )
 
 if __name__ == '__main__':
     ventana = GBooks()

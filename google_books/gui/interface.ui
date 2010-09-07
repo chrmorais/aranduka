@@ -138,6 +138,9 @@
            <property name="text">
             <string/>
            </property>
+           <property name="textFormat">
+            <enum>Qt::RichText</enum>
+           </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
            </property>
@@ -172,7 +175,7 @@
      <x>0</x>
      <y>0</y>
      <width>396</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
