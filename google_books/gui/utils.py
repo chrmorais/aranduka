@@ -2,7 +2,6 @@
 
 import string
 
-
 def validate_ISBN10(isbn):
     """
     Validate ISBN10 code. Returns the ISBN or False if is not valid.
@@ -48,3 +47,4 @@ def validate_ISBN(isbn):
     Validate ISBN13 or ISBN10 code. Returns the ISBN or False if any is valid.
     """
     return validate_ISBN10(isbn) or validate_ISBN13(isbn)
+    
