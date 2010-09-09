@@ -55,15 +55,15 @@ class GBooks(QtGui.QMainWindow, form_class):
             #print datos['identifiers']
 
             if 'title' in datos:
-               self.tituloLibro.setText(datos['title'].decode('utf-8'))
+               self.txt_1.setText(datos['title'].decode('utf-8'))
             if 'date' in datos:
-               self.fechaLibro.setText(datos['date'].decode('utf-8'))
+               self.dte_1.setDateTime(QtCore.QDateTime.fromString(datos['date'],'yyyy-mm-dd'))
             if 'subjects' in datos:
-               self.generosLibro.setText(', '.join(datos['subjects']).decode('utf-8'))
+               self.txt_2.setText(', '.join(datos['subjects']).decode('utf-8'))
             if 'authors' in datos:
-               self.autoresLibro.setText(', '.join(datos['authors']).decode('utf-8'))
+               self.txt_3.setText(', '.join(datos['authors']).decode('utf-8'))
             if 'description' in datos:
-               self.descripcionLibro.setText(datos['description'].decode('utf-8'))
+               self.txp_1.appendPlainText(datos['description'].decode('utf-8'))
 
             #Merengue para bajar la thumbnail porque QPixmap
             #no levanta desde una url :(
@@ -81,11 +81,11 @@ class GBooks(QtGui.QMainWindow, form_class):
 
         else:
             # El ISBN es válido pero GBooks no lo tiene, ej: 950-665-191-4
-            self.tituloLibro.setText('')
-            self.fechaLibro.setText('')
-            self.generosLibro.setText('')
-            self.autoresLibro.setText('')
-            self.descripcionLibro.setText('')
+            self.txt_1.setText('')
+            #self.fechaLibro.setText('')
+            self.txt_2.setText('')
+            self.txt_3.setText('')
+            self.txp_1.appendPlainText('')
             QtGui.QMessageBox.critical(self,
                                        self.trUtf8("Error"),
                                        self.trUtf8("El ISBN parece ser válido, pero no se encontró libro con el número indicado."),
