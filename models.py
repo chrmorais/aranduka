@@ -22,7 +22,7 @@ class Book (Entity):
     tags = ManyToMany('Tag')
 
     def __repr__(self):
-        return '<book>%s - %s</book>' % (self.title, self.author)
+        return '<book>%s - %s</book>' % (self.title, self.authors)
 
 class Identifier (Entity):
     key = Field(Unicode(30))
