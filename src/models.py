@@ -17,6 +17,7 @@ def initDB():
     setup_all()
 
 class Book (Entity):
+    using_options(tablename='books')
     title = Field(Unicode(40))
     volumen = Field(Integer)
     url = Field(Unicode(40))
@@ -32,6 +33,7 @@ class Book (Entity):
         return '<book>%s - %s</book>' % (self.title, self.authors)
 
 class Identifier (Entity):
+    using_options(tablename='identifiers')
     key = Field(Unicode(30))
     value = Field(Unicode(30))
     # Relationships
@@ -41,6 +43,7 @@ class Identifier (Entity):
         return '<identifier>%s: %s</identifier>' % (self.key, self.value)
 
 class Author (Entity):
+    using_options(tablename='authors')
     name = Field(Unicode(30))
     # Relationships
     books = ManyToOne('Book')
@@ -49,6 +52,7 @@ class Author (Entity):
         return '<author>%s</author>' % (self.name)
 
 class Tag (Entity):
+    using_options(tablename='tags')
     name = Field(Unicode(30))
     value = Field(Unicode(30))
     # Relationships
@@ -58,6 +62,7 @@ class Tag (Entity):
         return '<tag>%s: %s</Tag>' % (self.name, self.value)
 
 class File (Entity):
+    using_options(tablename='files')
     file_name = Field(Unicode(300))
     file_size = Field(Unicode(30))
     book = ManyToOne('Book')
