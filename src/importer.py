@@ -6,13 +6,17 @@ from metadata import get_metadata
 from pprint import pprint
 
 VALID_EXTENSIONS = ['fb2','mobi','pdf','txt','lit','html','htm']
+COMPRESSED_EXTENSIONS = ['gz','bz2','lzma']
 
 def clean_name (fname):
     "Clean a file name so it works better for a google query"
     fname = os.path.basename(fname)
     fname = fname.lower()
     fname = fname.replace('_',' ')
-    fname = '.'.join(fname.split('.')[:-1])
+    splitted = fname.split('.')
+    while splitted[-1] in VALID_EXTENSIONS+COMPRESSED_EXTENSIONS:
+        splitted=splitted[:-1]
+    fname = '.'.join(splitted)
     # FIXME: here we should use the system's encoding, but that's not
     # a sure thing to work, either.
     return fname.decode('latin1')
@@ -68,6 +72,8 @@ def import_file(fname):
 
     print fname
     extension = fname.split('.')[-1].lower()
+    if extension in COMPRESSED_EXTENSIONS:
+        extension = fname.split('.')[-2].lower()
     if extension not in VALID_EXTENSIONS:
         print "Not an ebook"
         return 

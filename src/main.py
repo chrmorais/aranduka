@@ -35,8 +35,16 @@ class Main(QtGui.QMainWindow):
 
     def loadBooks(self):
         """Get all books from the DB and show them"""
+        nocover = QtGui.QIcon("nocover.png")
         for b in models.Book.query.all():
-            item = QtGui.QListWidgetItem(QtGui.QIcon("nocover.png"),b.title, self.books)
+            icon = nocover
+            cname = os.path.join("covers",str(b.id)+".jpg")
+            if os.path.isfile(cname):
+                try:
+                    icon =  QtGui.QIcon(cname)
+                except:
+                    pass
+            item = QtGui.QListWidgetItem(icon, b.title, self.books)
             
 
 def main():
