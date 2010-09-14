@@ -80,6 +80,12 @@ def import_file(fname):
     
     print 'Importing as-is'
     b = models.Book.get_by(title = p)
+    if not b:
+        # TODO: add more metadata
+        b = models.Book(
+            title = p,
+        )
+        
     f = models.File(file_name=fname, book=b)
     models.session.commit()
     return 2
