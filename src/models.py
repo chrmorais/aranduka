@@ -12,7 +12,7 @@ metadata.bind.echo = False
 
 def initDB():
     "Create or initialize the database"
-    if os.path.isfile("./books.sqlite"):
+    if not os.path.isfile("./books.sqlite"):
         create_all()
     setup_all()
 
