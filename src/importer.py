@@ -56,6 +56,9 @@ def import_file(fname):
                     if not author:
                         author = models.Author(name = name)
                     b.authors.append(author)
+
+                # Fetch cover
+                b.fetch_cover()
                 
                 print "Accepted: ", data.title
                 f = models.File(file_name=fname, book=b)
@@ -118,7 +121,7 @@ def file_status(fname):
     if not f:
         return 0
     # FIXME really check that metadata is insufficient
-    elif not f.book or f.book.title == clean_name(fname) and not f.book.author:
+    elif not f.book or f.book.title == clean_name(fname) and not f.book.authors:
         return 2
     return 1
 
