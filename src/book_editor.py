@@ -1,42 +1,72 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys, urllib2
+import os, sys, urllib2
 
 from gdata.books.service import BookService
 from PyQt4 import QtCore, QtGui, uic
 
+import models
 from utils import validate_ISBN
 
 
-servicio = BookService()
+service = BookService()
 
 
 app = QtGui.QApplication(sys.argv)
-form_class, base_class = uic.loadUiType('book_editor.ui')
 
 
-class GBooks(QtGui.QMainWindow, form_class):
-    def __init__(self, *args):
-        super(GBooks, self).__init__(*args)
-        self.setupUi(self)
+class BookEditor(QtGui.QWidget):
+    def __init__(self, book_id, *args):
+        QtGui.QWidget.__init__(self,*args)
+        uifile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'book_editor.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
+        self.load_data(book_id)
 
-    def buscarLibro(self):
+    def load_data(self, book_id):
+        self.book = models.Book.get_by(id=book_id)
+        if not self.book:
+            # Called with invalid book ID
+            print "Wrong book ID"
+        self.title.setText(self.book.title)
+        self.authors.setText('|'.join([a.name for a in self.book.authors]))
+        for i in self.book.identifiers:
+            self.id_keys.addItem(i.key)
+            self.id_values.addItem(i.value)
+
+        cname = os.path.join("covers",str(self.book.id)+".jpg")
+        if os.path.isfile(cname):
+            self.cover.setPixmap(QtGui.QPixmap(cname))
+        else:
+            self.cover.setPixmap(QtGui.QPixmap("nocover.png"))
+
+
+    @QtCore.pyqtSlot()
+    def accept(self):
+        # Save the data first
+        self.book.title = unicode(self.title.text())
+        models.session.commit()
+        self.accept()
+
+    def findBook(self):
         """
         Busca un libro por ISBN en GoogleBooks y devuelve un dict con todos los datos o -1 si no valido el ISBN.
         """
         isbn = validate_ISBN(str(self.isbnEdit.text()))
         if isbn:
-            resultado = servicio.search('ISBN' + isbn)
-            if resultado.entry:
-                return resultado.entry[0].to_dict()
+            result = service.search('ISBN' + isbn)
+            if result.entry:
+                return result.entry[0].to_dict()
         else:
             return -1
 
-    def on_actionBuscarLibro_triggered(self, checked = None):
+    def on_actionfindBook_triggered(self, checked = None):
         if checked == None: return
 
-        datos = self.buscarLibro()
+        datos = self.findBook()
 
         if datos == -1:
             QtGui.QMessageBox.critical(self,
@@ -80,7 +110,7 @@ class GBooks(QtGui.QMainWindow, form_class):
             self.tapaLibro.setPixmap(thumb)
 
         else:
-            # El ISBN es válido pero GBooks no lo tiene, ej: 950-665-191-4
+            # El ISBN es válido pero BookEditor no lo tiene, ej: 950-665-191-4
             self.txt_1.setText('')
             #self.fechaLibro.setText('')
             self.txt_2.setText('')
@@ -93,6 +123,7 @@ class GBooks(QtGui.QMainWindow, form_class):
                                        )
 
 if __name__ == '__main__':
-    ventana = GBooks()
+    models.initDB()
+    ventana = BookEditor(1)
     ventana.show()
     sys.exit(app.exec_())
