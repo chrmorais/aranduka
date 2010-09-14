@@ -5,6 +5,7 @@
 # Aranduka mailing list about the schema.
 
 import os
+import urllib2
 from elixir import *
 
 
@@ -34,6 +35,23 @@ class Book (Entity):
 
     def __repr__(self):
         return '<book>%s - %s</book>' % (self.title, self.authors)
+
+    def fetch_cover(self):
+        """Downloads and stores a cover for this book, if possible"""
+        isbns = Identifier.query.filter_by(key = 'ISBN', book = self).all()
+        print isbns
+        fname = os.path.join("covers", str(self.id) +".jpg")
+        for isbn in isbns:
+            try:
+                print "Trying with ISBN: '%s'"%isbn.value
+                u=urllib2.urlopen('http://covers.openlibrary.org/b/isbn/%s-M.jpg?default=false'%isbn.value)
+                data = u.read()
+                u.close()
+                thumb = open(fname,'wb')
+                thumb.write(data)
+                thumb.close()
+            except urllib2.HTTPError:
+                pass
 
 class Identifier (Entity):
     using_options(tablename='identifiers')
