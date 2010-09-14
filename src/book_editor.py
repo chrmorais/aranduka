@@ -13,7 +13,7 @@ servicio = BookService()
 
 
 app = QtGui.QApplication(sys.argv)
-form_class, base_class = uic.loadUiType('interface.ui')
+form_class, base_class = uic.loadUiType('book_editor.ui')
 
 
 class GBooks(QtGui.QMainWindow, form_class):
@@ -48,7 +48,7 @@ class GBooks(QtGui.QMainWindow, form_class):
         elif datos:
 
             #Vaciar imagen siempre
-            thumb = QtGui.QPixmap("sintapa.png")
+            thumb = QtGui.QPixmap("nocover.png")
             self.tapaLibro.setPixmap(thumb)
 
             identifiers = dict(datos['identifiers'])
