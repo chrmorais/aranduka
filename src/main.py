@@ -1,12 +1,12 @@
 """The user interface for our app"""
 
 import os,sys
-import models
+import models, importer
 
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic
+from progress import progress
 
-# Create a class for our main window
 class Main(QtGui.QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
@@ -16,6 +16,19 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+
+    @QtCore.pyqtSlot()
+    def on_actionImport_Files_triggered(self):
+        fname = unicode(QtGui.QFileDialog.getExistingDirectory(self, "Import Folder"))
+        if not fname: return
+        # Get a list of all files to be imported
+        flist = []
+        for data in os.walk(fname, followlinks = True):
+            for f in data[2]:
+                flist.append(os.path.join(data[0],f))
+        for f in progress(flist, "Importing Files","Stop"):
+            status = importer.import_file(f)
+            print status 
 
 def main():
     # Init the database before doing anything else
