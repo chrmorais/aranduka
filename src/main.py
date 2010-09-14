@@ -16,6 +16,7 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+        self.loadBooks()
 
     @QtCore.pyqtSlot()
     def on_actionImport_Files_triggered(self):
@@ -28,7 +29,15 @@ class Main(QtGui.QMainWindow):
                 flist.append(os.path.join(data[0],f))
         for f in progress(flist, "Importing Files","Stop"):
             status = importer.import_file(f)
-            print status 
+            print status
+        # Reload books
+        self.loadBooks()
+
+    def loadBooks(self):
+        """Get all books from the DB and show them"""
+        for b in models.Book.query.all():
+            item = QtGui.QListWidgetItem(QtGui.QIcon("nocover.png"),b.title, self.books)
+            
 
 def main():
     # Init the database before doing anything else

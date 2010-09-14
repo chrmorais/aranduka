@@ -43,11 +43,20 @@ def import_file(fname):
                     b = models.Book(
                         title = data.title,
                     )
+                # Add Identifiers (ISBN, etc)
                 for key, value in data.identifiers:
                     ident = models.Identifier.get_by(key=key,value=value)
                     if not ident:
                         ident = models.Identifier(key=key, value=value)
                     ident.book = b
+
+                # Add Author(s)
+                for name in data.authors:
+                    author = models.Author.get_by(name=name)
+                    if not author:
+                        author = models.Author(name = name)
+                    b.authors.append(author)
+                
                 print "Accepted: ", data.title
                 f = models.File(file_name=fname, book=b)
                 models.session.commit()
