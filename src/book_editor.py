@@ -8,13 +8,45 @@ from PyQt4 import QtCore, QtGui, uic
 
 import models
 from utils import validate_ISBN
-
+from metadata import get_metadata
 
 service = BookService()
 
 
 app = QtGui.QApplication(sys.argv)
 
+
+class GuessDialog(QtGui.QDialog):
+    def __init__(self, book, *args):
+        QtGui.QDialog.__init__(self,*args)
+        uifile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'guess.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
+        self._query = None
+
+        self.book = book
+        self.title.setText("Title: %s"%book.title)
+        self.author.setText("Author: %s"%(u', '.join([a.name for a in book.authors])))
+        ident = models.Identifier.get_by(key='ISBN',book=book)
+        if ident:
+            self.isbn.setText('ISBN: %s'%ident.value)
+            self._isbn=ident.value
+        else:
+            self.isbn.hide()
+
+    def accept(self):
+        # Try to guess based on the reliable data
+        q=''
+        if self.title.isChecked():
+            q+='TITLE %s '%self.book.title
+        if self.author.isChecked():
+            q+='AUTHOR %s '%u', '.join([a.name for a in self.book.authors])
+        if self.isbn.isChecked():
+            q+='ISBN %s'%self._isbn
+        self._query = q
+        QtGui.QDialog.accept(self)
 
 class BookEditor(QtGui.QWidget):
     def __init__(self, book_id, *args):
@@ -37,19 +69,38 @@ class BookEditor(QtGui.QWidget):
             self.id_keys.addItem(i.key)
             self.id_values.addItem(i.value)
 
+        for f in self.book.files:
+            self.fileList.addItem(f.file_name)
+
         cname = os.path.join("covers",str(self.book.id)+".jpg")
         if os.path.isfile(cname):
             self.cover.setPixmap(QtGui.QPixmap(cname))
         else:
             self.cover.setPixmap(QtGui.QPixmap("nocover.png"))
 
+    @QtCore.pyqtSlot()
+    def on_guess_clicked(self):
+        dlg = GuessDialog(self.book, self)
+        dlg.exec_()
+        if dlg._query:
+            print get_metadata(dlg._query)
+            
 
     @QtCore.pyqtSlot()
-    def accept(self):
+    def on_save_clicked(self):
         # Save the data first
         self.book.title = unicode(self.title.text())
+
+        self.book.authors = []
+        authors = unicode(self.authors.text()).split('|')
+        for a in authors:
+            author = models.Author.get_by(name = a)
+            if not author:
+                print "Creating author:", a
+                author = models.Author(name = a)
+            self.book.authors.append(author)
+        # TODO: save the rest of the data
         models.session.commit()
-        self.accept()
 
     def findBook(self):
         """
@@ -124,6 +175,6 @@ class BookEditor(QtGui.QWidget):
 
 if __name__ == '__main__':
     models.initDB()
-    ventana = BookEditor(1)
+    ventana = BookEditor(int(sys.argv[1]))
     ventana.show()
     sys.exit(app.exec_())

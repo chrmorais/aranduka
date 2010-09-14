@@ -205,6 +205,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="guess">
+       <property name="text">
+        <string>Guess</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="save">
        <property name="text">
         <string>&amp;Save</string>
