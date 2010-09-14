@@ -1,7 +1,6 @@
 import os, sys, time, re
 from PyQt4 import QtCore, QtGui, uic
 
-from create_schema import createDataBase
 import models
 from metadata import get_metadata
 from pprint import pprint
@@ -157,7 +156,7 @@ def main():
     if len(sys.argv) < 2:
         print "Usage: python importer.py path1 ... pathX\n\npathX can be a folder or file name."
 
-    createDataBase()
+    models.initDB()
     app = QtGui.QApplication(sys.argv)
     w = Main(sys.argv[1:])
     w.show()
