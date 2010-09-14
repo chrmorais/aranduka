@@ -4,31 +4,55 @@
 # This set of MODELS are based on the discussion in the
 # Aranduka mailing list about the schema.
 
+import os
 from elixir import *
 
 metadata.bind = "sqlite:///books.sqlite"
 metadata.bind.echo = False
 
+def initDB():
+    "Create or initialize the database"
+    if os.path.isfile("./books.sqlite"):
+        create_all()
+    setup_all()
+
 class Book (Entity):
     title = Field(Unicode(40))
-    author = Field(Unicode(40))
-    serie_number = Field(Unicode(40))
     volumen = Field(Integer)
     url = Field(Unicode(40))
     cover = Field(Unicode(40))
     comments = Field(UnicodeText)
     # Relationships
+    authors = OneToMany('Author')
     files = OneToMany('File')
+    identifiers = OneToMany('Identifier')
     tags = ManyToMany('Tag')
 
     def __repr__(self):
-        return '<book>%s - %s</book>' % (self.title, self.author)
+        return '<book>%s - %s</book>' % (self.title, self.authors)
+
+class Identifier (Entity):
+    key = Field(Unicode(30))
+    value = Field(Unicode(30))
+    # Relationships
+    book = ManyToOne('Book')
+
+    def __repr__(self):
+        return '<identifier>%s: %s</identifier>' % (self.key, self.value)
+
+class Author (Entity):
+    name = Field(Unicode(30))
+    # Relationships
+    books = ManyToOne('Book')
+
+    def __repr__(self):
+        return '<author>%s</author>' % (self.name)
 
 class Tag (Entity):
     name = Field(Unicode(30))
     value = Field(Unicode(30))
     # Relationships
-    books = ManyToMany('Book')
+    book = ManyToMany('Book')
 
     def __repr__(self):
         return '<tag>%s: %s</Tag>' % (self.name, self.value)
