@@ -1,7 +1,7 @@
 import collections, datetime
 import gdata.books.service
 
-BookMetadata = collections.namedtuple('BookMetadata', 'title thumbnail date subjects authors description')
+BookMetadata = collections.namedtuple('BookMetadata', 'title thumbnail date subjects authors description identifiers')
 
 SERVICES = {'google_books':'Google Books', 'service_x':'Service X'}
 
@@ -18,6 +18,7 @@ def get_metadata(query, service='google_books'):
                                 date=x.get('date',datetime.date(1970,1,1)),
                                 subjects=x.get('subjects',[]),
                                 authors=x.get('authors',[]),
+                                identifiers=x.get('identifiers',()),
                                 description=x.get('description',''))
                     for x in data ]
         else:

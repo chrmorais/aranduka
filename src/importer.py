@@ -43,6 +43,11 @@ def import_file(fname):
                     b = models.Book(
                         title = data.title,
                     )
+                for key, value in data.identifiers:
+                    ident = models.Identifier.get_by(key=key,value=value)
+                    if not ident:
+                        ident = models.Identifier(key=key, value=value)
+                    ident.book = b
                 print "Accepted: ", data.title
                 f = models.File(file_name=fname, book=b)
                 models.session.commit()
