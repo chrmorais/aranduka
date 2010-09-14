@@ -4,10 +4,17 @@
 # This set of MODELS are based on the discussion in the
 # Aranduka mailing list about the schema.
 
+import os
 from elixir import *
 
 metadata.bind = "sqlite:///books.sqlite"
 metadata.bind.echo = True
+
+def initDB():
+    "Create or initialize the database"
+    if os.path.isfile("./books.sqlite"):
+        create_all()
+    setup_all()
 
 class Book (Entity):
     title = Field(Unicode(40))
