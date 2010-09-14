@@ -7,14 +7,17 @@
 import os
 from elixir import *
 
-metadata.bind = "sqlite:///books.sqlite"
-metadata.bind.echo = False
 
 def initDB():
     "Create or initialize the database"
-    if not os.path.isfile("./books.sqlite"):
-        create_all()
+    "Setting up database"
+    metadata.bind = "sqlite:///books.sqlite"
+    metadata.bind.echo = False
     setup_all()
+    if not os.path.isfile("./books.sqlite"):
+        "Creating database"
+        create_all()
+        session.commit()
 
 class Book (Entity):
     using_options(tablename='books')
