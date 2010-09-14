@@ -98,7 +98,13 @@ def import_file(fname):
     r1 = try_import(fname, 'TITLE '+p3)
     if r1:
         return r1
-    
+
+    # Maybe it's author - title
+    _, p4 = p.split('-',1)
+    r1 = try_import(fname, 'TITLE '+p4)
+    if r1:
+        return r1
+        
     #TODO Keep trying in other ways
     
     print 'Importing as-is'
