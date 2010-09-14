@@ -84,24 +84,24 @@ def import_file(fname):
         
     # First try the clean name as-is
     p = clean_name(fname)
-    r1 = try_import(fname, 'TITLE '+p)
+    r1 = try_import(fname, u'TITLE '+p)
     if r1:
         return r1
 
     # Try removing 'tags'
-    p2 = re.sub('[\(\[].*[\)\]]',' ',p)
-    r1 = try_import(fname, 'TITLE '+p2)
+    p2 = re.sub(u'[\(\[].*[\)\]]',' ',p)
+    r1 = try_import(fname, u'TITLE '+p2)
     if r1:
         return r1
     # Try separating pieces
-    p3 = p2.replace('-',' - ')
-    r1 = try_import(fname, 'TITLE '+p3)
+    p3 = p2.replace(u'-',u' - ')
+    r1 = try_import(fname, u'TITLE '+p3)
     if r1:
         return r1
 
     # Maybe it's author - title
-    _, p4 = p.split('-',1)
-    r1 = try_import(fname, 'TITLE '+p4)
+    _, p4 = p.split(u'-',1)
+    r1 = try_import(fname, u'TITLE '+p4)
     if r1:
         return r1
         
