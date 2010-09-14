@@ -1,6 +1,7 @@
 """The user interface for our app"""
 
 import os,sys
+import models
 
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic
@@ -10,9 +11,11 @@ class Main(QtGui.QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
 
-        # This is always the same
-        self.ui=Ui_MainWindow()
-        self.ui.setupUi(self)
+        uifile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'main.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
 
 def main():
     # Init the database before doing anything else
