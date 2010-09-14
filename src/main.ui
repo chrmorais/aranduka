@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>599</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -141,7 +141,7 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
+             <y>-112</y>
              <width>382</width>
              <height>648</height>
             </rect>
@@ -173,24 +173,6 @@
               <property name="viewMode">
                <enum>QListView::IconMode</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>Libro 1</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>tapa1.jpeg</normaloff>tapa1.jpeg</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Libro 2</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>tapa1.jpeg</normaloff>tapa1.jpeg</iconset>
-               </property>
-              </item>
              </widget>
             </item>
             <item>
@@ -219,24 +201,6 @@
               <property name="viewMode">
                <enum>QListView::IconMode</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>Libro 1</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>tapa1.jpeg</normaloff>tapa1.jpeg</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Libro 2</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>tapa1.jpeg</normaloff>tapa1.jpeg</iconset>
-               </property>
-              </item>
              </widget>
             </item>
             <item>
@@ -265,24 +229,6 @@
               <property name="viewMode">
                <enum>QListView::IconMode</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>Libro 1</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>tapa1.jpeg</normaloff>tapa1.jpeg</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Libro 2</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>tapa1.jpeg</normaloff>tapa1.jpeg</iconset>
-               </property>
-              </item>
              </widget>
             </item>
             <item>
@@ -311,24 +257,6 @@
               <property name="viewMode">
                <enum>QListView::IconMode</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>Libro 1</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>tapa1.jpeg</normaloff>tapa1.jpeg</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Libro 2</string>
-               </property>
-               <property name="icon">
-                <iconset>
-                 <normaloff>tapa1.jpeg</normaloff>tapa1.jpeg</iconset>
-               </property>
-              </item>
              </widget>
             </item>
             <item>
