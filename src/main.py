@@ -50,6 +50,7 @@ class Main(QtGui.QMainWindow):
         self.main_splitter.setSizes([0,self.main_splitter.size().width()])
 
     def show_shelves(self):
+        self.updateItem(self.books.currentItem())
         self.stack.setCurrentIndex(0)
         self.main_splitter.setSizes(self.last_splitter_sizes)
 
@@ -83,6 +84,20 @@ class Main(QtGui.QMainWindow):
             item = QtGui.QListWidgetItem(icon, b.title, self.books)
             item.book = b
             
+    def updateItem(self, item):
+        """Updates one item with the data for its book"""
+
+        # Make sure we are updated from the DB
+        item.book = models.Book.get_by(id = item.book.id)
+        cname = os.path.join("covers",str(item.book.id)+".jpg")
+        item.setText(item.book.title)
+        if os.path.isfile(cname):
+            try:
+                icon =  QtGui.QIcon(cname)
+                item.setIcon(icon)
+            except:
+                pass
+        
 
 def main():
     # Init the database before doing anything else
