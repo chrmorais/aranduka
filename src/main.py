@@ -6,6 +6,7 @@ import models, importer
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic
 from progress import progress
+from book_editor import BookEditor
 
 class Main(QtGui.QMainWindow):
     def __init__(self):
@@ -16,7 +17,24 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+
+        self._layout = QtGui.QVBoxLayout()
+        self.details.setLayout(self._layout)
+        self.book_editor = BookEditor(None)
+        self.book_editor.back.clicked.connect(self.show_shelves)
+        self._layout.addWidget(self.book_editor)
         self.loadBooks()
+        print "Finished initializing main window"
+
+    def on_books_itemActivated(self, item):
+        self.book_editor.load_data(item.book.id)
+        self.stack.setCurrentIndex(1)
+        self.last_splitter_sizes=self.main_splitter.sizes()
+        self.main_splitter.setSizes([0,self.main_splitter.size().width()])
+
+    def show_shelves(self):
+        self.stack.setCurrentIndex(0)
+        self.main_splitter.setSizes(self.last_splitter_sizes)
 
     @QtCore.pyqtSlot()
     def on_actionImport_Files_triggered(self):
@@ -46,6 +64,7 @@ class Main(QtGui.QMainWindow):
                 except:
                     pass
             item = QtGui.QListWidgetItem(icon, b.title, self.books)
+            item.book = b
             
 
 def main():

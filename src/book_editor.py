@@ -79,6 +79,7 @@ class BookEditor(QtGui.QWidget):
             self.id_keys.addItem(i.key)
             self.id_values.addItem(i.value)
 
+        self.fileList.clear()
         for f in self.book.files:
             self.fileList.addItem(f.file_name)
 

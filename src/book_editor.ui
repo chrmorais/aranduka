@@ -205,6 +205,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="back">
+       <property name="text">
+        <string>Back to Shelves</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="guess">
        <property name="text">
         <string>Guess</string>
