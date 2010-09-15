@@ -43,17 +43,14 @@
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Candidates:</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>159</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="bookList"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -78,9 +75,16 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="guess">
        <property name="text">
         <string>Guess</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Update</string>
        </property>
       </widget>
      </item>
@@ -97,8 +101,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>288</x>
-     <y>278</y>
+     <x>248</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
      <x>219</x>
@@ -107,18 +111,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>pushButton_3</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>360</x>
-     <y>281</y>
+     <y>273</y>
     </hint>
     <hint type="destinationlabel">
-     <x>392</x>
-     <y>208</y>
+     <x>397</x>
+     <y>228</y>
     </hint>
    </hints>
   </connection>

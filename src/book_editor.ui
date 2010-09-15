@@ -223,5 +223,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>id_keys</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>id_values</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>279</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>id_values</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>id_keys</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>354</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>263</x>
+     <y>132</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -26,6 +26,8 @@ class GuessDialog(QtGui.QDialog):
         self.ui = self
         self._query = None
 
+        self.md=[]
+        self.currentMD=None
         self.book = book
         self.title.setText("Title: %s"%book.title)
         self.author.setText("Author: %s"%(u', '.join([a.name for a in book.authors])))
@@ -36,7 +38,12 @@ class GuessDialog(QtGui.QDialog):
         else:
             self.isbn.hide()
 
-    def accept(self):
+    def on_bookList_currentRowChanged(self, row):
+        self.currentMD=self.md[row]
+        print "Selected: ",unicode(self.bookList.item(row).text())
+
+    @QtCore.pyqtSlot()
+    def on_guess_clicked(self):
         # Try to guess based on the reliable data
         q=''
         if self.title.isChecked():
@@ -46,7 +53,11 @@ class GuessDialog(QtGui.QDialog):
         if self.isbn.isChecked():
             q+='ISBN %s'%self._isbn
         self._query = q
-        QtGui.QDialog.accept(self)
+        if self._query:
+            self.md = get_metadata(self._query)
+        for candidate in self.md:
+            authors = ', '.join(candidate.authors)
+            self.bookList.addItem("%s by %s"%(candidate.title, authors))
 
 class BookEditor(QtGui.QWidget):
     def __init__(self, book_id, *args):
@@ -65,6 +76,8 @@ class BookEditor(QtGui.QWidget):
             print "Wrong book ID"
         self.title.setText(self.book.title)
         self.authors.setText('|'.join([a.name for a in self.book.authors]))
+        self.id_keys.clear()
+        self.id_values.clear()
         for i in self.book.identifiers:
             self.id_keys.addItem(i.key)
             self.id_values.addItem(i.value)
@@ -82,9 +95,20 @@ class BookEditor(QtGui.QWidget):
     def on_guess_clicked(self):
         dlg = GuessDialog(self.book, self)
         dlg.exec_()
-        if dlg._query:
-            print get_metadata(dlg._query)
-            
+        if dlg.currentMD:
+            md = dlg.currentMD
+            # A candidate was chosen, update data
+            self.title.setText(md.title)
+            self.authors.setText('|'.join(md.authors))
+            self.id_keys.clear()
+            self.id_values.clear()
+            for k,v in md.identifiers:
+                self.id_keys.addItem(k)
+                self.id_values.addItem(v)
+            self.on_save_clicked()
+            self.load_data(self.book.id)
+            self.book.fetch_cover()
+            self.load_data(self.book.id)
 
     @QtCore.pyqtSlot()
     def on_save_clicked(self):
@@ -99,6 +123,12 @@ class BookEditor(QtGui.QWidget):
                 print "Creating author:", a
                 author = models.Author(name = a)
             self.book.authors.append(author)
+        for ident in self.book.identifiers:
+            ident.delete()
+        for i in range(self.id_keys.count()):
+            k = unicode(self.id_keys.itemText(i))
+            v = unicode(self.id_values.itemText(i))
+            i = models.Identifier(key = k, value = v, book = self.book)
         # TODO: save the rest of the data
         models.session.commit()
 
