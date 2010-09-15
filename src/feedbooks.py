@@ -4,20 +4,18 @@ import sys, os
 
 # This gets the main catalog from feedbooks.
 
-class Catalog(QtGui.QDialog):
-    def __init__(self):
-        QtGui.QDialog.__init__(self)
-
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'catalog.ui')
-        uic.loadUi(uifile, self)
-        self.addBranch(self.catalog, 'http://www.feedbooks.com/catalog.atom')
+class Catalog(QtGui.QTreeWidgetItem):
+    def __init__(self, *args):
+        QtGui.QTreeWidgetItem.__init__(self, *args)
+        self.handler = self
+        self.setText(0, "FeedBooks")
+        self.addBranch(self, 'http://www.feedbooks.com/catalog.atom')
 
     def addBranch(self, parent, url):
         data = parse(url)
         for entry in data.entries:
             i = QtGui.QTreeWidgetItem(parent, [entry.title])
+            i.handler = self
             i.url = entry.links[0].href
             if i.url.split('/')[-1].isdigit():
                 # It's a book
@@ -35,13 +33,3 @@ class Catalog(QtGui.QDialog):
         if url.split('/')[-1].isdigit():
             # It's a book
             self.web.load(QtCore.QUrl(url))
-        
-def main():
-    app = QtGui.QApplication(sys.argv)
-    window=Catalog()
-    window.show()
-    sys.exit(app.exec_())
-
-if __name__ == "__main__":
-    main()
-

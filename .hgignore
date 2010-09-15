@@ -5,6 +5,7 @@ syntax: glob
 *.pyc
 *~
 secrets.py
+*.sqlite
 
 # switch to regexp syntax.
 #syntax: regexp
