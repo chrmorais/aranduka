@@ -67,7 +67,7 @@ class Author (Entity):
     using_options(tablename='authors')
     name = Field(Unicode(30))
     # Relationships
-    books = ManyToOne('Book')
+    books = ManyToMany('Book')
 
     def __repr__(self):
         return '<author>%s</author>' % (self.name)
