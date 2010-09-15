@@ -42,14 +42,31 @@ class Book (Entity):
         print isbns
         fname = os.path.join("covers", str(self.id) +".jpg")
         for isbn in isbns:
+            # Try openlibrary
             try:
-                print "Trying with ISBN: '%s'"%isbn.value
+                print "Trying openlibrary with ISBN: '%s'"%isbn.value
                 u=urllib2.urlopen('http://covers.openlibrary.org/b/isbn/%s-M.jpg?default=false'%isbn.value)
                 data = u.read()
                 u.close()
                 thumb = open(fname,'wb')
                 thumb.write(data)
                 thumb.close()
+                break
+            except urllib2.HTTPError:
+                pass
+
+            # Then we try LibraryThing
+            # Maybe using my devkey here is not a very good idea.
+            try:
+                print "Trying librarything with ISBN: '%s'"%isbn.value
+                u=urllib2.urlopen('http://covers.librarything.com/devkey/%s/medium/isbn/%s'%('09fc520942eb98c27391d2b8e02f3866',isbn.value))
+                data = u.read()
+                u.close()
+                if len(data) > 1000: #A real cover
+                    thumb = open(fname,'wb')
+                    thumb.write(data)
+                    thumb.close()
+                    break
             except urllib2.HTTPError:
                 pass
 
