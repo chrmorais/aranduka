@@ -12,10 +12,6 @@ from metadata import get_metadata
 
 service = BookService()
 
-
-app = QtGui.QApplication(sys.argv)
-
-
 class GuessDialog(QtGui.QDialog):
     def __init__(self, book, *args):
         QtGui.QDialog.__init__(self,*args)
@@ -60,14 +56,15 @@ class GuessDialog(QtGui.QDialog):
             self.bookList.addItem("%s by %s"%(candidate.title, authors))
 
 class BookEditor(QtGui.QWidget):
-    def __init__(self, book_id, *args):
+    def __init__(self, book_id = None, *args):
         QtGui.QWidget.__init__(self,*args)
         uifile = os.path.join(
             os.path.abspath(
                 os.path.dirname(__file__)),'book_editor.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        self.load_data(book_id)
+        if book_id is not None:
+            self.load_data(book_id)
 
     def load_data(self, book_id):
         self.book = models.Book.get_by(id=book_id)
@@ -204,6 +201,7 @@ class BookEditor(QtGui.QWidget):
                                        )
 
 if __name__ == '__main__':
+    app = QtGui.QApplication(sys.argv)
     models.initDB()
     ventana = BookEditor(int(sys.argv[1]))
     ventana.show()
