@@ -132,6 +132,16 @@ class BookEditor(QtGui.QWidget):
         # TODO: save the rest of the data
         models.session.commit()
 
+    @QtCore.pyqtSlot()
+    def on_add_file_clicked(self):
+        file_name = unicode(QtGui.QFileDialog.getOpenFileName(self, 'Add File'))
+        if file_name:
+            self.fileList.addItem(file_name)
+
+    @QtCore.pyqtSlot()
+    def on_remove_file_clicked(self):
+        self.fileList.takeItem(self.fileList.currentRow())
+
     def findBook(self):
         """
         Busca un libro por ISBN en GoogleBooks y devuelve un dict con todos los datos o -1 si no valido el ISBN.
