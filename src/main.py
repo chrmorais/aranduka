@@ -33,6 +33,16 @@ class Main(QtGui.QMainWindow):
         menu.addAction(self.actionDelete_Book)
         menu.exec_(self.books.mapToGlobal(point))
 
+    @QtCore.pyqtSlot()
+    def on_actionOpen_Book_triggered(self):
+        item = self.books.currentItem()
+        if not item:
+            return
+        if item.book.files:
+            url = QtCore.QUrl.fromLocalFile(item.book.files[0].file_name)
+            print "Opening:", url
+            QtGui.QDesktopServices.openUrl(url)
+
     def on_books_itemActivated(self, item):
         self.book_editor.load_data(item.book.id)
         self.stack.setCurrentIndex(1)
