@@ -26,6 +26,13 @@ class Main(QtGui.QMainWindow):
         self.loadBooks()
         print "Finished initializing main window"
 
+    def on_books_customContextMenuRequested(self, point):
+        menu = QtGui.QMenu()
+        menu.addAction(self.actionEdit_Book)
+        menu.addAction(self.actionOpen_Book)
+        menu.addAction(self.actionDelete_Book)
+        menu.exec_(self.books.mapToGlobal(point))
+
     def on_books_itemActivated(self, item):
         self.book_editor.load_data(item.book.id)
         self.stack.setCurrentIndex(1)

@@ -59,6 +59,7 @@ def import_file(fname):
                     author = models.Author.get_by(name=name)
                     if not author:
                         author = models.Author(name = name)
+                        print "Added author: ", name
                     b.authors.append(author)
 
                 # Fetch cover

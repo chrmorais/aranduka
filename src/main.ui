@@ -159,6 +159,9 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="styleSheet">
             <string notr="true">background-color: qlineargradient(spread:repeat, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(190, 190, 190, 255), stop:0.137566 rgba(255, 255, 255, 255));</string>
            </property>
@@ -214,12 +217,36 @@
     </property>
     <addaction name="actionImport_Files"/>
    </widget>
+   <widget class="QMenu" name="menuBook">
+    <property name="title">
+     <string>Book</string>
+    </property>
+    <addaction name="actionEdit_Book"/>
+    <addaction name="actionDelete_Book"/>
+    <addaction name="actionOpen_Book"/>
+   </widget>
    <addaction name="menuLibrary"/>
+   <addaction name="menuBook"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionImport_Files">
    <property name="text">
     <string>Import Files</string>
+   </property>
+  </action>
+  <action name="actionEdit_Book">
+   <property name="text">
+    <string>Edit</string>
+   </property>
+  </action>
+  <action name="actionDelete_Book">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionOpen_Book">
+   <property name="text">
+    <string>Open</string>
    </property>
   </action>
  </widget>
