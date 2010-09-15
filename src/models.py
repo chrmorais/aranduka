@@ -28,7 +28,7 @@ class Book (Entity):
     cover = Field(Unicode(40))
     comments = Field(UnicodeText)
     # Relationships
-    authors = OneToMany('Author')
+    authors = ManyToMany('Author')
     files = OneToMany('File')
     identifiers = OneToMany('Identifier')
     tags = ManyToMany('Tag')
