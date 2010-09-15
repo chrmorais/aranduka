@@ -92,7 +92,9 @@ class BookEditor(QtGui.QWidget):
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
         dlg = GuessDialog(self.book, self)
-        dlg.exec_()
+        r = dlg.exec_()
+        if not r == dlg.Accepted:
+            return
         if dlg.currentMD:
             md = dlg.currentMD
             # A candidate was chosen, update data
