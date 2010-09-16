@@ -135,7 +135,7 @@ class BookEditor(QtGui.QWidget):
     @QtCore.pyqtSlot()
     def on_add_file_clicked(self):
         file_name = unicode(QtGui.QFileDialog.getOpenFileName(self, 'Add File'))
-        if file_name:
+        if file_name and not self.fileList.findItems(file_name, QtCore.Qt.MatchExactly):
             self.fileList.addItem(file_name)
 
     @QtCore.pyqtSlot()
