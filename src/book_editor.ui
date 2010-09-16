@@ -86,16 +86,16 @@
            <widget class="QComboBox" name="id_values"/>
           </item>
           <item>
-           <widget class="QToolButton" name="remove_id">
+           <widget class="QToolButton" name="add_id">
             <property name="text">
-             <string>-</string>
+             <string>+</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="add_id">
+           <widget class="QToolButton" name="remove_id">
             <property name="text">
-             <string>+</string>
+             <string>-</string>
             </property>
            </widget>
           </item>
