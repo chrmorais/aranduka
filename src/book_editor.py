@@ -129,6 +129,10 @@ class BookEditor(QtGui.QWidget):
             k = unicode(self.id_keys.itemText(i))
             v = unicode(self.id_values.itemText(i))
             i = models.Identifier(key = k, value = v, book = self.book)
+        for old_file in self.book.files:
+            old_file.delete()
+        for file_name in [unicode(self.fileList.item(i).text()) for i in range(self.fileList.count())]:
+            f = models.File(file_name=file_name, book=self.book)
         # TODO: save the rest of the data
         models.session.commit()
 
