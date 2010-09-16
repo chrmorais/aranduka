@@ -55,6 +55,16 @@ class GuessDialog(QtGui.QDialog):
             authors = ', '.join(candidate.authors)
             self.bookList.addItem("%s by %s"%(candidate.title, authors))
 
+class IdentifierDialog(QtGui.QDialog):
+    def __init__(self, book, *args):
+        QtGui.QDialog.__init__(self,*args)
+        uifile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'identifier.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
+        self._query = None
+
 class BookEditor(QtGui.QWidget):
     def __init__(self, book_id = None, *args):
         QtGui.QWidget.__init__(self,*args)
@@ -145,6 +155,21 @@ class BookEditor(QtGui.QWidget):
     @QtCore.pyqtSlot()
     def on_remove_file_clicked(self):
         self.fileList.takeItem(self.fileList.currentRow())
+
+    @QtCore.pyqtSlot()
+    def on_add_id_clicked(self):
+        dlg = IdentifierDialog(self.book, self)
+        r = dlg.exec_()
+        if not r == dlg.Accepted:
+            return
+        self.id_keys.addItem(dlg.identifier.text())
+        self.id_values.addItem(dlg.value.text())
+
+    @QtCore.pyqtSlot()
+    def on_remove_id_clicked(self):
+        current_index = self.id_keys.currentIndex()
+        self.id_values.removeItem(current_index)
+        self.id_keys.removeItem(current_index)
 
     def findBook(self):
         """
