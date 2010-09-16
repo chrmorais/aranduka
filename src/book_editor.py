@@ -64,8 +64,8 @@ class IdentifierDialog(QtGui.QDialog):
         uic.loadUi(uifile, self)
         self.ui = self
         self._query = None
-        self.identifier.setText(id_key)
-        self.value.setText(id_value)
+        self.id_key.setText(id_key)
+        self.id_value.setText(id_value)
 
 class BookEditor(QtGui.QWidget):
     def __init__(self, book_id = None, *args):
@@ -164,8 +164,8 @@ class BookEditor(QtGui.QWidget):
         r = dlg.exec_()
         if not r == dlg.Accepted:
             return
-        self.id_keys.addItem(dlg.identifier.text())
-        self.id_values.addItem(dlg.value.text())
+        self.id_keys.addItem(dlg.id_key.text())
+        self.id_values.addItem(dlg.id_value.text())
 
     @QtCore.pyqtSlot()
     def on_remove_id_clicked(self):
@@ -179,8 +179,8 @@ class BookEditor(QtGui.QWidget):
         r = dlg.exec_()
         if not r == dlg.Accepted:
             return
-        self.id_keys.setItemText(self.id_keys.currentIndex(), dlg.identifier.text())
-        self.id_values.setItemText(self.id_values.currentIndex(), dlg.value.text())
+        self.id_keys.setItemText(self.id_keys.currentIndex(), dlg.id_key.text())
+        self.id_values.setItemText(self.id_values.currentIndex(), dlg.id_value.text())
 
     def findBook(self):
         """
