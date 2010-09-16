@@ -56,7 +56,7 @@ class GuessDialog(QtGui.QDialog):
             self.bookList.addItem("%s by %s"%(candidate.title, authors))
 
 class IdentifierDialog(QtGui.QDialog):
-    def __init__(self, book, *args):
+    def __init__(self, id_key, id_value, *args):
         QtGui.QDialog.__init__(self,*args)
         uifile = os.path.join(
             os.path.abspath(
@@ -64,6 +64,8 @@ class IdentifierDialog(QtGui.QDialog):
         uic.loadUi(uifile, self)
         self.ui = self
         self._query = None
+        self.identifier.setText(id_key)
+        self.value.setText(id_value)
 
 class BookEditor(QtGui.QWidget):
     def __init__(self, book_id = None, *args):
@@ -158,7 +160,7 @@ class BookEditor(QtGui.QWidget):
 
     @QtCore.pyqtSlot()
     def on_add_id_clicked(self):
-        dlg = IdentifierDialog(self.book, self)
+        dlg = IdentifierDialog('', '', self)
         r = dlg.exec_()
         if not r == dlg.Accepted:
             return
@@ -170,6 +172,15 @@ class BookEditor(QtGui.QWidget):
         current_index = self.id_keys.currentIndex()
         self.id_values.removeItem(current_index)
         self.id_keys.removeItem(current_index)
+
+    @QtCore.pyqtSlot()
+    def on_edit_id_clicked(self):
+        dlg = IdentifierDialog(self.id_keys.currentText(), self.id_values.currentText(), self)
+        r = dlg.exec_()
+        if not r == dlg.Accepted:
+            return
+        self.id_keys.setItemText(self.id_keys.currentIndex(), dlg.identifier.text())
+        self.id_values.setItemText(self.id_values.currentIndex(), dlg.value.text())
 
     def findBook(self):
         """
