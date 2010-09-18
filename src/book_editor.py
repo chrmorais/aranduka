@@ -50,7 +50,7 @@ class GuessDialog(QtGui.QDialog):
             q+='ISBN %s'%self._isbn
         self._query = q
         if self._query:
-            self.md = get_metadata(self._query)
+            self.md = get_metadata(self._query) or []
         for candidate in self.md:
             authors = ', '.join(candidate.authors)
             self.bookList.addItem("%s by %s"%(candidate.title, authors))
