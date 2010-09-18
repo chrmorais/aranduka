@@ -25,6 +25,7 @@ class Catalog(object):
         
     def search (self, terms):
         url = "http://www.feedbooks.com/search.atom?"+urllib.urlencode(dict(query=terms))
+        self.openUrl(QtCore.QUrl(url))
 
     def openUrl(self, url):
         url = unicode(url.toString())
