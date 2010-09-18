@@ -101,10 +101,12 @@ def import_file(fname):
         return r1
 
     # Maybe it's author - title
-    _, p4 = p.split(u'-',1)
-    r1 = try_import(fname, u'TITLE '+p4)
-    if r1:
-        return r1
+    l = p.split(u'-',1)
+    if len(l)==2:
+    	_, p4 = l
+        r1 = try_import(fname, u'TITLE '+p4)
+        if r1:
+            return r1
         
     #TODO Keep trying in other ways
     
