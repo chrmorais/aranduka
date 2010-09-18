@@ -19,8 +19,12 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-
-        self.feedbooksStore = feedbooks.Catalog(self.stores)
+        self.last_splitter_sizes = None
+        self.store_handler = None
+        
+        item = QtGui.QTreeWidgetItem(["Feedbooks"])
+        item.handler = feedbooks.Catalog
+        self.stores.addTopLevelItem(item)
 
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
@@ -28,10 +32,12 @@ class Main(QtGui.QMainWindow):
         self.book_editor.back.clicked.connect(self.show_shelves)
         self._layout.addWidget(self.book_editor)
         self.loadBooks()
+        self.back_from_store.clicked.connect(self.show_shelves_from_store)
         print "Finished initializing main window"
 
-    def on_stores_itemExpanded(self, item):
-        item.handler.on_catalog_itemExpanded(item)
+    def on_stores_itemClicked(self, item):
+        self.stack.setCurrentIndex(2)
+        self.store_handler=item.handler(self)
 
     def on_books_customContextMenuRequested(self, point):
         menu = QtGui.QMenu()
@@ -57,9 +63,18 @@ class Main(QtGui.QMainWindow):
         self.main_splitter.setSizes([0,self.main_splitter.size().width()])
 
     def show_shelves(self):
+        if self.store_handler:
+            del(self.store_handler)
+            self.store_handler = None
         self.updateItem(self.books.currentItem())
         self.stack.setCurrentIndex(0)
-        self.main_splitter.setSizes(self.last_splitter_sizes)
+        if self.last_splitter_sizes:
+            self.main_splitter.setSizes(self.last_splitter_sizes)
+
+    def show_shelves_from_store(self):
+        self.loadBooks()
+        self.show_shelves()
+
 
     @QtCore.pyqtSlot()
     def on_actionImport_Files_triggered(self):
@@ -95,6 +110,8 @@ class Main(QtGui.QMainWindow):
         """Updates one item with the data for its book"""
 
         # Make sure we are updated from the DB
+	if not item:
+	    return
         item.book = models.Book.get_by(id = item.book.id)
         cname = os.path.join("covers",str(item.book.id)+".jpg")
         item.setText(item.book.title)

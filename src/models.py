@@ -36,39 +36,51 @@ class Book (Entity):
     def __repr__(self):
         return '<book>%s - %s</book>' % (self.title, self.authors)
 
-    def fetch_cover(self):
-        """Downloads and stores a cover for this book, if possible"""
-        isbns = Identifier.query.filter_by(key = 'ISBN', book = self).all()
-        print isbns
+    def fetch_cover(self, url = None):
+        """Downloads and stores a cover for this book, if possible.
+        
+        If a url is given, it uses that. If not, it tries to get it from other
+        sources.
+        """
         fname = os.path.join("covers", str(self.id) +".jpg")
-        for isbn in isbns:
-            # Try openlibrary
-            try:
-                print "Trying openlibrary with ISBN: '%s'"%isbn.value
-                u=urllib2.urlopen('http://covers.openlibrary.org/b/isbn/%s-M.jpg?default=false'%isbn.value)
-                data = u.read()
-                u.close()
-                thumb = open(fname,'wb')
-                thumb.write(data)
-                thumb.close()
-                break
-            except urllib2.HTTPError:
-                pass
-
-            # Then we try LibraryThing
-            # Maybe using my devkey here is not a very good idea.
-            try:
-                print "Trying librarything with ISBN: '%s'"%isbn.value
-                u=urllib2.urlopen('http://covers.librarything.com/devkey/%s/large/isbn/%s'%('09fc520942eb98c27391d2b8e02f3866',isbn.value))
-                data = u.read()
-                u.close()
-                if len(data) > 1000: #A real cover
+        if url:
+            print "Fetching cover: ", url
+            u=urllib2.urlopen(url)
+            data = u.read()
+            u.close()
+            thumb = open(fname,'wb')
+            thumb.write(data)
+            thumb.close()
+        else:
+            isbns = Identifier.query.filter_by(key = 'ISBN', book = self).all()
+            for isbn in isbns:
+                # Try openlibrary
+                try:
+                    print "Trying openlibrary with ISBN: '%s'"%isbn.value
+                    u=urllib2.urlopen('http://covers.openlibrary.org/b/isbn/%s-M.jpg?default=false'%isbn.value)
+                    data = u.read()
+                    u.close()
                     thumb = open(fname,'wb')
                     thumb.write(data)
                     thumb.close()
                     break
-            except urllib2.HTTPError:
-                pass
+                except urllib2.HTTPError:
+                    pass
+
+                # Then we try LibraryThing
+                # Maybe using my devkey here is not a very good idea.
+                try:
+                    print "Trying librarything with ISBN: '%s'"%isbn.value
+                    u=urllib2.urlopen('http://covers.librarything.com/devkey/%s/large/isbn/%s'%('09fc520942eb98c27391d2b8e02f3866',isbn.value))
+                    data = u.read()
+                    u.close()
+                    if len(data) > 1000: #A real cover
+                        thumb = open(fname,'wb')
+                        thumb.write(data)
+                        thumb.close()
+                        break
+                except urllib2.HTTPError:
+                    pass
 
 class Identifier (Entity):
     using_options(tablename='identifiers')
