@@ -136,7 +136,7 @@ class Catalog(object):
             html.append(item)
 
         # Maybe it's paginated
-        pCount = ceil(float(data.feed.get('opensearch_totalresults', 1))/int(data.feed.get('opensearch_itemsperpage', 1)))
+        pCount = int(ceil(float(data.feed.get('opensearch_totalresults', 1))/int(data.feed.get('opensearch_itemsperpage', 1))))
         #from pudb import set_trace; set_trace()
         if pCount > 1:
             html.append("<div>")
