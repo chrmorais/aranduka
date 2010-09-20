@@ -16,8 +16,10 @@ class Catalog(object):
         self.widget.store_name.setText("FeedBooks")
         self.widget.search_text.editingFinished.connect(self.doSearch)
         self.widget.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
-        self.showBranch('http://www.feedbooks.com/catalog.atom')
+        self.crumbs=[]
+        self.openUrl(QtCore.QUrl('http://www.feedbooks.com/catalog.atom'))
         self.widget.store_web.page().linkClicked.connect(self.openUrl)
+        self.widget.crumbs.linkActivated.connect(self.openUrl)
         
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
@@ -25,14 +27,20 @@ class Catalog(object):
         
     def search (self, terms):
         url = "http://www.feedbooks.com/search.atom?"+urllib.urlencode(dict(query=terms))
+        self.crumbs=[self.crumbs[0],["Search: %s"%terms, url]]
         self.openUrl(QtCore.QUrl(url))
 
     def openUrl(self, url):
-        url = unicode(url.toString())
+        print "CRUMBS:", self.crumbs
+        if isinstance(url, QtCore.QUrl):
+            url = url.toString()
+        url = unicode(url)
         extension = url.split('.')[-1]
         print "Opening:",url
         if url.split('/')[-1].isdigit():
             # A details page
+            self.crumbs.append(["#%s"%url.split('/')[-1],url])
+            self.showCrumbs()
             self.widget.store_web.load(QtCore.QUrl(url))
         elif extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
@@ -79,10 +87,25 @@ class Catalog(object):
         else:
             self.showBranch(url)
 
+    def showCrumbs(self):
+        ctext = []
+        for c in self.crumbs:
+            ctext.append('<a href="%s">%s</a>'%(c[1],c[0]))
+        ctext = "&nbsp;>&nbsp;".join(ctext)
+        self.widget.crumbs.setText(ctext)
+
     def showBranch(self, url):
         print "Showing:", url
         data = parse(url)
         html = ["<h1>%s</h1>"%data.feed.title]
+        crumb = [data.feed.title.split("|")[0].split("/")[-1].strip(), url]
+        try:
+            r=self.crumbs.index(crumb)
+            self.crumbs=self.crumbs[:r+1]
+        except ValueError:
+            self.crumbs.append(crumb)
+        self.showCrumbs()
+        
         for entry in data.entries:
             iurl = entry.links[0].href
 
