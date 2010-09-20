@@ -91,6 +91,14 @@ class Main(QtGui.QMainWindow):
         # Reload books
         self.loadBooks()
 
+    @QtCore.pyqtSlot()
+    def on_actionImport_File_triggered(self):
+        fname = unicode(QtGui.QFileDialog.getOpenFileName(self, "Import File"))
+        if not fname: return
+        status = importer.import_file(fname)
+        self.loadBooks()
+
+
     def loadBooks(self):
         """Get all books from the DB and show them"""
         nocover = QtGui.QIcon("nocover.png")
