@@ -55,6 +55,7 @@ class Catalog(object):
                     if not t:
                         t = Tag(name = tag.label)
                     tags.append(t)
+                ident = Identifier(key="FEEDBOOKS_ID", value=book_id)
                 author = Author.get_by (name = bookdata.author)
                 if not author:
                     author = Author(name = bookdata.author)
@@ -62,6 +63,7 @@ class Catalog(object):
                     title = title,
                     authors = [author],
                     tags = tags,
+                    identifiers = [ident]
                 )
             session.commit()
             
@@ -136,7 +138,7 @@ class Catalog(object):
                 item = """
                 <dd>
                     <a href="%s">%s</a>: %s
-                </dd>
+                </dd>--
                 """%(
                     iurl,
                     entry.title,
