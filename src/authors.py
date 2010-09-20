@@ -20,7 +20,7 @@ class Catalog(object):
                 cname = os.path.join("covers",str(b.id)+".jpg")
                 if os.path.isfile(cname):
                     try:
-                        icon =  QtGui.QIcon(cname)
+                        icon =  QtGui.QIcon(QtGui.QPixmap(cname).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                     except:
                         pass
                 item = QtGui.QListWidgetItem(icon, b.title, self.widget.books)

@@ -229,14 +229,14 @@ padding: .5em;
                <enum>QFrame::Plain</enum>
               </property>
               <property name="dragDropMode">
-               <enum>QAbstractItemView::DragOnly</enum>
+               <enum>QAbstractItemView::DragDrop</enum>
               </property>
               <property name="alternatingRowColors">
                <bool>false</bool>
               </property>
               <property name="iconSize">
                <size>
-                <width>80</width>
+                <width>128</width>
                 <height>128</height>
                </size>
               </property>
@@ -248,12 +248,6 @@ padding: .5em;
               </property>
               <property name="layoutMode">
                <enum>QListView::Batched</enum>
-              </property>
-              <property name="gridSize">
-               <size>
-                <width>150</width>
-                <height>150</height>
-               </size>
               </property>
               <property name="viewMode">
                <enum>QListView::IconMode</enum>

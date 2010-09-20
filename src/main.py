@@ -21,7 +21,6 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        self.last_splitter_sizes = None
         self.store_handler = None
 
         item = QtGui.QTreeWidgetItem(["Titles"])
@@ -48,7 +47,7 @@ class Main(QtGui.QMainWindow):
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
         self.book_editor = BookEditor(None)
-        self.book_editor.back.clicked.connect(self.show_shelves)
+        #self.book_editor.back.clicked.connect(self.show_shelves)
         self._layout.addWidget(self.book_editor)
         print "Finished initializing main window"
 
@@ -82,9 +81,8 @@ class Main(QtGui.QMainWindow):
 
     def on_books_itemActivated(self, item):
         self.book_editor.load_data(item.book.id)
+        self.title.setText('Editing properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(1)
-        self.last_splitter_sizes=self.main_splitter.sizes()
-        self.main_splitter.setSizes([0,self.main_splitter.size().width()])
 
     def show_shelves(self):
         if self.store_handler:
@@ -92,8 +90,6 @@ class Main(QtGui.QMainWindow):
             self.store_handler = None
         self.updateItem(self.books.currentItem())
         self.stack.setCurrentIndex(0)
-        if self.last_splitter_sizes:
-            self.main_splitter.setSizes(self.last_splitter_sizes)
 
     @QtCore.pyqtSlot()
     def on_actionImport_Files_triggered(self):
@@ -121,17 +117,17 @@ class Main(QtGui.QMainWindow):
         """Updates one item with the data for its book"""
 
         # Make sure we are updated from the DB
-	if not item:
-	    return
-        item.book = models.Book.get_by(id = item.book.id)
-        cname = os.path.join("covers",str(item.book.id)+".jpg")
-        item.setText(item.book.title)
-        if os.path.isfile(cname):
-            try:
-                icon =  QtGui.QIcon(cname)
-                item.setIcon(icon)
-            except:
-                pass
+        if not item:
+            return
+            item.book = models.Book.get_by(id = item.book.id)
+            cname = os.path.join("covers",str(item.book.id)+".jpg")
+            item.setText(item.book.title)
+            if os.path.isfile(cname):
+                try:
+                    icon =  QtGui.QIcon(QPixmap(cname).scaledToHeight(128))
+                    item.setIcon(icon)
+                except:
+                    pass
         
 
 def main():
