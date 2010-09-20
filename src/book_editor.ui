@@ -62,10 +62,7 @@
        <item row="2" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QComboBox" name="id_keys"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="id_values"/>
+          <widget class="QComboBox" name="ids"/>
          </item>
          <item>
           <widget class="QToolButton" name="add_id">
@@ -143,8 +140,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>710</width>
-        <height>429</height>
+        <width>180</width>
+        <height>105</height>
        </rect>
       </property>
       <attribute name="label">
@@ -210,8 +207,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>710</width>
-        <height>429</height>
+        <width>146</width>
+        <height>74</height>
        </rect>
       </property>
       <attribute name="label">
@@ -301,38 +298,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>id_keys</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>id_values</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>330</x>
-     <y>124</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>424</x>
-     <y>121</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>id_values</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>id_keys</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>384</x>
-     <y>107</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>355</x>
-     <y>111</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

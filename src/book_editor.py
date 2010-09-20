@@ -85,11 +85,9 @@ class BookEditor(QtGui.QWidget):
             print "Wrong book ID"
         self.title.setText(self.book.title)
         self.authors.setText('|'.join([a.name for a in self.book.authors]))
-        self.id_keys.clear()
-        self.id_values.clear()
+        self.ids.clear()
         for i in self.book.identifiers:
-            self.id_keys.addItem(i.key)
-            self.id_values.addItem(i.value)
+            self.ids.addItem("%s: %s"%(i.key,i.value))
 
         self.fileList.clear()
         for f in self.book.files:
@@ -112,11 +110,9 @@ class BookEditor(QtGui.QWidget):
             # A candidate was chosen, update data
             self.title.setText(md.title)
             self.authors.setText('|'.join(md.authors))
-            self.id_keys.clear()
-            self.id_values.clear()
+            self.ids.clear()
             for k,v in md.identifiers:
-                self.id_keys.addItem(k)
-                self.id_values.addItem(v)
+                self.ids.addItem("%s: %s"%(k,v))
             self.on_save_clicked()
             self.load_data(self.book.id)
             self.book.fetch_cover()
@@ -137,9 +133,9 @@ class BookEditor(QtGui.QWidget):
             self.book.authors.append(author)
         for ident in self.book.identifiers:
             ident.delete()
-        for i in range(self.id_keys.count()):
-            k = unicode(self.id_keys.itemText(i))
-            v = unicode(self.id_values.itemText(i))
+        for i in range(self.ids.count()):
+            t = unicode(self.ids.itemText(i))
+            k, v = split(t,': ',1)
             i = models.Identifier(key = k, value = v, book = self.book)
         for old_file in self.book.files:
             old_file.delete()
@@ -164,23 +160,22 @@ class BookEditor(QtGui.QWidget):
         r = dlg.exec_()
         if not r == dlg.Accepted:
             return
-        self.id_keys.addItem(dlg.id_key.text())
-        self.id_values.addItem(dlg.id_value.text())
+        self.ids.addItem("%s: %s"%(dlg.id_key.text(), dlg.id_value.text()))
 
     @QtCore.pyqtSlot()
     def on_remove_id_clicked(self):
-        current_index = self.id_keys.currentIndex()
-        self.id_values.removeItem(current_index)
-        self.id_keys.removeItem(current_index)
+        current_index = self.ids.currentIndex()
+        self.ids.removeItem(current_index)
 
     @QtCore.pyqtSlot()
     def on_edit_id_clicked(self):
-        dlg = IdentifierDialog(self.id_keys.currentText(), self.id_values.currentText(), self)
+        k, v = self.ids.currentText().split(": ",1)
+        dlg = IdentifierDialog(k, v, self)
         r = dlg.exec_()
         if not r == dlg.Accepted:
             return
-        self.id_keys.setItemText(self.id_keys.currentIndex(), dlg.id_key.text())
-        self.id_values.setItemText(self.id_values.currentIndex(), dlg.id_value.text())
+        self.ids.setItemText(self.ids.currentIndex(), "%s: %s"%(
+            dlg.id_key.text(), dlg.id_value.text()))
 
     def findBook(self):
         """
