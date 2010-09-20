@@ -14,7 +14,7 @@ class Catalog(object):
         """Get all books from the DB and show them"""
         nocover = QtGui.QIcon("nocover.png")
         self.widget.books.clear()
-        for b in models.Book.query.all().order_by(title):
+        for b in models.Book.query.order_by("title").all():
             icon = nocover
             cname = os.path.join("covers",str(b.id)+".jpg")
             if os.path.isfile(cname):
