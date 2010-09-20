@@ -10,6 +10,7 @@ from book_editor import BookEditor
 
 import feedbooks
 import titles
+import authors
 
 class Main(QtGui.QMainWindow):
     def __init__(self):
@@ -28,7 +29,13 @@ class Main(QtGui.QMainWindow):
         item.handler = titles.Catalog
         self.treeWidget.addTopLevelItem(item)
         self.on_treeWidget_itemClicked(item)
+        self.treeWidget.setCurrentItem(item)
         self.shelves_handler.loadBooks()
+
+        item = QtGui.QTreeWidgetItem(["Authors"])
+        item.is_shelves = True
+        item.handler = authors.Catalog
+        self.treeWidget.addTopLevelItem(item)
 
         item = QtGui.QTreeWidgetItem(["Feedbooks"])
         item.is_store = True
@@ -49,7 +56,9 @@ class Main(QtGui.QMainWindow):
             self.store_handler=item.handler(self)
         elif hasattr(item, 'is_shelves'):
             self.stack.setCurrentIndex(0)
+            print repr(item.handler)
             self.shelves_handler=item.handler(self)
+            self.shelves_handler.loadBooks()
 
     def on_books_customContextMenuRequested(self, point):
         menu = QtGui.QMenu()
