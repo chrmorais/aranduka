@@ -27,17 +27,20 @@ class Main(QtGui.QMainWindow):
         item = QtGui.QTreeWidgetItem(["Titles"])
         item.is_shelves = True
         item.handler = titles.Catalog
+        item.title = "Books by Title"
         self.treeWidget.addTopLevelItem(item)
         self.on_treeWidget_itemClicked(item)
         self.treeWidget.setCurrentItem(item)
         self.shelves_handler.loadBooks()
 
         item = QtGui.QTreeWidgetItem(["Authors"])
+        item.title = "Books by Author"
         item.is_shelves = True
         item.handler = authors.Catalog
         self.treeWidget.addTopLevelItem(item)
 
         item = QtGui.QTreeWidgetItem(["Feedbooks"])
+        item.title = "FeedBooks: Free and Public Domain Books"
         item.is_store = True
         item.handler = feedbooks.Catalog
         self.treeWidget.addTopLevelItem(item)
@@ -58,6 +61,7 @@ class Main(QtGui.QMainWindow):
             print repr(item.handler)
             self.shelves_handler=item.handler(self)
             self.shelves_handler.loadBooks()
+        self.title.setText(item.title)
 
     def on_books_customContextMenuRequested(self, point):
         menu = QtGui.QMenu()
