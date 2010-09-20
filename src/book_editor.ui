@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>728</width>
+    <width>740</width>
     <height>570</height>
    </rect>
   </property>
@@ -14,24 +14,47 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QToolBox" name="page3">
+     <property name="styleSheet">
+      <string notr="true">::tab:selected {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #6a6ea9, stop: 1 #888dd9);
+ }
+
+::tab {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #FAFBFE, stop: 1 #DCDEF1);
+ }</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="details_page">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>710</width>
-        <height>429</height>
+        <width>730</width>
+        <height>437</height>
        </rect>
       </property>
       <attribute name="label">
        <string>Book Details</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::ExpandingFieldsGrow</enum>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="label_6">
          <property name="text">
@@ -140,14 +163,17 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>180</width>
-        <height>105</height>
+        <width>730</width>
+        <height>437</height>
        </rect>
       </property>
       <attribute name="label">
        <string>Shelves</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_2">
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
@@ -207,14 +233,17 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>146</width>
-        <height>74</height>
+        <width>730</width>
+        <height>437</height>
        </rect>
       </property>
       <attribute name="label">
        <string>Files</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_3">
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
