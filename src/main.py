@@ -9,6 +9,7 @@ from progress import progress
 from book_editor import BookEditor
 
 import feedbooks
+import titles
 
 class Main(QtGui.QMainWindow):
     def __init__(self):
@@ -21,23 +22,34 @@ class Main(QtGui.QMainWindow):
         self.ui = self
         self.last_splitter_sizes = None
         self.store_handler = None
-        
+
+        item = QtGui.QTreeWidgetItem(["Titles"])
+        item.is_shelves = True
+        item.handler = titles.Catalog
+        self.treeWidget.addTopLevelItem(item)
+        self.on_treeWidget_itemClicked(item)
+        self.shelves_handler.loadBooks()
+
         item = QtGui.QTreeWidgetItem(["Feedbooks"])
+        item.is_store = True
         item.handler = feedbooks.Catalog
-        self.stores.addTopLevelItem(item)
+        self.treeWidget.addTopLevelItem(item)
 
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
         self.book_editor = BookEditor(None)
         self.book_editor.back.clicked.connect(self.show_shelves)
         self._layout.addWidget(self.book_editor)
-        self.loadBooks()
         self.back_from_store.clicked.connect(self.show_shelves_from_store)
         print "Finished initializing main window"
 
-    def on_stores_itemClicked(self, item):
-        self.stack.setCurrentIndex(2)
-        self.store_handler=item.handler(self)
+    def on_treeWidget_itemClicked(self, item):
+        if hasattr(item, 'is_store'):
+            self.stack.setCurrentIndex(2)
+            self.store_handler=item.handler(self)
+        elif hasattr(item, 'is_shelves'):
+            self.stack.setCurrentIndex(0)
+            self.shelves_handler=item.handler(self)
 
     def on_books_customContextMenuRequested(self, point):
         menu = QtGui.QMenu()
@@ -72,7 +84,7 @@ class Main(QtGui.QMainWindow):
             self.main_splitter.setSizes(self.last_splitter_sizes)
 
     def show_shelves_from_store(self):
-        self.loadBooks()
+        self.shelves_handler.loadBooks()
         self.show_shelves()
 
 
@@ -89,30 +101,14 @@ class Main(QtGui.QMainWindow):
             status = importer.import_file(f)
             print status
         # Reload books
-        self.loadBooks()
+        self.shelves_handler.loadBooks()
 
     @QtCore.pyqtSlot()
     def on_actionImport_File_triggered(self):
         fname = unicode(QtGui.QFileDialog.getOpenFileName(self, "Import File"))
         if not fname: return
         status = importer.import_file(fname)
-        self.loadBooks()
-
-
-    def loadBooks(self):
-        """Get all books from the DB and show them"""
-        nocover = QtGui.QIcon("nocover.png")
-        self.books.clear()
-        for b in models.Book.query.all():
-            icon = nocover
-            cname = os.path.join("covers",str(b.id)+".jpg")
-            if os.path.isfile(cname):
-                try:
-                    icon =  QtGui.QIcon(cname)
-                except:
-                    pass
-            item = QtGui.QListWidgetItem(icon, b.title, self.books)
-            item.book = b
+        self.shelves_handler.loadBooks()
             
     def updateItem(self, item):
         """Updates one item with the data for its book"""

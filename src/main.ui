@@ -40,52 +40,18 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <column>
-            <property name="text">
-             <string>Ordered</string>
-            </property>
-           </column>
-           <item>
-            <property name="text">
-             <string>By Title</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>By Author</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>By Tag</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>Unread</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Currently Reading</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Scifi</string>
-             </property>
-            </item>
-           </item>
-          </widget>
-          <widget class="QTreeWidget" name="stores">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+           <property name="animated">
+            <bool>true</bool>
+           </property>
+           <property name="allColumnsShowFocus">
+            <bool>true</bool>
+           </property>
+           <property name="headerHidden">
+            <bool>true</bool>
            </property>
            <column>
             <property name="text">
-             <string>Libraries and Bookstores</string>
+             <string>Ordered</string>
             </property>
            </column>
           </widget>
@@ -101,7 +67,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="shelves">
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -175,27 +141,18 @@
        <widget class="QWidget" name="store">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QLabel" name="store_name">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Store Name</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="crumbs">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="crumbs">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">

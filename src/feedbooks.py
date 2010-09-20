@@ -13,7 +13,6 @@ EBOOK_EXTENSIONS=['epub','mobi','pdf']
 class Catalog(object):
     def __init__(self, widget):
         self.widget = widget
-        self.widget.store_name.setText("FeedBooks")
         self.widget.search_text.editingFinished.connect(self.doSearch)
         self.widget.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
         self.crumbs=[]
