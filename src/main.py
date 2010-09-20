@@ -47,7 +47,6 @@ class Main(QtGui.QMainWindow):
         self.book_editor = BookEditor(None)
         self.book_editor.back.clicked.connect(self.show_shelves)
         self._layout.addWidget(self.book_editor)
-        self.back_from_store.clicked.connect(self.show_shelves_from_store)
         print "Finished initializing main window"
 
     def on_treeWidget_itemClicked(self, item):
@@ -91,11 +90,6 @@ class Main(QtGui.QMainWindow):
         self.stack.setCurrentIndex(0)
         if self.last_splitter_sizes:
             self.main_splitter.setSizes(self.last_splitter_sizes)
-
-    def show_shelves_from_store(self):
-        self.shelves_handler.loadBooks()
-        self.show_shelves()
-
 
     @QtCore.pyqtSlot()
     def on_actionImport_Files_triggered(self):
