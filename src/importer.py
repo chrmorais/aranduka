@@ -17,6 +17,7 @@ def clean_name (fname):
     while splitted[-1] in VALID_EXTENSIONS+COMPRESSED_EXTENSIONS:
         splitted=splitted[:-1]
     fname = '.'.join(splitted)
+    fname = fname.replace('.',' ')
     # FIXME: here we should use the system's encoding, but that's not
     # a sure thing to work, either.
     return fname.decode('latin1')
