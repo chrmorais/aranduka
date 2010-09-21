@@ -106,7 +106,7 @@ class Tag (Entity):
     name = Field(Unicode(30))
     value = Field(Unicode(30))
     # Relationships
-    book = ManyToMany('Book')
+    books = ManyToMany('Book')
 
     def __repr__(self):
         return '<tag>%s: %s</Tag>' % (self.name, self.value)

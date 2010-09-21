@@ -76,8 +76,11 @@ class Catalog(BookStore):
             title = root_elem.find('title').text
             authors = root_elem.findall('creator')
             book_id = root_elem.find('identifier').text
-            tags = root_elem.find('subject').text.split(';')
-            print tags, root_elem.find('subject')
+            tags = root_elem.find('subject')
+            if tags:
+                tags = tags.text.split(';')
+            else:
+                tags = []
             book = Book.get_by(title = title)
             if not book:
                 _tags = []
