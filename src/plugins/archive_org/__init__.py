@@ -76,9 +76,18 @@ class Catalog(BookStore):
             title = root_elem.find('title').text
             authors = root_elem.findall('creator')
             book_id = root_elem.find('identifier').text
-            # TODO: tags are "Subject" separated by semicolons
+            tags = root_elem.find('subject').text.split(';')
+            print tags, root_elem.find('subject')
             book = Book.get_by(title = title)
             if not book:
+                _tags = []
+                # FIXME: it doesn't work. No idea why.
+                #for tag in tags:
+                    #t = Tag.get_by(name = "subject", value = tag.strip())
+                    #if not t:
+                        #t = Tag(name = "subject", value = tag.strip())
+                    #_tags.append(t)
+                    #print _tags
                 ident = Identifier(key="Archive.org_ID", value=book_id)
                 a_list = []
                 for a in authors:
@@ -92,7 +101,8 @@ class Catalog(BookStore):
                 book = Book (
                     title = title,
                     authors = a_list,
-                    identifiers = [ident]
+                    identifiers = [ident],
+                    tags = _tags,
                 )
             session.commit()
             
@@ -173,14 +183,14 @@ class Catalog(BookStore):
 
                 item = """
                 <table><tr>
-                    <td>
-                    <img src=%s width="64px">
+                    <td style="height: 80px; width: 80px;">
+                    <img src=%s style="height: 64px;">
                     <td>
                         %s</br>
                         Download: %s
                 </table>
                 """%(
-                    cover_url[0],
+                    cover_url,
                     entry.title,
                     acq_fragment,
                     )
