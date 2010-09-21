@@ -20,6 +20,7 @@ class Catalog(BookStore):
         print "INIT: Archive.org"
         self.widget = None
         self.w = None
+        self.cover_cache={}
         
     def setWidget (self, widget):
         self.widget = widget
@@ -75,14 +76,18 @@ class Catalog(BookStore):
             title = root_elem.find('title').text
             authors = root_elem.findall('creator')
             book_id = root_elem.find('identifier').text
+            # TODO: tags are "Subject" separated by semicolons
             book = Book.get_by(title = title)
             if not book:
                 ident = Identifier(key="Archive.org_ID", value=book_id)
                 a_list = []
                 for a in authors:
-                    author = Author.get_by (name = a.text)
+                    name = a.text or ""
+                    if not name:
+                        continue
+                    author = Author.get_by (name = name)
                     if not author:
-                        author = Author(name = a.text)
+                        author = Author(name = name)
                         a_list.append(author)
                 book = Book (
                     title = title,
@@ -108,7 +113,9 @@ class Catalog(BookStore):
             book.files.append(f)
             session.commit()
             # FIXME: find how to fetch the cover
-            #book.fetch_cover("http://www.Archive.org.com/book/%s.jpg"%book_id)
+            cover_url = self.cover_cache.get(url,None)
+            if cover_url:
+                book.fetch_cover(cover_url)
             
         else:
             self.showBranch(url)
@@ -135,6 +142,8 @@ class Catalog(BookStore):
         except ValueError:
             self.crumbs.append(crumb)
         self.showCrumbs()
+
+        self.cover_cache={}
         
         for entry in data.entries:
             iurl = entry.links[0].href
@@ -150,14 +159,18 @@ class Catalog(BookStore):
                     entry.get('subtitle',''),
                     )
             else: # A book
+                cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/image'][0]
                 # Find acquisition links
-                acq_links = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/acquisition']
+                acq_links = []
+                for l in entry.links:
+                    if l.rel==u'http://opds-spec.org/acquisition':
+                        acq_links.append(l.href)
+                        self.cover_cache[l.href]=cover_url
                 acq_fragment = []
                 for l in acq_links:
                     acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
                 acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
 
-                cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/image']
                 item = """
                 <table><tr>
                     <td>
