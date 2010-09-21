@@ -29,6 +29,7 @@ class Catalog(ShelveView):
             print "Call setWidget first"
             return
         self.widget.stack.setCurrentIndex(0)
+        self.widget.title.setText(self.title)
         nocover = QtGui.QIcon("nocover.png")
         self.widget.books.clear()
         for b in models.Book.query.order_by("title").all():

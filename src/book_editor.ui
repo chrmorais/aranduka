@@ -18,9 +18,14 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QToolBox" name="page3">
+    <widget class="QToolBox" name="toolbox">
      <property name="styleSheet">
-      <string notr="true">::tab:selected {
+      <string notr="true">#toolbox {
+	margin: 0;
+    padding: 0;
+}
+
+::tab:selected {
      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                  stop: 0 #6a6ea9, stop: 1 #888dd9);
 	color: rgb(255, 255, 255);
@@ -35,15 +40,15 @@
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="details_page">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>280</width>
-        <height>289</height>
+        <width>730</width>
+        <height>437</height>
        </rect>
       </property>
       <attribute name="label">
@@ -164,8 +169,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>172</width>
-        <height>97</height>
+        <width>730</width>
+        <height>437</height>
        </rect>
       </property>
       <attribute name="label">

@@ -6,17 +6,18 @@ from models import *
 from pprint import pprint
 from math import ceil
 from pluginmgr import BookStore
+from elementtree.ElementTree import XML
 
-# This gets the main catalog from feedbooks.
+# This gets the main catalog from Archive.org.
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
 class Catalog(BookStore):
 
-    title = "FeedBooks: Free and Public Domain Books"
+    title = "Archive.org: Free and Public Domain Books"
     
     def __init__(self):
-        print "INIT: feedbooks"
+        print "INIT: Archive.org"
         self.widget = None
         self.w = None
         
@@ -26,7 +27,7 @@ class Catalog(BookStore):
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
         plugin"""
-        return QtGui.QTreeWidgetItem(["FeedBooks"])
+        return QtGui.QTreeWidgetItem(["Archive.org"])
 
     def operate(self):
         "Show the store"
@@ -41,7 +42,7 @@ class Catalog(BookStore):
             self.w = uic.loadUi(uifile)
             self.pageNumber = self.widget.stack.addWidget(self.w)
             self.crumbs=[]
-            self.openUrl(QtCore.QUrl('http://www.feedbooks.com/catalog.atom'))
+            self.openUrl(QtCore.QUrl('http://bookserver.archive.org/catalog/'))
             self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
@@ -55,7 +56,7 @@ class Catalog(BookStore):
         self.search(unicode(self.w.search_text.text()))
         
     def search (self, terms):
-        url = "http://www.feedbooks.com/search.atom?"+urllib.urlencode(dict(query=terms))
+        url = "http://bookserver.archive.org/catalog/opensearch?"+urllib.urlencode(dict(q=terms))
         self.crumbs=[self.crumbs[0],["Search: %s"%terms, url]]
         self.openUrl(QtCore.QUrl(url))
 
@@ -66,33 +67,26 @@ class Catalog(BookStore):
         url = unicode(url)
         extension = url.split('.')[-1]
         print "Opening:",url
-        if url.split('/')[-1].isdigit():
-            # A details page
-            self.crumbs.append(["#%s"%url.split('/')[-1],url])
-            self.showCrumbs()
-            self.w.store_web.load(QtCore.QUrl(url))
-        elif extension in EBOOK_EXTENSIONS:
+        if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
-            book_id = url.split('/')[-1].split('.')[0]
-            bookdata = parse("http://www.feedbooks.com/book/%s.atom"%book_id).entries[0]
-            title = bookdata.title
+            meta_url = url[:-len(extension)-1]+'_meta.xml'
+            data = urllib.urlopen(meta_url).read()
+            root_elem = XML(data)
+            title = root_elem.find('title').text
+            authors = root_elem.findall('creator')
+            book_id = root_elem.find('identifier').text
             book = Book.get_by(title = title)
             if not book:
-                # Let's create a lot of data
-                tags = []
-                for tag in bookdata.tags:
-                    t = Tag.get_by(name = tag.label)
-                    if not t:
-                        t = Tag(name = tag.label)
-                    tags.append(t)
-                ident = Identifier(key="FEEDBOOKS_ID", value=book_id)
-                author = Author.get_by (name = bookdata.author)
-                if not author:
-                    author = Author(name = bookdata.author)
+                ident = Identifier(key="Archive.org_ID", value=book_id)
+                a_list = []
+                for a in authors:
+                    author = Author.get_by (name = a.text)
+                    if not author:
+                        author = Author(name = a.text)
+                        a_list.append(author)
                 book = Book (
                     title = title,
-                    authors = [author],
-                    tags = tags,
+                    authors = a_list,
                     identifiers = [ident]
                 )
             session.commit()
@@ -113,14 +107,15 @@ class Catalog(BookStore):
             f = File(file_name = fname)
             book.files.append(f)
             session.commit()
-            book.fetch_cover("http://www.feedbooks.com/book/%s.jpg"%book_id)
+            # FIXME: find how to fetch the cover
+            #book.fetch_cover("http://www.Archive.org.com/book/%s.jpg"%book_id)
             
         else:
             self.showBranch(url)
 
     def showCrumbs(self):
         ctext = []
-        for c in self.crumbs:
+        for c in self.crumbs[-4:]:
             ctext.append('<a href="%s">%s</a>'%(c[1],c[0]))
         ctext = "&nbsp;>&nbsp;".join(ctext)
         self.w.crumbs.setText(ctext)
@@ -129,7 +124,11 @@ class Catalog(BookStore):
         print "Showing:", url
         data = parse(url)
         html = ["<h1>%s</h1>"%data.feed.title]
-        crumb = [data.feed.title.split("|")[0].split("/")[-1].strip(), url]
+        if url.split('/')[-1].isdigit(): # It's a pageNumber
+            pn = int(url.split('/')[-1])+1
+            crumb = [data.feed.title.split("books",1)[-1]+"[%d]"%pn, url]
+        else:
+            crumb = [data.feed.title.split("-")[-1].strip(), url]
         try:
             r=self.crumbs.index(crumb)
             self.crumbs=self.crumbs[:r+1]
@@ -139,64 +138,52 @@ class Catalog(BookStore):
         
         for entry in data.entries:
             iurl = entry.links[0].href
+            if entry.links[0].type == u'application/atom+xml':
+                # A category
+                item = """
+                <dd>
+                    <a href="%s">%s</a>: %s
+                </dd>
+                """%(
+                    iurl,
+                    entry.title,
+                    entry.get('subtitle',''),
+                    )
+            else: # A book
+                # Find acquisition links
+                acq_links = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/acquisition']
+                acq_fragment = []
+                for l in acq_links:
+                    acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
+                acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
 
-            # Find acquisition links
-            acq_links = [l.href for l in entry.links if l.rel=='http://opds-spec.org/acquisition']
-            acq_fragment = []
-            for l in acq_links:
-                acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
-            acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
-            
-            if iurl.split('/')[-1].isdigit():
-                # A book
+                cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/image']
                 item = """
                 <table><tr>
                     <td>
                     <img src=%s width="64px">
                     <td>
-                        %s <a href="%s">[Details]</a></br>
+                        %s</br>
                         Download: %s
                 </table>
                 """%(
-                    iurl+".jpg",
+                    cover_url[0],
                     entry.title,
-                    iurl,
                     acq_fragment,
                     )
-            elif len(entry.links) == 1:
-                # A category without icon
-                item = """
-                <dd>
-                    <a href="%s">%s</a>: %s
-                </dd>--
-                """%(
-                    iurl,
-                    entry.title,
-                    entry.get('subtitle',''),
-                    )
-            else:
-                # A book link, or a category with icons
-                item = """
-                <dd>
-                    <img src="%s">
-                    <a href="%s">%s</a>: %s
-                </dd>
-                """%(
-                    entry.links[1].href,
-                    iurl,
-                    entry.title,
-                    entry.get('subtitle',''),
-                    )
+
             html.append(item)
 
         # Maybe it's paginated
-        pCount = int(ceil(float(data.feed.get('opensearch_totalresults', 1))/int(data.feed.get('opensearch_itemsperpage', 1))))
-        #from pudb import set_trace; set_trace()
-        if pCount > 1:
-            html.append("<div>")
-            for pnum in range(1,pCount+1):
-                html.append('<a href="%s&page=%s">%s</a>&nbsp;'%(url, pnum, pnum))
-            html.append("</div>")
+        # If it has previous
+        html.append('<div>')
+        for l in data.feed.links:
+            if l.rel == u'previous':
+                html.append('<a href="%s">Previous Page</a>'%l.href)
+        for l in data.feed.links:
+            if l.rel == u'next':
+                html.append('<a href="%s">Next Page</a>'%l.href)
+        html.append('</div>')
             
         html='\n'.join(html)
         self.w.store_web.setHtml(html)
