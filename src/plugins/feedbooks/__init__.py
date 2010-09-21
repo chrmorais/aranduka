@@ -6,6 +6,9 @@ from models import *
 from pprint import pprint
 from math import ceil
 from pluginmgr import BookStore
+from templite import Templite
+import codecs
+import urlparse
 
 # This gets the main catalog from feedbooks.
 
@@ -21,6 +24,13 @@ class Catalog(BookStore):
         self.w = None
         
     def setWidget (self, widget):
+        tplfile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'category.tmpl')
+
+        tplfile = codecs.open(tplfile,'r','utf-8')
+        self.template = Templite(tplfile.read())
+        tplfile.close()
         self.widget = widget
 
     def treeItem(self):
@@ -114,7 +124,6 @@ class Catalog(BookStore):
     def showBranch(self, url):
         print "Showing:", url
         data = parse(url)
-        html = ["<h1>%s</h1>"%data.feed.title]
         crumb = [data.feed.title.split("|")[0].split("/")[-1].strip(), url]
         try:
             r=self.crumbs.index(crumb)
@@ -122,7 +131,8 @@ class Catalog(BookStore):
         except ValueError:
             self.crumbs.append(crumb)
         self.showCrumbs()
-        
+        books = []
+        links = []        
         for entry in data.entries:
             iurl = entry.links[0].href
 
@@ -132,59 +142,25 @@ class Catalog(BookStore):
             for l in acq_links:
                 acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
             acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
-            
-            if iurl.split('/')[-1].isdigit():
-                # A book
-                item = """
-                <table><tr>
-                    <td>
-                    <img src=%s width="64px">
-                    <td>
-                        %s <a href="%s">[Details]</a></br>
-                        Download: %s
-                </table>
-                """%(
-                    iurl+".jpg",
-                    entry.title,
-                    iurl,
-                    acq_fragment,
-                    )
-            elif len(entry.links) == 1:
-                # A category without icon
-                item = """
-                <dd>
-                    <a href="%s">%s</a>: %s
-                </dd>--
-                """%(
-                    iurl,
-                    entry.title,
-                    entry.get('subtitle',''),
-                    )
-            else:
-                # A book link, or a category with icons
-                item = """
-                <dd>
-                    <img src="%s">
-                    <a href="%s">%s</a>: %s
-                </dd>
-                """%(
-                    entry.links[1].href,
-                    iurl,
-                    entry.title,
-                    entry.get('subtitle',''),
-                    )
-            html.append(item)
 
-        # Maybe it's paginated
-        pCount = int(ceil(float(data.feed.get('opensearch_totalresults', 1))/int(data.feed.get('opensearch_itemsperpage', 1))))
-        #from pudb import set_trace; set_trace()
-        if pCount > 1:
-            html.append("<div>")
-            for pnum in range(1,pCount+1):
-                html.append('<a href="%s&page=%s">%s</a>&nbsp;'%(url, pnum, pnum))
-            html.append("</div>")
+            if acq_links: # Can be acquired
+                books.append(entry)
+            else:
+                links.append(entry)
+
+        totPages = int(ceil(float(data.feed.get('opensearch_totalresults', 1))/int(data.feed.get('opensearch_itemsperpage', 1))))
+        curPage = urlparse.parse_qs(urlparse.urlparse(url).query).get('page',[1])[-1]
+
+        html = self.template.render(
+            title = data.feed.title,
+            books = books,
+            links = links,
+            url = url,
+            base_url = url.split('?')[0],
+            totPages = totPages,
+            curPage = int(curPage)
+            )
             
-        html='\n'.join(html)
         self.w.store_web.setHtml(html)
 
     def on_catalog_itemExpanded(self, item):

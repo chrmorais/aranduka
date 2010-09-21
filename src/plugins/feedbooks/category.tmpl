@@ -1,0 +1,92 @@
+<h1>${title}$</h1>
+
+${ if totPages > 1: }$
+<div style="text-align: right; width:90%; margin-left: 5%; margin-bottom: 8px;">
+Pages:&nbsp;
+${
+    if curPage > 3:
+        emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>...'%(base_url,1,1))
+    for p in range(max(1,curPage-3), min(curPage+3,totPages+1)):
+        if p == curPage:
+            emit('<span style="border: 1px solid red; background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
+        else:
+            emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
+    if curPage+3 < totPages+1:
+        emit('...<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,totPages+1,totPages+1))
+}$
+</div>
+${:endif}$
+
+<table>
+${for book in books:}$
+${
+    iurl = book.links[0].href
+    title = book.title
+    author = book.author
+    acq_links = []
+    non_acq_links = []
+    for l in book.links:
+        #Non-acquisition links
+        if l.rel == "alternate" and l.type == "text/html":
+            non_acq_links.append('<a href="%s">%s</a>'%(l.href, l.title))
+    for l in book.links:
+        #acquisition links
+        if l.rel == "http://opds-spec.org/acquisition":
+            acq_links.append('<a href="%s">%s</a>'%(l.href, l.href.split('.')[-1]))
+}$
+<tr>
+    <td style="text-align: right;">
+        <img src="${iurl}$.jpg" height="64">
+    </td>
+    <td>
+        ${title}$ by ${author}$</br>
+        ${
+            if non_acq_links:
+                emit("&nbsp;".join(non_acq_links)+"</br>")
+            if acq_links:
+                emit("Download: "+"&nbsp;".join(acq_links))
+        }$
+    </td>
+</tr>
+${:end-for}$
+</table>
+
+<table>
+${for link in links:}$
+${
+    iurl = link.links[0].href
+    if len(link.links) > 1:
+        icon_url = link.links[1].href
+    else:
+        icon_url = 'ADDMISSING.jpg'
+    title = link.title
+    subtitle = link.get('subtitle','')
+    if subtitle:
+        title = title+": "
+}$
+<tr>
+<td>
+        <img src="${icon_url}$">
+        <a href="${iurl}$">${title}$</a>
+</td>
+<tr>
+<td>
+        ${subtitle}$
+</td>
+</tr>
+${:end-for}$
+</table>
+
+${ if totPages > 1: }$
+<div style="text-align: right; width:90%; margin-left: 5%; margin-bottom: 8px;">
+Pages:&nbsp;
+${
+    if curPage > 3:
+        emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>...'%(base_url,1,1))
+    for p in range(max(1,curPage-3), min(curPage+3,totPages+1)):
+        emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
+    if curPage+3 < totPages+1:
+        emit('...<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,totPages+1,totPages+1))
+}$
+</div>
+${:endif}$
