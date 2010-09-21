@@ -110,9 +110,14 @@ class BookEditor(QtGui.QWidget):
             # A candidate was chosen, update data
             self.title.setText(md.title)
             self.authors.setText('|'.join(md.authors))
-            self.ids.clear()
+            # FIXME: maybe there are identifier conflicts?
+            items = [unicode(self.ids.itemText(i)) for i in range(self.ids.count())]
             for k,v in md.identifiers:
-                self.ids.addItem("%s: %s"%(k,v))
+                items.append("%s: %s"%(k,v))
+            items = list(set(items))
+            items.sort()
+            self.ids.clear()
+            self.ids.addItems(items)
             self.on_save_clicked()
             self.load_data(self.book.id)
             self.book.fetch_cover()
@@ -135,7 +140,7 @@ class BookEditor(QtGui.QWidget):
             ident.delete()
         for i in range(self.ids.count()):
             t = unicode(self.ids.itemText(i))
-            k, v = split(t,': ',1)
+            k, v = t.split(': ',1)
             i = models.Identifier(key = k, value = v, book = self.book)
         for old_file in self.book.files:
             old_file.delete()
