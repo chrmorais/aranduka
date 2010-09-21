@@ -1,5 +1,8 @@
 """Plugin manager for Aranduka, using Yapsy"""
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 import os
 from yapsy.PluginManager import PluginManager
 from yapsy.IPlugin import IPlugin

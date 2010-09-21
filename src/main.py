@@ -50,10 +50,29 @@ class Main(QtGui.QMainWindow):
         item.handler.operate()
 
     def on_books_customContextMenuRequested(self, point):
+        item = self.books.currentItem()
         menu = QtGui.QMenu()
         menu.addAction(self.actionEdit_Book)
         menu.addAction(self.actionOpen_Book)
         menu.addAction(self.actionDelete_Book)
+
+        # Check what converters apply
+        converters = []
+        for plugin in manager.getPluginsOfCategory("Converter"):
+            r = plugin.plugin_object.can_convert(item.book)
+            if r:
+                converters.append([plugin.plugin_object, r])
+
+        if converters:
+            # So, we can convert
+            convert_menu = QtGui.QMenu("Convert")
+            for plugin, formats in converters:
+                for f in formats:
+                    convert_menu.addAction("%s via %s"%(f, plugin.name),
+                        lambda f = f : plugin.convert(item.book, f))
+
+            menu.addMenu(convert_menu)
+            
         menu.exec_(self.books.mapToGlobal(point))
 
     @QtCore.pyqtSlot()
