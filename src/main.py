@@ -8,9 +8,7 @@ from PyQt4 import QtCore, QtGui, uic
 from progress import progress
 from book_editor import BookEditor
 
-import feedbooks
-import titles
-import authors
+from pluginmgr import manager
 
 class Main(QtGui.QMainWindow):
     def __init__(self):
@@ -23,26 +21,24 @@ class Main(QtGui.QMainWindow):
         self.ui = self
         self.store_handler = None
 
-        item = QtGui.QTreeWidgetItem(["Titles"])
-        item.is_shelves = True
-        item.handler = titles.Catalog
-        item.title = "Books by Title"
-        self.treeWidget.addTopLevelItem(item)
-        self.on_treeWidget_itemClicked(item)
-        self.treeWidget.setCurrentItem(item)
-        self.shelves_handler.loadBooks()
+        manager.locatePlugins()
+        manager.loadPlugins()
 
-        item = QtGui.QTreeWidgetItem(["Authors"])
-        item.title = "Books by Author"
-        item.is_shelves = True
-        item.handler = authors.Catalog
-        self.treeWidget.addTopLevelItem(item)
+        for plugin in manager.getPluginsOfCategory("ShelveView"):
+            # Ways to fill the shelves
+            item = plugin.plugin_object.treeItem()
+            item.handler = plugin.plugin_object
+            item.title = plugin.plugin_object.title
+            plugin.plugin_object.setWidget(self)
+            self.treeWidget.addTopLevelItem(item)
 
-        item = QtGui.QTreeWidgetItem(["Feedbooks"])
-        item.title = "FeedBooks: Free and Public Domain Books"
-        item.is_store = True
-        item.handler = feedbooks.Catalog
-        self.treeWidget.addTopLevelItem(item)
+        for plugin in manager.getPluginsOfCategory("BookStore"):
+            # Ways to fill the shelves
+            item = plugin.plugin_object.treeItem()
+            item.handler = plugin.plugin_object
+            item.title = plugin.plugin_object.title
+            plugin.plugin_object.setWidget(self)
+            self.treeWidget.addTopLevelItem(item)
 
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
@@ -52,15 +48,7 @@ class Main(QtGui.QMainWindow):
         print "Finished initializing main window"
 
     def on_treeWidget_itemClicked(self, item):
-        if hasattr(item, 'is_store'):
-            self.stack.setCurrentIndex(2)
-            self.store_handler=item.handler(self)
-        elif hasattr(item, 'is_shelves'):
-            self.stack.setCurrentIndex(0)
-            print repr(item.handler)
-            self.shelves_handler=item.handler(self)
-            self.shelves_handler.loadBooks()
-        self.title.setText(item.title)
+        item.handler.operate()
 
     def on_books_customContextMenuRequested(self, point):
         menu = QtGui.QMenu()

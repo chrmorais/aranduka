@@ -5,21 +5,42 @@ from elementtree.ElementTree import XML
 from models import *
 from pprint import pprint
 from math import ceil
+from pluginmgr import BookStore
 
 # This gets the main catalog from feedbooks.
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(object):
-    def __init__(self, widget):
+class Catalog(BookStore):
+
+    title = "FeedBooks: Free and Public Domain Books"
+    
+    def __init__(self):
+        print "INIT: feedbooks"
+        self.widget = None
+        
+    def setWidget (self, widget):
         self.widget = widget
         self.widget.search_text.editingFinished.connect(self.doSearch)
         self.widget.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
+
+    def treeItem(self):
+        """Returns a QTreeWidgetItem representing this
+        plugin"""
+        return QtGui.QTreeWidgetItem(["FeedBooks"])
+
+    def operate(self):
+        "Show the store"
+        if not self.widget:
+            print "Call setWidget first"
+            return
+        self.widget.stack.setCurrentIndex(2)
         self.crumbs=[]
         self.openUrl(QtCore.QUrl('http://www.feedbooks.com/catalog.atom'))
         self.widget.store_web.page().linkClicked.connect(self.openUrl)
         self.widget.crumbs.linkActivated.connect(self.openUrl)
         
+
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
         self.search(unicode(self.widget.search_text.text()))

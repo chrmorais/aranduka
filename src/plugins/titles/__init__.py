@@ -1,17 +1,34 @@
 from PyQt4 import QtGui, QtCore
 import sys, os
 import models
+from pluginmgr import ShelveView
 
 # This gets the main catalog from feedbooks.
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(object):
-    def __init__(self, widget):
+class Catalog(ShelveView):
+
+    title = "Books By Title"
+    
+    def __init__(self):
+        print "INIT: titles"
+        self.widget = None
+
+    def treeItem(self):
+        """Returns a QTreeWidgetItem representing this
+        plugin"""
+        return QtGui.QTreeWidgetItem(["Titles"])
+
+    def setWidget(self, widget):
         self.widget = widget
 
-    def loadBooks(self):
+    def operate(self):
         """Get all books from the DB and show them"""
+        if not self.widget:
+            print "Call setWidget first"
+            return
+        self.widget.stack.setCurrentIndex(0)
         nocover = QtGui.QIcon("nocover.png")
         self.widget.books.clear()
         for b in models.Book.query.order_by("title").all():
