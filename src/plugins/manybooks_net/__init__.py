@@ -1,12 +1,10 @@
 from feedparser import parse
 from PyQt4 import QtGui, QtCore, QtWebKit, uic
 import sys, os, urllib, urllib2
-from elementtree.ElementTree import XML
 from models import *
 from pprint import pprint
 from math import ceil
 from pluginmgr import BookStore
-from elementtree.ElementTree import XML
 
 # This gets the main catalog from ManyBooks.net.
 
@@ -21,6 +19,9 @@ class Catalog(BookStore):
         self.widget = None
         self.w = None
         self.cover_cache={}
+        self.author_cache={}
+        self.id_cache={}
+        self.title_cache={}
         
     def setWidget (self, widget):
         self.widget = widget
@@ -70,42 +71,20 @@ class Catalog(BookStore):
         print "Opening:",url
         if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
-            meta_url = url[:-len(extension)-1]+'_meta.xml'
-            data = urllib.urlopen(meta_url).read()
-            root_elem = XML(data)
-            title = root_elem.find('title').text
-            authors = root_elem.findall('creator')
-            book_id = root_elem.find('identifier').text
-            tags = root_elem.find('subject')
-            if tags:
-                tags = tags.text.split(';')
-            else:
-                tags = []
+            # Metadata is cached
+            title = self.title_cache[url]
+            _author = self.author_cache[url]
+            book_id = self.id_cache[url]
             book = Book.get_by(title = title)
             if not book:
-                _tags = []
-                # FIXME: it doesn't work. No idea why.
-                #for tag in tags:
-                    #t = Tag.get_by(name = "subject", value = tag.strip())
-                    #if not t:
-                        #t = Tag(name = "subject", value = tag.strip())
-                    #_tags.append(t)
-                    #print _tags
                 ident = Identifier(key="ManyBooks.net_ID", value=book_id)
-                a_list = []
-                for a in authors:
-                    name = a.text or ""
-                    if not name:
-                        continue
-                    author = Author.get_by (name = name)
-                    if not author:
-                        author = Author(name = name)
-                        a_list.append(author)
+                author = Author.get_by (name = _author)
+                if not author:
+                    author = Author(name = _author)
                 book = Book (
                     title = title,
-                    authors = a_list,
+                    authors = [author],
                     identifiers = [ident],
-                    tags = _tags,
                 )
             session.commit()
             
@@ -157,6 +136,8 @@ class Catalog(BookStore):
         self.showCrumbs()
 
         self.cover_cache={}
+        self.id_cache={}
+        self.author_cache={}
         
         for entry in data.entries:
             iurl = entry.links[0].href
@@ -183,24 +164,45 @@ class Catalog(BookStore):
                     if l.rel==u'http://opds-spec.org/acquisition':
                         acq_links.append(l.href)
                         self.cover_cache[l.href]=cover_url
+                        self.id_cache[l.href]=entry.get('id')
+                        self.author_cache[l.href]=entry.author
+                        self.title_cache[l.href]=entry.title
+                        print entry.title, entry.author
                 acq_fragment = []
                 for l in acq_links:
                     acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
                 acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
 
-                item = """
-                <table><tr>
-                    <td style="height: 80px; width: 80px;">
-                    <img src=%s style="height: 64px;">
-                    <td>
-                        %s</br>
-                        Download: %s
-                </table>
-                """%(
-                    cover_url,
-                    entry.title,
-                    acq_fragment,
-                    )
+                if acq_fragment:
+                    # A book entry
+
+                    item = """
+                    <table><tr>
+                        <td style="height: 80px; width: 80px;">
+                        <img src=%s style="height: 64px;">
+                        <td>
+                            %s</br>
+                            Download: %s
+                    </table>
+                    """%(
+                        cover_url,
+                        entry.title,
+                        acq_fragment,
+                        )
+
+                else:
+                    # A search result
+                    item = """
+                    <table><tr>
+                        <td>
+                            <a href="%s">%s</a></br>
+                            By: %s
+                    </table>
+                    """%(
+                        entry.links[0].href,
+                        entry.title,
+                        entry.author,
+                        )
 
             html.append(item)
 
