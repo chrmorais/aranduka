@@ -29,11 +29,13 @@
      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                  stop: 0 #6a6ea9, stop: 1 #888dd9);
 	color: rgb(255, 255, 255);
+	font-weight: normal;
  }
 
 ::tab {
      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                  stop: 0 #FAFBFE, stop: 1 #DCDEF1);
+	font-weight: normal;
  }</string>
      </property>
      <property name="frameShape">
