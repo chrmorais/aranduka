@@ -36,12 +36,37 @@ class Book (Entity):
     def __repr__(self):
         return '<book>%s - %s</book>' % (self.title, self.authors)
 
+    def fetch_file(self, url, extension):
+        """Given a URL, and a file extension, downloads it and adds
+        the file as belonging to this book"""
+        # FIXME: check for name collisions and identical files
+        # FIXME: make non-blocking
+        # FIXME: give user feedback
+        fname = os.path.abspath(
+            os.path.join("ebooks", str(self.id) +"."+extension))
+        print "Fetching file: ", url
+        u=urllib2.urlopen(url)
+        data = u.read()
+        u.close()
+        thumb = open(fname,'wb')
+        thumb.write(data)
+        thumb.close()
+
+        print "F1", self.files
+        f = File(file_name = fname)
+        self.files.append(f)
+        print "F2", self.files
+        session.commit()
+        
+
     def fetch_cover(self, url = None):
         """Downloads and stores a cover for this book, if possible.
         
         If a url is given, it uses that. If not, it tries to get it from other
         sources.
         """
+        # FIXME: make non-blocking
+        # FIXME: give user feedback
         fname = os.path.join("covers", str(self.id) +".jpg")
         if url:
             print "Fetching cover: ", url

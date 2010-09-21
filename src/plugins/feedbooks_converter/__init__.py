@@ -34,20 +34,6 @@ class FBConverter(Converter):
         """Convert that book to that destination format"""
         # Get the file
         book_id = extract_id(book)
-        fname = os.path.abspath(os.path.join("ebooks", str(book.id) + '.' + dest_format))
         url="http://www.feedbooks.com/book/%s.%s"%(book_id, dest_format)
-
-        try:
-            print "Fetching: ", url
-            u=urllib2.urlopen(url)
-            data = u.read()
-            u.close()
-            f = open(fname,'wb')
-            f.write(data)
-            f.close()
-        except urllib2.HTTPError:
-            pass
-        f = File(file_name = fname)
-        book.files.append(f)
-        session.commit()
+        book.fetch_file(url, dest_format)
         
