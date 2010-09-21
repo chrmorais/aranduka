@@ -18,11 +18,10 @@ class Catalog(BookStore):
     def __init__(self):
         print "INIT: feedbooks"
         self.widget = None
+        self.w = None
         
     def setWidget (self, widget):
         self.widget = widget
-        self.widget.search_text.editingFinished.connect(self.doSearch)
-        self.widget.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
 
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
@@ -34,16 +33,25 @@ class Catalog(BookStore):
         if not self.widget:
             print "Call setWidget first"
             return
-        self.widget.stack.setCurrentIndex(2)
-        self.crumbs=[]
-        self.openUrl(QtCore.QUrl('http://www.feedbooks.com/catalog.atom'))
-        self.widget.store_web.page().linkClicked.connect(self.openUrl)
-        self.widget.crumbs.linkActivated.connect(self.openUrl)
+        if not self.w:
+            uifile = os.path.join(
+                os.path.abspath(
+                    os.path.dirname(__file__)),'feedbooks_store.ui')
+            self.w = uic.loadUi(uifile)
+            self.pageNumber = self.widget.stack.addWidget(self.w)
+            self.crumbs=[]
+            self.openUrl(QtCore.QUrl('http://www.feedbooks.com/catalog.atom'))
+            self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
+            self.w.store_web.page().linkClicked.connect(self.openUrl)
+            self.w.crumbs.linkActivated.connect(self.openUrl)
+            self.w.search_text.returnPressed.connect(self.doSearch)
+            
+        self.widget.stack.setCurrentIndex(self.pageNumber)
         
 
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
-        self.search(unicode(self.widget.search_text.text()))
+        self.search(unicode(self.w.search_text.text()))
         
     def search (self, terms):
         url = "http://www.feedbooks.com/search.atom?"+urllib.urlencode(dict(query=terms))
@@ -61,7 +69,7 @@ class Catalog(BookStore):
             # A details page
             self.crumbs.append(["#%s"%url.split('/')[-1],url])
             self.showCrumbs()
-            self.widget.store_web.load(QtCore.QUrl(url))
+            self.w.store_web.load(QtCore.QUrl(url))
         elif extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
             book_id = url.split('/')[-1].split('.')[0]
@@ -114,7 +122,7 @@ class Catalog(BookStore):
         for c in self.crumbs:
             ctext.append('<a href="%s">%s</a>'%(c[1],c[0]))
         ctext = "&nbsp;>&nbsp;".join(ctext)
-        self.widget.crumbs.setText(ctext)
+        self.w.crumbs.setText(ctext)
 
     def showBranch(self, url):
         print "Showing:", url
@@ -190,7 +198,7 @@ class Catalog(BookStore):
             html.append("</div>")
             
         html='\n'.join(html)
-        self.widget.store_web.setHtml(html)
+        self.w.store_web.setHtml(html)
 
     def on_catalog_itemExpanded(self, item):
         if item.childCount()==0:

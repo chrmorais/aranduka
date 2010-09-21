@@ -19,7 +19,6 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        self.store_handler = None
 
         manager.locatePlugins()
         manager.loadPlugins()
