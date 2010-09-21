@@ -1,6 +1,6 @@
 from feedparser import parse
 from PyQt4 import QtGui, QtCore, QtWebKit, uic
-import sys, os, urllib, urllib2
+import sys, os, urllib
 from models import *
 from pprint import pprint
 from math import ceil
@@ -90,21 +90,7 @@ class Catalog(BookStore):
             
             # Get the file
             fname = os.path.abspath(os.path.join("ebooks", str(book.id) + '.' + extension))
-
-            try:
-                print "Fetching: ", url
-                u=urllib2.urlopen(url)
-                data = u.read()
-                u.close()
-                f = open(fname,'wb')
-                f.write(data)
-                f.close()
-            except urllib2.HTTPError:
-                pass
-            f = File(file_name = fname)
-            book.files.append(f)
-            session.commit()
-            # FIXME: find how to fetch the cover
+            book.fetch_file(url, extension)
             cover_url = self.cover_cache.get(url,None)
             if cover_url:
                 book.fetch_cover(cover_url)

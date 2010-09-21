@@ -1,6 +1,6 @@
 from feedparser import parse
 from PyQt4 import QtGui, QtCore, QtWebKit, uic
-import sys, os, urllib, urllib2
+import sys, os, urllib
 from elementtree.ElementTree import XML
 from models import *
 from pprint import pprint
@@ -98,21 +98,7 @@ class Catalog(BookStore):
             session.commit()
             
             # Get the file
-            fname = os.path.abspath(os.path.join("ebooks", str(book.id) + '.' + extension))
-
-            try:
-                print "Fetching: ", url
-                u=urllib2.urlopen(url)
-                data = u.read()
-                u.close()
-                f = open(fname,'wb')
-                f.write(data)
-                f.close()
-            except urllib2.HTTPError:
-                pass
-            f = File(file_name = fname)
-            book.files.append(f)
-            session.commit()
+            book.fetch_file(url, extension)
             book.fetch_cover("http://www.feedbooks.com/book/%s.jpg"%book_id)
             
         else:

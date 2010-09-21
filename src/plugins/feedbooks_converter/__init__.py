@@ -2,7 +2,7 @@
 "convert" the book to other formats by downloading them"""
 
 from pluginmgr import Converter
-import sys, os, urllib, urllib2
+import sys, os, urllib
 from models import File, session
 
 SUPPORTED = ['epub','pdf','mobi']
