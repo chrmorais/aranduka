@@ -95,7 +95,7 @@ class BookEditor(QtGui.QWidget):
 
         cname = os.path.join("covers",str(self.book.id)+".jpg")
         if os.path.isfile(cname):
-            self.cover.setPixmap(QtGui.QPixmap(cname))
+            self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
         else:
             self.cover.setPixmap(QtGui.QPixmap("nocover.png"))
 
