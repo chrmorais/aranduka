@@ -94,7 +94,7 @@ class Identifier (Entity):
 
 class Author (Entity):
     using_options(tablename='authors')
-    name = Field(Unicode(30))
+    name = Field(Unicode(250))
     # Relationships
     books = ManyToMany('Book')
 
