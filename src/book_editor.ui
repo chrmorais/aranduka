@@ -23,6 +23,7 @@
       <string notr="true">::tab:selected {
      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                  stop: 0 #6a6ea9, stop: 1 #888dd9);
+	color: rgb(255, 255, 255);
  }
 
 ::tab {
@@ -41,8 +42,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>730</width>
-        <height>437</height>
+        <width>280</width>
+        <height>289</height>
        </rect>
       </property>
       <attribute name="label">
@@ -163,8 +164,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>730</width>
-        <height>437</height>
+        <width>172</width>
+        <height>97</height>
        </rect>
       </property>
       <attribute name="label">
