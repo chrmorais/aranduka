@@ -7,6 +7,7 @@ import models, importer
 from PyQt4 import QtCore, QtGui, uic
 from progress import progress
 from book_editor import BookEditor
+import rc_icons
 
 from pluginmgr import manager
 
