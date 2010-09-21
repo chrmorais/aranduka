@@ -3,3 +3,9 @@ BookStores
 
 http://arxiv.org/help/api/user-manual
 
+New Plugin Types
+----------------
+
+Importers (move importer.py, add others?)
+
+Converters (using calibre or something else)
