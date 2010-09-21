@@ -7,11 +7,13 @@ from yapsy.IPlugin import IPlugin
 # These classes define our plugin categories
 class ShelveView(object): pass
 class BookStore(object): pass
+class Converter(object): pass
 
 manager = PluginManager(
     categories_filter={
         "ShelveView": ShelveView,
         "BookStore": BookStore,
+        "Converter": Converter,
     })
 
 plugindir = os.path.join(
