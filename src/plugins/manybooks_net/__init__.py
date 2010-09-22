@@ -40,7 +40,7 @@ class Catalog(BookStore):
         if not self.w:
             uifile = os.path.join(
                 os.path.abspath(
-                    os.path.dirname(__file__)),'feedbooks_store.ui')
+                    os.path.dirname(__file__)),'store.ui')
             self.w = uic.loadUi(uifile)
             self.pageNumber = self.widget.stack.addWidget(self.w)
             self.crumbs=[]

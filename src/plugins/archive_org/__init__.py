@@ -15,20 +15,12 @@ EBOOK_EXTENSIONS=['epub','mobi','pdf']
 class Catalog(BookStore):
 
     title = "Archive.org: Free and Public Domain Books"
+    itemText = "Archive.org"
     
     def __init__(self):
-        print "INIT: Archive.org"
-        self.widget = None
+        BookStore.__init__(self)
         self.w = None
         self.cover_cache={}
-        
-    def setWidget (self, widget):
-        self.widget = widget
-
-    def treeItem(self):
-        """Returns a QTreeWidgetItem representing this
-        plugin"""
-        return QtGui.QTreeWidgetItem(["Archive.org"])
 
     def operate(self):
         "Show the store"
@@ -39,7 +31,7 @@ class Catalog(BookStore):
         if not self.w:
             uifile = os.path.join(
                 os.path.abspath(
-                    os.path.dirname(__file__)),'feedbooks_store.ui')
+                    os.path.dirname(__file__)),'store.ui')
             self.w = uic.loadUi(uifile)
             self.pageNumber = self.widget.stack.addWidget(self.w)
             self.crumbs=[]
@@ -53,10 +45,6 @@ class Catalog(BookStore):
     showGrid = operate
     showList = operate
 
-    @QtCore.pyqtSlot()
-    def doSearch(self, *args):
-        self.search(unicode(self.widget.searchWidget.text.text()))
-        
     def search (self, terms):
         url = "http://bookserver.archive.org/catalog/opensearch?"+urllib.urlencode(dict(q=terms))
         self.crumbs=[self.crumbs[0],["Search: %s"%terms, url]]
@@ -200,13 +188,3 @@ class Catalog(BookStore):
             
         html='\n'.join(html)
         self.w.store_web.setHtml(html)
-
-    def on_catalog_itemExpanded(self, item):
-        if item.childCount()==0:
-            self.addBranch(item, item.url)
-
-    def on_catalog_itemActivated(self, item, column):
-        url=item.url
-        if url.split('/')[-1].isdigit():
-            # It's a book
-            self.web.load(QtCore.QUrl(url))

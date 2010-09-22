@@ -11,7 +11,10 @@ from yapsy.IPlugin import IPlugin
 
 # These classes define our plugin categories
 class ShelveView(QtCore.QObject):
-    title = "base ShelveView"
+    """Plugins that inherit this class display the contents
+    of your book database."""
+    
+    title = "Base ShelveView"
     itemText = "BASE"
     
     def __init__(self):
@@ -56,7 +59,30 @@ class ShelveView(QtCore.QObject):
 
 
 
-class BookStore(object): pass
+class BookStore(object):
+    """Plugins that inherit this class give access to some
+    mechanism for book acquisition"""
+
+    title = "Base Bookstore"
+    itemText = "BASE"
+
+    def __init__(self):
+        print "INIT:", self.title
+        self.widget = None
+
+    def treeItem(self):
+        """Returns a QTreeWidgetItem representing this
+        plugin"""
+        return QtGui.QTreeWidgetItem([self.itemText])
+
+    def setWidget (self, widget):
+        self.widget = widget
+
+    @QtCore.pyqtSlot()
+    def doSearch(self, *args):
+        self.search(unicode(self.widget.searchWidget.text.text()))
+
+
 class Converter(object): pass
 
 manager = PluginManager(

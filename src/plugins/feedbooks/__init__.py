@@ -18,10 +18,10 @@ EBOOK_EXTENSIONS=['epub','mobi','pdf']
 class Catalog(BookStore):
 
     title = "FeedBooks: Free and Public Domain Books"
+    itemText = "FeedBooks.com"
     
     def __init__(self):
-        print "INIT: feedbooks"
-        self.widget = None
+        BookStore.__init__(self)
         self.w = None
         
     def setWidget (self, widget):
@@ -34,10 +34,6 @@ class Catalog(BookStore):
         tplfile.close()
         self.widget = widget
 
-    def treeItem(self):
-        """Returns a QTreeWidgetItem representing this
-        plugin"""
-        return QtGui.QTreeWidgetItem(["FeedBooks"])
 
     def operate(self):
         "Show the store"
@@ -48,7 +44,7 @@ class Catalog(BookStore):
         if not self.w:
             uifile = os.path.join(
                 os.path.abspath(
-                    os.path.dirname(__file__)),'feedbooks_store.ui')
+                    os.path.dirname(__file__)),'store.ui')
             self.w = uic.loadUi(uifile)
             self.pageNumber = self.widget.stack.addWidget(self.w)
             self.crumbs=[]
@@ -60,11 +56,7 @@ class Catalog(BookStore):
 
     showGrid = operate
     showList = operate
-    
-    @QtCore.pyqtSlot()
-    def doSearch(self, *args):
-        self.search(unicode(self.widget.searchWidget.text.text()))
-        
+            
     def search (self, terms):
         url = "http://www.feedbooks.com/search.atom?"+urllib.urlencode(dict(query=terms))
         self.crumbs=[self.crumbs[0],["Search: %s"%terms, url]]
@@ -85,7 +77,11 @@ class Catalog(BookStore):
         elif extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
             book_id = url.split('/')[-1].split('.')[0]
-            bookdata = parse("http://www.feedbooks.com/book/%s.atom"%book_id).entries[0]
+            bookdata = parse("http://www.feedbooks.com/book/%s.atom"%book_id)
+            if bookdata.status == 404:
+                bookdata = parse("http://www.feedbooks.com/userbook/%s.atom"%book_id)
+                
+            bookdata = bookdata.entries[0]
             title = bookdata.title
             book = Book.get_by(title = title)
             if not book:
@@ -181,13 +177,3 @@ class Catalog(BookStore):
         print "Rendered in: %s seconds"%(time.time()-t1)
             
         self.w.store_web.page().mainFrame().setHtml(html)
-
-    def on_catalog_itemExpanded(self, item):
-        if item.childCount()==0:
-            self.addBranch(item, item.url)
-
-    def on_catalog_itemActivated(self, item, column):
-        url=item.url
-        if url.split('/')[-1].isdigit():
-            # It's a book
-            self.web.load(QtCore.QUrl(url))
