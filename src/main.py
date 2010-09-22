@@ -104,8 +104,22 @@ class Main(QtGui.QMainWindow):
         self.currentBook = book
         menu = QtGui.QMenu()
         menu.addAction(self.actionEdit_Book)
-        menu.addAction(self.actionOpen_Book)
         menu.addAction(self.actionDelete_Book)
+
+        # Create menu with files for this book
+        open_menu = QtGui.QMenu("Open")
+        if len(book.files) == 1:
+            # A single file
+            f = book.files[0]
+            url = QtCore.QUrl.fromLocalFile(f.file_name)
+            menu.addAction("Open %s"%os.path.basename(f.file_name),
+                lambda f = f: QtGui.QDesktopServices.openUrl(url))
+        elif book.files:
+            for f in book.files:
+                url = QtCore.QUrl.fromLocalFile(f.file_name)
+                open_menu.addAction(os.path.basename(f.file_name),
+                    lambda f = f: QtGui.QDesktopServices.openUrl(url))
+            menu.addMenu(open_menu)
 
         # Check what converters apply
         converters = []
