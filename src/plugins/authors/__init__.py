@@ -7,7 +7,7 @@ from pluginmgr import ShelveView
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(ShelveView, QtCore.QObject):
+class Catalog(ShelveView):
 
     title = "Books By Author"
     itemText = "Authors"

@@ -8,12 +8,11 @@ from functools import partial
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(ShelveView, QtCore.QObject):
+class Catalog(ShelveView):
 
     title = "Books By Title"
     itemText = "Titles"
     
-
     def showList(self, search = None):
         """Get all books from the DB and show them"""
 
