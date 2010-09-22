@@ -245,7 +245,7 @@ padding: .5em;
                  <x>0</x>
                  <y>0</y>
                  <width>142</width>
-                 <height>341</height>
+                 <height>333</height>
                 </rect>
                </property>
               </widget>
@@ -296,6 +296,26 @@ padding: .5em;
    </widget>
    <addaction name="menuLibrary"/>
    <addaction name="menuBook"/>
+  </widget>
+  <widget class="QToolBar" name="searchBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomToolBarArea</set>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
   <action name="actionImport_Files">
    <property name="text">

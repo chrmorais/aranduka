@@ -11,6 +11,15 @@ import rc_icons
 
 from pluginmgr import manager
 
+class SearchWidget(QtGui.QWidget):
+    def __init__(self, parent=None):
+        QtGui.QWidget.__init__(self, parent)
+        uifile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'searchwidget.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
+
 class Main(QtGui.QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
@@ -30,6 +39,14 @@ class Main(QtGui.QMainWindow):
         self.viewGroup.addButton(self.listMode)
         self.gridMode.setChecked(True)
 
+        # Search Bar
+        self.searchBar = QtGui.QToolBar()
+        self.addToolBar(QtCore.Qt.BottomToolBarArea, self.searchBar)
+        self.searchWidget = SearchWidget()
+        self.searchBar.addWidget(self.searchWidget)
+        self.searchBar.hide()
+
+        # Plugins
         manager.locatePlugins()
         manager.loadPlugins()
 
