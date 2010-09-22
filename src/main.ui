@@ -68,16 +68,12 @@ padding: .5em</string>
      padding: .5em;
      border:none;
 }
-
-QPushButton:checked {
-	 border-left: 1px solid white;
- }
-
 </string>
             </property>
             <property name="icon">
              <iconset resource="icons.qrc">
-              <normaloff>:/icons/icon_view.svg</normaloff>:/icons/icon_view.svg</iconset>
+              <normaloff>:/icons/icon_view.svg</normaloff>
+              <activeon>:/icons/icon_view_selected.svg</activeon>:/icons/icon_view.svg</iconset>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -103,11 +99,6 @@ QPushButton:checked {
      padding: .5em;
      border:none;
 }
-
-QPushButton:checked {
-	 border-left: 1px solid white;
- }
-
 </string>
             </property>
             <property name="text">
@@ -115,7 +106,8 @@ QPushButton:checked {
             </property>
             <property name="icon">
              <iconset resource="icons.qrc">
-              <normaloff>:/icons/list_view.svg</normaloff>:/icons/list_view.svg</iconset>
+              <normaloff>:/icons/list_view.svg</normaloff>
+              <activeon>:/icons/list_view_selected.svg</activeon>:/icons/list_view.svg</iconset>
             </property>
             <property name="checkable">
              <bool>true</bool>

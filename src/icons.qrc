@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/list_view_selected.svg</file>
+    <file>icons/icon_view_selected.svg</file>
     <file>icons/list_view.svg</file>
     <file>icons/icon_view.svg</file>
   </qresource>
