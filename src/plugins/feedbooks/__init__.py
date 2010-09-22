@@ -56,19 +56,15 @@ class Catalog(BookStore):
             self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
-            self.w.search_text.returnPressed.connect(self.doSearch)
-            #self.w.store_web.page().loadFinished.connect(self.processPage)
+            self.widget.searchWidget.doSearch.clicked.connect(self.doSearch)
         self.widget.stack.setCurrentIndex(self.pageNumber)
 
+    showGrid = operate
+    showList = operate
     
-
-    #@QtCore.pyqtSlot()
-    #def processPage(self):
-        #print self.w.store_web.page().mainFrame().toHtml()
-
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
-        self.search(unicode(self.w.search_text.text()))
+        self.search(unicode(self.widget.searchWidget.text.text()))
         
     def search (self, terms):
         url = "http://www.feedbooks.com/search.atom?"+urllib.urlencode(dict(query=terms))

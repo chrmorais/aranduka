@@ -81,6 +81,7 @@ class Main(QtGui.QMainWindow):
 
     def on_actionFind_triggered(self):
         self.searchBar.show()
+        self.searchWidget.text.setFocus(True)
 
     def bookContextMenuRequested(self, book, point):
         """Given a book, and a place in the screen,

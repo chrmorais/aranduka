@@ -55,24 +55,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QToolButton" name="previous">
-     <property name="text">
-      <string>&amp;Previous</string>
-     </property>
-     <property name="icon">
-      <iconset resource="icons.qrc">
-       <normaloff>:/icons/previous.svg</normaloff>:/icons/previous.svg</iconset>
-     </property>
-     <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonIconOnly</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="next">
+    <widget class="QToolButton" name="doSearch">
      <property name="text">
       <string>&amp;Next</string>
      </property>
@@ -97,7 +80,7 @@
   <connection>
    <sender>text</sender>
    <signal>returnPressed()</signal>
-   <receiver>next</receiver>
+   <receiver>doSearch</receiver>
    <slot>animateClick()</slot>
    <hints>
     <hint type="sourcelabel">
