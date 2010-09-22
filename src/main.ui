@@ -14,26 +14,88 @@
    <string>Aranduka</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_5">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
       <property name="handleWidth">
-       <number>8</number>
+       <number>12</number>
       </property>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+      <widget class="QTreeWidget" name="treeWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">::item {
+    height: 2em;
+}
+
+::item:alternate {
+     background: #EEEEEE;
+ }
+
+::item:selected {
+     border: 1px solid #6a6ea9;
+ }
+
+::item:selected:!active {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ABAFE5, stop: 1 #8588B2);
+ }
+
+::item:selected:active {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #6a6ea9, stop: 1 #888dd9);
+ }
+
+::item:hover {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #FAFBFE, stop: 1 #DCDEF1);
+ }</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="verticalScrollMode">
+        <enum>QAbstractItemView::ScrollPerItem</enum>
+       </property>
+       <property name="rootIsDecorated">
+        <bool>false</bool>
+       </property>
+       <property name="animated">
+        <bool>true</bool>
+       </property>
+       <property name="allColumnsShowFocus">
+        <bool>true</bool>
+       </property>
+       <property name="headerHidden">
+        <bool>true</bool>
+       </property>
+       <column>
+        <property name="text">
+         <string>Ordered</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <property name="spacing">
            <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="label_3">
+           <widget class="QLabel" name="title">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -41,14 +103,13 @@
             <property name="styleSheet">
              <string notr="true">width: 30%;
 background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
+border:none;
 color: rgb(255, 255, 255);
-padding: .5em</string>
+padding: .5em;
+</string>
             </property>
             <property name="text">
-             <string>View:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
@@ -62,7 +123,6 @@ padding: .5em</string>
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	 width: 30%;
      background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
      color: rgb(255, 255, 255);
      padding: .5em;
@@ -93,7 +153,6 @@ padding: .5em</string>
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	 width: 30%;
      background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
      color: rgb(255, 255, 255);
      padding: .5em;
@@ -114,109 +173,7 @@ padding: .5em</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">width: 30%;
-background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
-color: rgb(255, 255, 255);
-padding: .5em</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
          </layout>
-        </item>
-        <item>
-         <widget class="QTreeWidget" name="treeWidget">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">::item {
-    height: 2em;
-}
-
-::item:alternate {
-     background: #EEEEEE;
- }
-
-::item:selected {
-     border: 1px solid #6a6ea9;
- }
-
-::item:selected:!active {
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                 stop: 0 #ABAFE5, stop: 1 #8588B2);
- }
-
-::item:selected:active {
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                 stop: 0 #6a6ea9, stop: 1 #888dd9);
- }
-
-::item:hover {
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                 stop: 0 #FAFBFE, stop: 1 #DCDEF1);
- }</string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="verticalScrollMode">
-           <enum>QAbstractItemView::ScrollPerItem</enum>
-          </property>
-          <property name="rootIsDecorated">
-           <bool>false</bool>
-          </property>
-          <property name="animated">
-           <bool>true</bool>
-          </property>
-          <property name="allColumnsShowFocus">
-           <bool>true</bool>
-          </property>
-          <property name="headerHidden">
-           <bool>true</bool>
-          </property>
-          <column>
-           <property name="text">
-            <string>Ordered</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="title">
-          <property name="styleSheet">
-           <string notr="true">width: 30%;
-background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
-border:none;
-color: rgb(255, 255, 255);
-padding: .5em;
-</string>
-          </property>
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
         </item>
         <item>
          <widget class="QStackedWidget" name="stack">
@@ -236,6 +193,9 @@ padding: .5em;
             </property>
             <item>
              <widget class="QScrollArea" name="shelveStack">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
               <property name="widgetResizable">
                <bool>true</bool>
               </property>
@@ -244,8 +204,8 @@ padding: .5em;
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>142</width>
-                 <height>333</height>
+                 <width>251</width>
+                 <height>337</height>
                 </rect>
                </property>
               </widget>
