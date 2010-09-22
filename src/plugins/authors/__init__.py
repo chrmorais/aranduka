@@ -59,6 +59,8 @@ class Catalog(ShelveView):
             shelf.setMinimumHeight(153)
             shelf.setMaximumHeight(153)
             shelf.setMinimumWidth(153*len(a.books))
+            shelf.setFlow(shelf.LeftToRight)
+            shelf.setWrapping(False)
             
             # Fill the shelf
             for b in a.books:

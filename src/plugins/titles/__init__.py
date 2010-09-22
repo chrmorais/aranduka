@@ -79,6 +79,8 @@ class Catalog(ShelveView):
             shelf.setMinimumHeight(153)
             shelf.setMaximumHeight(153)
             shelf.setMinimumWidth(153*len(grouped_books[k]))
+            shelf.setFlow(shelf.LeftToRight)
+            shelf.setWrapping(False)
             
             # Fill the shelf
             for b in grouped_books[k]:
