@@ -37,6 +37,7 @@ class Main(QtGui.QMainWindow):
         self.viewGroup.setExclusive(True)
         self.viewGroup.addButton(self.gridMode)
         self.viewGroup.addButton(self.listMode)
+        self.viewGroup.buttonClicked.connect(self.viewModeChanged)
         self.gridMode.setChecked(True)
 
         # Search Bar
@@ -72,6 +73,11 @@ class Main(QtGui.QMainWindow):
         self.book_editor = BookEditor(None)
         self._layout.addWidget(self.book_editor)
         print "Finished initializing main window"
+
+    def viewModeChanged(self, id):
+        item = self.treeWidget.currentItem()
+        if not item: return
+        self.on_treeWidget_itemClicked(item)
 
     def on_treeWidget_itemClicked(self, item):
         try:
