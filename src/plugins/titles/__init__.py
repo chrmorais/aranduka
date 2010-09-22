@@ -12,11 +12,6 @@ class Catalog(ShelveView, QtCore.QObject):
 
     title = "Books By Title"
     
-    def __init__(self):
-        print "INIT: titles"
-        self.widget = None
-        QtCore.QObject.__init__(self)
-
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
         plugin"""

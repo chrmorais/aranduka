@@ -11,11 +11,6 @@ class Catalog(ShelveView, QtCore.QObject):
 
     title = "Books By Author"
 
-    def __init__(self):
-        print "INIT: authors"
-        self.widget = None
-        QtCore.QObject.__init__(self)
-
     def setWidget(self, widget):
         self.widget = widget
 
