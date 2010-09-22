@@ -24,6 +24,55 @@ class Catalog(ShelveView, QtCore.QObject):
         plugin"""
         return QtGui.QTreeWidgetItem(["Authors"])
 
+    def showList(self):
+        """Get all books from the DB and show them"""
+
+        if not self.widget:
+            print "Call setWidget first"
+            return
+        css = '''
+        ::item {
+                padding: 0;
+                margin: 0;
+                height: 48;
+            }
+        '''
+
+        self.widget.title.setText(self.title)
+        nocover = QtGui.QIcon("nocover.png")
+        # Setup widgetry
+        self.widget.stack.setCurrentIndex(0)
+        self.shelf = QtGui.QListWidget()
+        # Make it look right
+        self.shelf.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.shelf.setFrameShape(self.shelf.NoFrame)
+        self.shelf.setDragEnabled(False)
+        self.shelf.setSelectionMode(self.shelf.NoSelection)
+        self.shelf.setStyleSheet(css)
+        self.shelf.setIconSize(QtCore.QSize(48,48))
+        # Hook the shelf context menu
+        self.shelf.customContextMenuRequested.connect(self.shelfContextMenu)
+
+        # Hook book editor
+        self.shelf.itemActivated.connect(self.widget.on_books_itemActivated)
+
+        # Fill the shelf
+        for a in models.Author.query.order_by("name").all():
+            a_item = QtGui.QListWidgetItem(a.name, self.shelf)
+            for b in a.books:
+                icon = nocover
+                cname = os.path.join("covers",str(b.id)+".jpg")
+                if os.path.isfile(cname):
+                    try:
+                        icon =  QtGui.QIcon(QtGui.QPixmap(cname).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                    except:
+                        pass
+                item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
+                item.book = b
+
+        self.widget.shelveStack.setWidget(self.shelf)
+
+
     def showGrid(self):
         """Get all books from the DB and show them"""
         if not self.widget:
