@@ -59,6 +59,9 @@ class Main(QtGui.QMainWindow):
             item.title = plugin.plugin_object.title
             plugin.plugin_object.setWidget(self)
             self.treeWidget.addTopLevelItem(item)
+            if item.handler.itemText == "Titles":
+                self.on_treeWidget_itemClicked(item)
+                self.treeWidget.setCurrentItem(item)
 
         for plugin in manager.getPluginsOfCategory("BookStore"):
             # Ways to fill the shelves
