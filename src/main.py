@@ -43,7 +43,6 @@ class Main(QtGui.QMainWindow):
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
         self.book_editor = BookEditor(None)
-        #self.book_editor.back.clicked.connect(self.show_shelves)
         self._layout.addWidget(self.book_editor)
         print "Finished initializing main window"
 

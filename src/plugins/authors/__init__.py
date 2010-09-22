@@ -48,7 +48,9 @@ class Catalog(ShelveView):
         
         for a in models.Author.query.order_by("name").all():
             # Make a shelf
+            shelf_label = QtGui.QLabel(a.name)
             shelf = QtGui.QListWidget()
+            self.shelvesLayout.addWidget(shelf_label)
             self.shelvesLayout.addWidget(shelf)
             # Make it look right
             shelf.setStyleSheet(css)
@@ -61,6 +63,10 @@ class Catalog(ShelveView):
             shelf.setMinimumWidth(153*len(a.books))
             shelf.setFlow(shelf.LeftToRight)
             shelf.setWrapping(False)
+            shelf.setDragEnabled(False)
+            shelf.setSelectionMode(shelf.NoSelection)
+
+            shelf.itemActivated.connect(self.widget.on_books_itemActivated)
             
             # Fill the shelf
             for b in a.books:
