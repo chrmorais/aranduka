@@ -2,18 +2,20 @@ from PyQt4 import QtGui, QtCore
 import sys, os
 import models
 from pluginmgr import ShelveView
+from functools import partial
 
 # This gets the main catalog from feedbooks.
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(ShelveView):
+class Catalog(ShelveView, QtCore.QObject):
 
     title = "Books By Title"
     
     def __init__(self):
         print "INIT: titles"
         self.widget = None
+        QtCore.QObject.__init__(self)
 
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
@@ -68,7 +70,9 @@ class Catalog(ShelveView):
         keys.sort()
         for k in keys:
             # Make a shelf
+            shelf_label = QtGui.QLabel("Books starting with: %s"%k)
             shelf = QtGui.QListWidget()
+            self.shelvesLayout.addWidget(shelf_label)
             self.shelvesLayout.addWidget(shelf)
             # Make it look right
             shelf.setStyleSheet(css)
@@ -84,6 +88,10 @@ class Catalog(ShelveView):
             shelf.setDragEnabled(False)
             shelf.setSelectionMode(shelf.NoSelection)
 
+            # Hook the shelf context menu
+            shelf.customContextMenuRequested.connect(self.shelfContextMenu)
+            
+            # Hook book editor
             shelf.itemActivated.connect(self.widget.on_books_itemActivated)
             
             # Fill the shelf
@@ -100,3 +108,11 @@ class Catalog(ShelveView):
 
 
         self.widget.shelveStack.setWidget(self.shelves)
+
+    def shelfContextMenu(self, point):
+        shelf = self.sender()
+        item = shelf.currentItem()
+        book = item.book
+        point = shelf.mapToGlobal(point)
+        self.widget.bookContextMenuRequested(book, point)
+        

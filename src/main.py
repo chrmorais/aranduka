@@ -20,6 +20,8 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+        
+        self.currentBook = None
 
         manager.locatePlugins()
         manager.loadPlugins()
@@ -49,8 +51,11 @@ class Main(QtGui.QMainWindow):
     def on_treeWidget_itemClicked(self, item):
         item.handler.operate()
 
-    def on_books_customContextMenuRequested(self, point):
-        item = self.books.currentItem()
+    def bookContextMenuRequested(self, book, point):
+        """Given a book, and a place in the screen,
+        shows a proper context menu for it"""
+
+        self.currentBook = book
         menu = QtGui.QMenu()
         menu.addAction(self.actionEdit_Book)
         menu.addAction(self.actionOpen_Book)
@@ -59,7 +64,7 @@ class Main(QtGui.QMainWindow):
         # Check what converters apply
         converters = []
         for plugin in manager.getPluginsOfCategory("Converter"):
-            r = plugin.plugin_object.can_convert(item.book)
+            r = plugin.plugin_object.can_convert(book)
             if r:
                 converters.append([plugin.plugin_object, r])
 
@@ -73,15 +78,14 @@ class Main(QtGui.QMainWindow):
 
             menu.addMenu(convert_menu)
             
-        menu.exec_(self.books.mapToGlobal(point))
+        menu.exec_(point)
 
     @QtCore.pyqtSlot()
     def on_actionOpen_Book_triggered(self):
-        item = self.books.currentItem()
-        if not item:
+        if not self.currentBook:
             return
-        if item.book.files:
-            url = QtCore.QUrl.fromLocalFile(item.book.files[0].file_name)
+        if self.currentBook.files:
+            url = QtCore.QUrl.fromLocalFile(self.currentBook.files[0].file_name)
             print "Opening:", url
             QtGui.QDesktopServices.openUrl(url)
 

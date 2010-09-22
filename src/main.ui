@@ -53,7 +53,7 @@ padding: .5em</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="gridMode">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -61,21 +61,34 @@ padding: .5em</string>
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">width: 30%;
-background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
-border:none;
-color: rgb(255, 255, 255);
-padding: .5em;
+             <string notr="true">QPushButton {
+	 width: 30%;
+     background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
+     color: rgb(255, 255, 255);
+     padding: .5em;
+     border:none;
+}
+
+QPushButton:checked {
+	 border-left: 1px solid white;
+ }
+
 </string>
             </property>
             <property name="icon">
              <iconset resource="icons.qrc">
               <normaloff>:/icons/icon_view.svg</normaloff>:/icons/icon_view.svg</iconset>
             </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="listMode">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -83,11 +96,18 @@ padding: .5em;
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">width: 30%;
-background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
-border:none;
-color: rgb(255, 255, 255);
-padding: .5em;
+             <string notr="true">QPushButton {
+	 width: 30%;
+     background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
+     color: rgb(255, 255, 255);
+     padding: .5em;
+     border:none;
+}
+
+QPushButton:checked {
+	 border-left: 1px solid white;
+ }
+
 </string>
             </property>
             <property name="text">
@@ -96,6 +116,9 @@ padding: .5em;
             <property name="icon">
              <iconset resource="icons.qrc">
               <normaloff>:/icons/list_view.svg</normaloff>:/icons/list_view.svg</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -229,7 +252,7 @@ padding: .5em;
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>288</width>
+                 <width>142</width>
                  <height>341</height>
                 </rect>
                </property>

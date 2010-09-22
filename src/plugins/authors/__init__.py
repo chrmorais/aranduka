@@ -7,13 +7,14 @@ from pluginmgr import ShelveView
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(ShelveView):
+class Catalog(ShelveView, QtCore.QObject):
 
     title = "Books By Author"
 
     def __init__(self):
         print "INIT: authors"
         self.widget = None
+        QtCore.QObject.__init__(self)
 
     def setWidget(self, widget):
         self.widget = widget
@@ -66,6 +67,10 @@ class Catalog(ShelveView):
             shelf.setDragEnabled(False)
             shelf.setSelectionMode(shelf.NoSelection)
 
+            # Hook the shelf context menu
+            shelf.customContextMenuRequested.connect(self.shelfContextMenu)
+
+            # Hook book editor
             shelf.itemActivated.connect(self.widget.on_books_itemActivated)
             
             # Fill the shelf
@@ -81,3 +86,10 @@ class Catalog(ShelveView):
                 item.book = b
 
         self.widget.shelveStack.setWidget(self.shelves)
+        
+    def shelfContextMenu(self, point):
+        shelf = self.sender()
+        item = shelf.currentItem()
+        book = item.book
+        point = shelf.mapToGlobal(point)
+        self.widget.bookContextMenuRequested(book, point)
