@@ -63,7 +63,7 @@ class Catalog(ShelveView, QtCore.QObject):
 
         # Fill the shelf
         if search:
-            authors = models.Author.query.filter(models.Author.name.like("%%%s%%"%search))
+            authors = models.Author.query.order_by("name").filter(models.Author.name.like("%%%s%%"%search))
         else:
             authors = models.Author.query.order_by("name").all()
         
@@ -108,7 +108,7 @@ class Catalog(ShelveView, QtCore.QObject):
         self.shelves.setLayout(self.shelvesLayout)
         
         if search:
-            authors = models.Author.query.filter(models.Author.name.like("%%%s%%"%search))
+            authors = models.Author.query.order_by("name").filter(models.Author.name.like("%%%s%%"%search))
         else:
             authors = models.Author.query.order_by("name").all()
         for a in authors:
