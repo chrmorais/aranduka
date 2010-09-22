@@ -27,10 +27,35 @@ class ShelveView(QtCore.QObject):
         plugin"""
         return QtGui.QTreeWidgetItem([self.itemText])
 
+    def showGrid(self, search=None):
+        """Show a grid containing the (possibly filtered) books."""
+        pass
+    
+    def showList(self, search=None):
+        """Show a list containing the (possibly filtered) books."""
+        pass
+
+    operate = showGrid
+
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
+        """Perform a search and display the results"""
         self.operate(search = unicode(self.widget.searchWidget.text.text()))
-    
+
+    def shelfContextMenu(self, point):
+        """Show context menu for the book where the user
+        right-clicked.
+        If you are not using QListViews to display the
+        books, you probably need to reimplement this"""
+        
+        shelf = self.sender()
+        item = shelf.currentItem()
+        book = item.book
+        point = shelf.mapToGlobal(point)
+        self.widget.bookContextMenuRequested(book, point)
+
+
+
 class BookStore(object): pass
 class Converter(object): pass
 

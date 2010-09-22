@@ -135,9 +135,3 @@ class Catalog(ShelveView, QtCore.QObject):
 
         self.widget.shelveStack.setWidget(self.shelves)
         
-    def shelfContextMenu(self, point):
-        shelf = self.sender()
-        item = shelf.currentItem()
-        book = item.book
-        point = shelf.mapToGlobal(point)
-        self.widget.bookContextMenuRequested(book, point)
