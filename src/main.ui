@@ -212,7 +212,7 @@ padding: .5em;
            </sizepolicy>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="shelves">
            <layout class="QVBoxLayout" name="verticalLayout">
@@ -220,77 +220,20 @@ padding: .5em;
              <number>0</number>
             </property>
             <item>
-             <widget class="QListWidget" name="books">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="sizeIncrement">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="contextMenuPolicy">
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="autoFillBackground">
+             <widget class="QScrollArea" name="shelveStack">
+              <property name="widgetResizable">
                <bool>true</bool>
               </property>
-              <property name="styleSheet">
-               <string notr="true">::item {
-	background-color: qlineargradient(spread:repeat, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(190, 190, 190, 255), stop:0.137566 rgba(255, 255, 255, 255));
-    padding: 0;
-    margin: 0;
-    width: 150px;
-    height: 150px;
-}
-</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::NoFrame</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Plain</enum>
-              </property>
-              <property name="dragDropMode">
-               <enum>QAbstractItemView::DragDrop</enum>
-              </property>
-              <property name="alternatingRowColors">
-               <bool>false</bool>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>128</width>
-                <height>128</height>
-               </size>
-              </property>
-              <property name="movement">
-               <enum>QListView::Snap</enum>
-              </property>
-              <property name="resizeMode">
-               <enum>QListView::Adjust</enum>
-              </property>
-              <property name="layoutMode">
-               <enum>QListView::Batched</enum>
-              </property>
-              <property name="viewMode">
-               <enum>QListView::IconMode</enum>
-              </property>
-              <property name="uniformItemSizes">
-               <bool>true</bool>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>288</width>
+                 <height>341</height>
+                </rect>
+               </property>
+              </widget>
              </widget>
             </item>
            </layout>
@@ -303,6 +246,7 @@ padding: .5em;
             </property>
            </layout>
           </widget>
+          <widget class="QWidget" name="booklist"/>
          </widget>
         </item>
        </layout>
