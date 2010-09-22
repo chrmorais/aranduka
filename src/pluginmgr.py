@@ -27,6 +27,9 @@ class ShelveView(QtCore.QObject):
         plugin"""
         return QtGui.QTreeWidgetItem([self.itemText])
 
+    @QtCore.pyqtSlot()
+    def doSearch(self, *args):
+        self.operate(search = unicode(self.widget.searchWidget.text.text()))
     
 class BookStore(object): pass
 class Converter(object): pass

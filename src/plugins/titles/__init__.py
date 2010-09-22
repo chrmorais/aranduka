@@ -14,10 +14,6 @@ class Catalog(ShelveView, QtCore.QObject):
     itemText = "Titles"
     
 
-    @QtCore.pyqtSlot()
-    def doSearch(self, *args):
-        self.operate(search = unicode(self.widget.searchWidget.text.text()))
-
     def showList(self, search = None):
         """Get all books from the DB and show them"""
 
