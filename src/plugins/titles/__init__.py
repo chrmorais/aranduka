@@ -24,10 +24,19 @@ class Catalog(ShelveView, QtCore.QObject):
 
     def setWidget(self, widget):
         self.widget = widget
+        self.widget.searchWidget.doSearch.clicked.connect(self.doSearch)
 
-    def showList(self):
+    @QtCore.pyqtSlot()
+    def doSearch(self, *args):
+        self.search(unicode(self.widget.searchWidget.text.text()))
+
+    def search(self, terms):
+        self.operate(search = terms)
+
+    def showList(self, search = None):
         """Get all books from the DB and show them"""
 
+        self.operate = self.showList
         if not self.widget:
             print "Call setWidget first"
             return
@@ -58,7 +67,12 @@ class Catalog(ShelveView, QtCore.QObject):
         self.shelf.itemActivated.connect(self.widget.on_books_itemActivated)
 
         # Fill the shelf
-        for b in models.Book.query.order_by("title").all():
+        if search:
+            books = models.Book.query.filter(models.Book.title.like("%%%s%%"%search))
+        else:
+            books = models.Book.query.order_by("title").all()
+        
+        for b in books:
             icon = nocover
             cname = os.path.join("covers",str(b.id)+".jpg")
             if os.path.isfile(cname):
@@ -72,12 +86,13 @@ class Catalog(ShelveView, QtCore.QObject):
         self.widget.shelveStack.setWidget(self.shelf)
 
 
-    def showGrid(self):
+    def showGrid(self, search=None):
         """Get all books from the DB and show them"""
 
         if not self.widget:
             print "Call setWidget first"
             return
+        self.operate = self.showGrid
         
         self.widget.title.setText(self.title)
         nocover = QtGui.QIcon("nocover.png")
@@ -105,7 +120,13 @@ class Catalog(ShelveView, QtCore.QObject):
             else:
                 grouped_books[k]=[b]
         
-        for b in models.Book.query.order_by("title").all():
+        # Fill the shelf
+        if search:
+            books = models.Book.query.filter(models.Book.title.like("%%%s%%"%search))
+        else:
+            books = models.Book.query.order_by("title").all()
+            
+        for b in books:
             initial = b.title[0].upper()
             if initial.isdigit():
                 add_book(b,'#')
