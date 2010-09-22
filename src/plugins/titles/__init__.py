@@ -4,7 +4,7 @@ import models
 from pluginmgr import ShelveView
 from functools import partial
 
-# This gets the main catalog from feedbooks.
+# This plugin lists the books by title
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 

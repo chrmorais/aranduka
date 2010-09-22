@@ -3,7 +3,7 @@ import sys, os
 import models
 from pluginmgr import ShelveView
 
-# This gets the main catalog from feedbooks.
+# This plugin lists the books by author
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
