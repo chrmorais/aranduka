@@ -74,6 +74,11 @@ class Main(QtGui.QMainWindow):
         print "Finished initializing main window"
 
     def on_treeWidget_itemClicked(self, item):
+        try:
+            self.searchWidget.doSearch.clicked.disconnect()
+        except TypeError: # Happens when there's no connections
+            pass
+        self.searchWidget.doSearch.clicked.connect(item.handler.doSearch)
         if self.gridMode.isChecked():
             item.handler.showGrid()
         else:

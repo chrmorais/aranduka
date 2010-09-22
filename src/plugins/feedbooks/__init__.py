@@ -56,7 +56,6 @@ class Catalog(BookStore):
             self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
-            self.widget.searchWidget.doSearch.clicked.connect(self.doSearch)
         self.widget.stack.setCurrentIndex(self.pageNumber)
 
     showGrid = operate

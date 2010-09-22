@@ -24,22 +24,18 @@ class Catalog(ShelveView, QtCore.QObject):
 
     def setWidget(self, widget):
         self.widget = widget
-        self.widget.searchWidget.doSearch.clicked.connect(self.doSearch)
 
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
-        self.search(unicode(self.widget.searchWidget.text.text()))
-
-    def search(self, terms):
-        self.operate(search = terms)
+        self.operate(search = unicode(self.widget.searchWidget.text.text()))
 
     def showList(self, search = None):
         """Get all books from the DB and show them"""
 
-        self.operate = self.showList
         if not self.widget:
             print "Call setWidget first"
             return
+        self.operate = self.showList
         css = '''
         ::item {
                 padding: 0;

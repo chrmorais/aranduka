@@ -19,17 +19,22 @@ class Catalog(ShelveView, QtCore.QObject):
     def setWidget(self, widget):
         self.widget = widget
 
+    @QtCore.pyqtSlot()
+    def doSearch(self, *args):
+        self.operate(search = unicode(self.widget.searchWidget.text.text()))
+
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
         plugin"""
         return QtGui.QTreeWidgetItem(["Authors"])
 
-    def showList(self):
+    def showList(self, search = None):
         """Get all books from the DB and show them"""
 
         if not self.widget:
             print "Call setWidget first"
             return
+        self.operate = self.showList
         css = '''
         ::item {
                 padding: 0;
@@ -57,7 +62,12 @@ class Catalog(ShelveView, QtCore.QObject):
         self.shelf.itemActivated.connect(self.widget.on_books_itemActivated)
 
         # Fill the shelf
-        for a in models.Author.query.order_by("name").all():
+        if search:
+            authors = models.Author.query.filter(models.Author.name.like("%%%s%%"%search))
+        else:
+            authors = models.Author.query.order_by("name").all()
+        
+        for a in authors:
             a_item = QtGui.QListWidgetItem(a.name, self.shelf)
             for b in a.books:
                 icon = nocover
@@ -73,11 +83,12 @@ class Catalog(ShelveView, QtCore.QObject):
         self.widget.shelveStack.setWidget(self.shelf)
 
 
-    def showGrid(self):
+    def showGrid(self, search = None):
         """Get all books from the DB and show them"""
         if not self.widget:
             print "Call setWidget first"
             return
+        self.operate = self.showGrid
             
         self.widget.title.setText(self.title)
         nocover = QtGui.QIcon("nocover.png")
@@ -96,7 +107,11 @@ class Catalog(ShelveView, QtCore.QObject):
         self.shelvesLayout = QtGui.QVBoxLayout()
         self.shelves.setLayout(self.shelvesLayout)
         
-        for a in models.Author.query.order_by("name").all():
+        if search:
+            authors = models.Author.query.filter(models.Author.name.like("%%%s%%"%search))
+        else:
+            authors = models.Author.query.order_by("name").all()
+        for a in authors:
             # Make a shelf
             shelf_label = QtGui.QLabel(a.name)
             shelf = QtGui.QListWidget()
