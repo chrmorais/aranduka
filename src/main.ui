@@ -293,6 +293,8 @@ padding: .5em;
     <addaction name="actionEdit_Book"/>
     <addaction name="actionDelete_Book"/>
     <addaction name="actionOpen_Book"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
    </widget>
    <addaction name="menuLibrary"/>
    <addaction name="menuBook"/>
@@ -340,6 +342,14 @@ padding: .5em;
   <action name="actionImport_File">
    <property name="text">
     <string>Import File</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>

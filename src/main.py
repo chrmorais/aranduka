@@ -45,6 +45,7 @@ class Main(QtGui.QMainWindow):
         self.searchWidget = SearchWidget()
         self.searchBar.addWidget(self.searchWidget)
         self.searchBar.hide()
+        self.searchWidget.closeBar.clicked.connect(self.searchBar.hide)
 
         # Plugins
         manager.locatePlugins()
@@ -77,6 +78,9 @@ class Main(QtGui.QMainWindow):
             item.handler.showGrid()
         else:
             item.handler.showList()
+
+    def on_actionFind_triggered(self):
+        self.searchBar.show()
 
     def bookContextMenuRequested(self, book, point):
         """Given a book, and a place in the screen,
