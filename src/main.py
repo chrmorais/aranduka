@@ -111,7 +111,7 @@ class Main(QtGui.QMainWindow):
             for plugin, formats in converters:
                 for f in formats:
                     convert_menu.addAction("%s via %s"%(f, plugin.name),
-                        lambda f = f : plugin.convert(item.book, f))
+                        lambda f = f : plugin.convert(book, f))
 
             menu.addMenu(convert_menu)
             
