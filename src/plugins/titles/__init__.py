@@ -11,14 +11,8 @@ EBOOK_EXTENSIONS=['epub','mobi','pdf']
 class Catalog(ShelveView, QtCore.QObject):
 
     title = "Books By Title"
+    itemText = "Titles"
     
-    def treeItem(self):
-        """Returns a QTreeWidgetItem representing this
-        plugin"""
-        return QtGui.QTreeWidgetItem(["Titles"])
-
-    def setWidget(self, widget):
-        self.widget = widget
 
     @QtCore.pyqtSlot()
     def doSearch(self, *args):

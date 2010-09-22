@@ -1,6 +1,6 @@
 """Plugin manager for Aranduka, using Yapsy"""
 
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
 
 import logging
 #logging.basicConfig(level=logging.DEBUG)
@@ -12,10 +12,21 @@ from yapsy.IPlugin import IPlugin
 # These classes define our plugin categories
 class ShelveView(QtCore.QObject):
     title = "base ShelveView"
+    itemText = "BASE"
+    
     def __init__(self):
         print "INIT: ", self.title
         self.widget = None
         QtCore.QObject.__init__(self)
+        
+    def setWidget(self, widget):
+        self.widget = widget
+
+    def treeItem(self):
+        """Returns a QTreeWidgetItem representing this
+        plugin"""
+        return QtGui.QTreeWidgetItem([self.itemText])
+
     
 class BookStore(object): pass
 class Converter(object): pass
