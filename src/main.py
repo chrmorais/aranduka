@@ -23,6 +23,13 @@ class Main(QtGui.QMainWindow):
         
         self.currentBook = None
 
+        # View types toggles
+        self.viewGroup = QtGui.QButtonGroup(self)
+        self.viewGroup.setExclusive(True)
+        self.viewGroup.addButton(self.gridMode)
+        self.viewGroup.addButton(self.listMode)
+        self.gridMode.setChecked(True)
+
         manager.locatePlugins()
         manager.loadPlugins()
 
@@ -49,7 +56,10 @@ class Main(QtGui.QMainWindow):
         print "Finished initializing main window"
 
     def on_treeWidget_itemClicked(self, item):
-        item.handler.operate()
+        if self.gridMode.isChecked():
+            item.handler.showGrid()
+        else:
+            item.handler.showList()
 
     def bookContextMenuRequested(self, book, point):
         """Given a book, and a place in the screen,

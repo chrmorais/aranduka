@@ -24,7 +24,7 @@ class Catalog(ShelveView, QtCore.QObject):
         plugin"""
         return QtGui.QTreeWidgetItem(["Authors"])
 
-    def operate(self):
+    def showGrid(self):
         """Get all books from the DB and show them"""
         if not self.widget:
             print "Call setWidget first"

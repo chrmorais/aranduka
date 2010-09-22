@@ -25,7 +25,7 @@ class Catalog(ShelveView, QtCore.QObject):
     def setWidget(self, widget):
         self.widget = widget
 
-    def operate(self):
+    def showGrid(self):
         """Get all books from the DB and show them"""
 
         if not self.widget:
