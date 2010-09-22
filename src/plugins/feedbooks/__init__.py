@@ -9,6 +9,7 @@ from pluginmgr import BookStore
 from templite import Templite
 import codecs
 import urlparse
+import time
 
 # This gets the main catalog from feedbooks.
 
@@ -56,9 +57,14 @@ class Catalog(BookStore):
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
             self.w.search_text.returnPressed.connect(self.doSearch)
-            
+            #self.w.store_web.page().loadFinished.connect(self.processPage)
         self.widget.stack.setCurrentIndex(self.pageNumber)
-        
+
+    
+
+    #@QtCore.pyqtSlot()
+    #def processPage(self):
+        #print self.w.store_web.page().mainFrame().toHtml()
 
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
@@ -122,8 +128,24 @@ class Catalog(BookStore):
         self.w.crumbs.setText(ctext)
 
     def showBranch(self, url):
+        """Trigger download of the branch, then trigger
+        parseBranch when it's downloaded"""
         print "Showing:", url
-        data = parse(url)
+        self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
+        self.w.store_web.page().mainFrame().loadFinished.connect(self.parseBranch)
+        return
+        
+    @QtCore.pyqtSlot()
+    def parseBranch(self):
+        """Replaces the content of the web page (which is assumed to be
+        an Atom feed from Feedbooks) with the generated HTML"""
+        self.w.store_web.page().mainFrame().loadFinished.disconnect(self.parseBranch)
+        url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())
+        print "Parsing the branch:", url
+        t1 = time.time()
+        data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
+        print "Parsed branch in: %s seconds"%(time.time()-t1)
+        
         crumb = [data.feed.title.split("|")[0].split("/")[-1].strip(), url]
         try:
             r=self.crumbs.index(crumb)
@@ -151,6 +173,7 @@ class Catalog(BookStore):
         totPages = int(ceil(float(data.feed.get('opensearch_totalresults', 1))/int(data.feed.get('opensearch_itemsperpage', 1))))
         curPage = urlparse.parse_qs(urlparse.urlparse(url).query).get('page',[1])[-1]
 
+        t1 = time.time()
         html = self.template.render(
             title = data.feed.title,
             books = books,
@@ -160,8 +183,9 @@ class Catalog(BookStore):
             totPages = totPages,
             curPage = int(curPage)
             )
+        print "Rendered in: %s seconds"%(time.time()-t1)
             
-        self.w.store_web.setHtml(html)
+        self.w.store_web.page().mainFrame().setHtml(html)
 
     def on_catalog_itemExpanded(self, item):
         if item.childCount()==0:

@@ -7,7 +7,7 @@
 import os
 import urllib2
 from elixir import *
-
+from downloader import get
 
 def initDB():
     "Create or initialize the database"
