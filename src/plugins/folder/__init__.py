@@ -4,6 +4,14 @@ import os
 import models
 import utils
 import json
+import unicodedata
+import re
+import shutil
+
+def slugify(value):
+    "Converts to lowercase, removes non-alpha chars and converts spaces to hyphens"
+    value = re.sub('[^\w\s-]', '', value).strip().lower()
+    return re.sub('[-\s]+', '-', value)
 
 class FolderDevice(object):
     """Syncs a set of tags' books to a folder, using specified
@@ -17,7 +25,33 @@ class FolderDevice(object):
 
     def sync(self):
         """Perform the sync"""
-        print "syncing tags:", self.tags, "to folder", self.folder 
+        print "syncing tags:", self.tags, "to folder", self.folder
+        files_to_sync = []
+        book_set = set()
+        for t in self.tags:
+            tag = models.Tag.get_by(name = t)
+            for b in tag.books:
+                book_set.add(b)
+        for b in book_set:
+            for f in self.formats:
+                fl = b.files_for_format("."+f)
+                if fl:
+                    files_to_sync.append([b, fl] )
+                    break
+            else:
+                # FIXME: here we should autoconvert
+                files_to_sync.append([b, []])
+
+        for d in files_to_sync:
+            b, fn = d
+            if not fn:
+                # FIXME: Whine that we can't sync this book
+                continue
+            _, ext = os.path.splitext(fn[0])
+            new_name = slugify(b.title)+ext
+            dest = os.path.join(self.folder, new_name)
+            print fn[0],'=>', dest
+            shutil.copyfile(fn[0],dest)
 
 class NewDeviceDialog(QtGui.QDialog):
     def __init__(self):
@@ -79,8 +113,8 @@ class FolderDevicePlugin(Device, QtCore.QObject):
             f.close()
             for d in data:
                 self.devices.append(FolderDevice(**d))
-        except ValueError:
-            pass
+        except IOError:
+            self.devices=[]
         
     def newfolder(self):
         while True:
