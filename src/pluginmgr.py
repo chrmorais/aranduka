@@ -3,7 +3,7 @@
 from PyQt4 import QtCore, QtGui
 
 import logging
-#logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 import os
 from yapsy.PluginManager import PluginManager
@@ -11,6 +11,12 @@ from yapsy.IPlugin import IPlugin
 import utils
 
 # These classes define our plugin categories
+
+class Device(object):
+    """A plugin that represents a device to read books.
+    These get added in the 'Devices' menu
+    """
+    pass
 
 class Tool(object):
     """A plugin that gets added to the Tools menu in the main.ui"""
@@ -97,6 +103,7 @@ manager = PluginManager(
         "BookStore": BookStore,
         "Converter": Converter,
         "Tool": Tool,
+        "Device": Device,
     })
 
 manager.setPluginPlaces(utils.PLUGINPATH)

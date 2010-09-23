@@ -74,6 +74,11 @@ class Main(QtGui.QMainWindow):
         for plugin in manager.getPluginsOfCategory("Tool"):
             self.menuTools.addAction(plugin.plugin_object.action())
 
+        self.deviceNewMenu=QtGui.QMenu("New Device")
+        for plugin in manager.getPluginsOfCategory("Device"):
+            self.deviceNewMenu.addAction(plugin.plugin_object.actionNew())
+        self.menuDevices.addMenu(self.deviceNewMenu)
+
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
         self.book_editor = BookEditor(None)

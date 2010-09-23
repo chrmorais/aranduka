@@ -261,9 +261,15 @@ padding: .5em;
      <string>Tools</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuDevices">
+    <property name="title">
+     <string>Devices</string>
+    </property>
+   </widget>
    <addaction name="menuLibrary"/>
    <addaction name="menuBook"/>
    <addaction name="menuTools"/>
+   <addaction name="menuDevices"/>
   </widget>
   <widget class="QToolBar" name="searchBar">
    <property name="windowTitle">
