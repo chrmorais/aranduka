@@ -111,13 +111,14 @@ class Main(QtGui.QMainWindow):
 
         # Create menu with files for this book
         open_menu = QtGui.QMenu("Open")
-        if len(book.files) == 1:
+        formats = book.available_formats()
+        if len(formats) == 1:
             # A single file
             f = book.files[0]
             url = QtCore.QUrl.fromLocalFile(f.file_name)
             menu.addAction("Open %s"%os.path.basename(f.file_name),
                 lambda f = f: QtGui.QDesktopServices.openUrl(url))
-        elif book.files:
+        elif formats:
             for f in book.files:
                 url = QtCore.QUrl.fromLocalFile(f.file_name)
                 open_menu.addAction(os.path.basename(f.file_name),
