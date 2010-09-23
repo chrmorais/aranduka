@@ -49,7 +49,7 @@ def validate_ISBN(isbn):
     """
     return validate_ISBN10(isbn) or validate_ISBN13(isbn)
 
-SCRIPTPATH = os.path.abspath(os.path.dirname(__file__)))
+SCRIPTPATH = os.path.abspath(os.path.dirname(__file__))
 BASEPATH = os.path.expanduser(os.path.join('~','.aranduka'))
 BOOKPATH = os.path.join(BASEPATH,'ebooks')
 COVERPATH = os.path.join(BASEPATH,'covers')
