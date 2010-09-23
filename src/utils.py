@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import string
 
 def validate_ISBN10(isbn):
@@ -47,4 +48,10 @@ def validate_ISBN(isbn):
     Validate ISBN13 or ISBN10 code. Returns the ISBN or False if any is valid.
     """
     return validate_ISBN10(isbn) or validate_ISBN13(isbn)
-    
+
+SCRIPTPATH = os.path.abspath(os.path.dirname(__file__)))
+BASEPATH = os.path.expanduser(os.path.join('~','.aranduka'))
+BOOKPATH = os.path.join(BASEPATH,'ebooks')
+COVERPATH = os.path.join(BASEPATH,'covers')
+PLUGINPATH = [os.path.join(BASEPATH,'plugins'),
+    os.path.join(SCRIPTPATH,'plugins')]
