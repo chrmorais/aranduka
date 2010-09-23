@@ -76,6 +76,8 @@ class TagDialog(QtGui.QDialog):
         uic.loadUi(uifile, self)
         self.ui = self
         self._query = None
+        for t in models.Tag.query.all():
+            self.tag_name.addItem(t.name, t.name)
         self.tag_name.setEditText(tag_name)
 
 class BookEditor(QtGui.QWidget):
