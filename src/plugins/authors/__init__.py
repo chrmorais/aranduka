@@ -28,7 +28,6 @@ class Catalog(ShelveView):
         '''
 
         self.widget.title.setText(self.title)
-        nocover = QtGui.QIcon("nocover.png")
         # Setup widgetry
         self.widget.stack.setCurrentIndex(0)
         self.shelf = QtGui.QListWidget()
@@ -54,13 +53,7 @@ class Catalog(ShelveView):
         for a in authors:
             a_item = QtGui.QListWidgetItem(a.name, self.shelf)
             for b in a.books:
-                icon = nocover
-                cname = os.path.join("covers",str(b.id)+".jpg")
-                if os.path.isfile(cname):
-                    try:
-                        icon =  QtGui.QIcon(QtGui.QPixmap(cname).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
-                    except:
-                        pass
+                icon =  QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
                 item.book = b
 
@@ -75,7 +68,6 @@ class Catalog(ShelveView):
         self.operate = self.showGrid
             
         self.widget.title.setText(self.title)
-        nocover = QtGui.QIcon("nocover.png")
         css = '''
         ::item {
                 padding: 0;
@@ -123,13 +115,7 @@ class Catalog(ShelveView):
             
             # Fill the shelf
             for b in a.books:
-                icon = nocover
-                cname = os.path.join("covers",str(b.id)+".jpg")
-                if os.path.isfile(cname):
-                    try:
-                        icon =  QtGui.QIcon(QtGui.QPixmap(cname).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
-                    except:
-                        pass
+                icon =  QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, shelf)
                 item.book = b
 
