@@ -1,5 +1,7 @@
-from PyQt4 import QtGui
+from PyQt4 import QtGui, uic
 from pluginmgr import Device
+import os
+import models
 
 class FolderDevice(Device):
     """This device syncs books to a folder.
@@ -12,6 +14,18 @@ class FolderDevice(Device):
         return self.action
 
     def newfolder(self):
-        print "Create new sync folder"
+        uifile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'new_device.ui')
+        self.w = uic.loadUi(uifile)
+    
+        for f in ["epub","pdf","mobi","fb2","txt"]:
+            self.w.formats.addItem(f)
+
+        for t in models.Tag.query.order_by("name").all():
+            self.w.tags.addItem(t.name)
+        self.w.exec_()
+        
+        
         
     
