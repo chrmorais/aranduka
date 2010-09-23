@@ -1,7 +1,6 @@
 from feedparser import parse
 from PyQt4 import QtGui, QtCore, QtWebKit, uic
 import sys, os, urllib
-from elementtree.ElementTree import XML
 from models import *
 from pprint import pprint
 from math import ceil
