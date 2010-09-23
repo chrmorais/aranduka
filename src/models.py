@@ -45,7 +45,7 @@ class Book (Entity):
         # FIXME: make non-blocking
         # FIXME: give user feedback
         fname = os.path.abspath(
-            os.path.join("ebooks", str(self.id) +"."+extension))
+            os.path.join(utils.BOOKPATH, str(self.id) +"."+extension))
         print "Fetching file: ", url
         u=urllib2.urlopen(url)
         data = u.read()
@@ -69,7 +69,7 @@ class Book (Entity):
         """
         # FIXME: make non-blocking
         # FIXME: give user feedback
-        fname = os.path.join("covers", str(self.id) +".jpg")
+        fname = os.path.join(utils.COVERPATH, str(self.id) +".jpg")
         if url:
             print "Fetching cover: ", url
             u=urllib2.urlopen(url)
