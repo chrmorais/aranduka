@@ -194,14 +194,10 @@ class Main(QtGui.QMainWindow):
         if not item:
             return
             item.book = models.Book.get_by(id = item.book.id)
-            cname = os.path.join("covers",str(item.book.id)+".jpg")
+            cname = item.book.cover()
             item.setText(item.book.title)
-            if os.path.isfile(cname):
-                try:
-                    icon =  QtGui.QIcon(QPixmap(cname).scaledToHeight(128))
-                    item.setIcon(icon)
-                except:
-                    pass
+            icon =  QtGui.QIcon(QPixmap(cname).scaledToHeight(128))
+            item.setIcon(icon)
         
 
 def main():

@@ -60,15 +60,26 @@ class Book (Entity):
         print "F2", self.files
         session.commit()
 
+    def files_for_format(self, extension):
+        """Given an extension (ie: "pdf"), return a list
+        of files for this book that match it."""
+        extension = extension.lower()
+        files = []
+        for f in self.files:
+            _, ext = os.path.splitext(f.file_name)
+            if extension == ext.lower():
+                files.append(f.file_name)
+        return files
+
     def available_formats(self):
         """Returns what formats are available for this book, as a list
-        of strings, for example: ['epub','pdf']"""
+        of strings, for example: ['.epub','.pdf']"""
 
         extensions = set()
         for f in self.files:
             _, ext = os.path.splitext(f.file_name)
             extensions.add(ext)
-        return list(ext)
+        return list(extensions)
 
     def cover(self):
         """Returns the path for the cover image if available, or the
