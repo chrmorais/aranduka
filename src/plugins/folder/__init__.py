@@ -15,6 +15,10 @@ class FolderDevice(object):
         self.name = name
         self.folder = folder
 
+    def sync(self):
+        """Perform the sync"""
+        print "syncing tags:", self.tags, "to folder", self.folder 
+
 class NewDeviceDialog(QtGui.QDialog):
     def __init__(self):
         QtGui.QDialog.__init__(self)
@@ -46,7 +50,8 @@ class FolderDevicePlugin(Device, QtCore.QObject):
 
     def deviceActions(self):
         """Returns a list of actions, one for each device"""
-        return [QtGui.QAction(d.name, self) for d in self.devices]
+        return [QtGui.QAction(d.name, self, triggered = d.sync)
+            for d in self.devices]
 
     def actionNew(self):
         self.action = QtGui.QAction("New Sync Folder", None)
