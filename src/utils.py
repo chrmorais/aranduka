@@ -55,3 +55,7 @@ BOOKPATH = os.path.join(BASEPATH,'ebooks')
 COVERPATH = os.path.join(BASEPATH,'covers')
 PLUGINPATH = [os.path.join(BASEPATH,'plugins'),
     os.path.join(SCRIPTPATH,'plugins')]
+
+for P in [SCRIPTPATH,BASEPATH,BOOKPATH,COVERPATH]+PLUGINPATH:
+    if not os.path.isdir(P):
+        os.makedirs(P)
