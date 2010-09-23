@@ -57,6 +57,7 @@ class Catalog(ShelveView):
                 item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
                 item.book = b
 
+        self.shelvesLayout.addStretch(1)
         self.widget.shelveStack.setWidget(self.shelf)
 
 

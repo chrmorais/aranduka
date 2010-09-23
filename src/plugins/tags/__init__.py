@@ -118,6 +118,6 @@ class Catalog(ShelveView):
                 icon =  QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, shelf)
                 item.book = b
-
+        self.shelvesLayout.addStretch(1)
         self.widget.shelveStack.setWidget(self.shelves)
         
