@@ -7,15 +7,18 @@
 import os
 import urllib2
 from elixir import *
+import utils
 
 def initDB():
     "Create or initialize the database"
-    "Setting up database"
-    metadata.bind = "sqlite:///books.sqlite"
+    dburl="sqlite:///%s"%(os.path.join(utils.BASEPATH,'books.sqlite'))
+    print "Setting up database ", dburl
+    metadata.bind = dburl
     metadata.bind.echo = False
     setup_all()
-    if not os.path.isfile("./books.sqlite"):
-        "Creating database"
+    dbpath = os.path.join(utils.BASEPATH,"books.sqlite")
+    if not os.path.isfile(dbpath):
+        print "Creating database", dbpath
         create_all()
         session.commit()
 
