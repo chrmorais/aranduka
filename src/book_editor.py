@@ -7,7 +7,7 @@ from gdata.books.service import BookService
 from PyQt4 import QtCore, QtGui, uic
 
 import models
-from utils import validate_ISBN
+from utils import validate_ISBN, SCRIPTPATH
 from metadata import get_metadata
 
 service = BookService()
@@ -110,11 +110,8 @@ class BookEditor(QtGui.QWidget):
         for t in self.book.tags:
             self.tags.addItem(t.name)
 
-        cname = os.path.join("covers",str(self.book.id)+".jpg")
-        if os.path.isfile(cname):
-            self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
-        else:
-            self.cover.setPixmap(QtGui.QPixmap("nocover.png"))
+        cname = self.book.cover()
+        self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
 
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
@@ -246,7 +243,7 @@ class BookEditor(QtGui.QWidget):
         elif datos:
 
             #Vaciar imagen siempre
-            thumb = QtGui.QPixmap("nocover.png")
+            thumb = QtGui.QPixmap(os.path.join(SCRIPTPATH,"nocover.png"))
             self.tapaLibro.setPixmap(thumb)
 
             identifiers = dict(datos['identifiers'])

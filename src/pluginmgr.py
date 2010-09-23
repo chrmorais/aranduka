@@ -8,6 +8,7 @@ import logging
 import os
 from yapsy.PluginManager import PluginManager
 from yapsy.IPlugin import IPlugin
+import utils
 
 # These classes define our plugin categories
 
@@ -98,9 +99,5 @@ manager = PluginManager(
         "Tool": Tool,
     })
 
-plugindir = os.path.join(
-            os.path.abspath(
-            os.path.dirname(__file__)),'plugins')
-
-manager.setPluginPlaces([plugindir])
+manager.setPluginPlaces(utils.PLUGINPATH)
 

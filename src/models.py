@@ -7,15 +7,18 @@
 import os
 import urllib2
 from elixir import *
+import utils
 
 def initDB():
     "Create or initialize the database"
-    "Setting up database"
-    metadata.bind = "sqlite:///books.sqlite"
+    dburl="sqlite:///%s"%(os.path.join(utils.BASEPATH,'books.sqlite'))
+    print "Setting up database ", dburl
+    metadata.bind = dburl
     metadata.bind.echo = False
     setup_all()
-    if not os.path.isfile("./books.sqlite"):
-        "Creating database"
+    dbpath = os.path.join(utils.BASEPATH,"books.sqlite")
+    if not os.path.isfile(dbpath):
+        print "Creating database", dbpath
         create_all()
         session.commit()
 
@@ -42,7 +45,7 @@ class Book (Entity):
         # FIXME: make non-blocking
         # FIXME: give user feedback
         fname = os.path.abspath(
-            os.path.join("ebooks", str(self.id) +"."+extension))
+            os.path.join(utils.BOOKPATH, str(self.id) +"."+extension))
         print "Fetching file: ", url
         u=urllib2.urlopen(url)
         data = u.read()
@@ -56,7 +59,24 @@ class Book (Entity):
         self.files.append(f)
         print "F2", self.files
         session.commit()
-        
+
+    def available_formats(self):
+        """Returns what formats are available for this book, as a list
+        of strings, for example: ['epub','pdf']"""
+
+        extensions = set()
+        for f in self.files:
+            _, ext = os.path.splitext(f.file_name)
+            extensions.add(ext)
+        return list(ext)
+
+    def cover(self):
+        """Returns the path for the cover image if available, or the
+        default nocover picture"""
+        coverfn = os.path.join(utils.COVERPATH,"%s.jpg"%(self.id))
+        if os.path.isfile(coverfn):
+            return coverfn
+        return os.path.join(utils.SCRIPTPATH,"nocover.png")
 
     def fetch_cover(self, url = None):
         """Downloads and stores a cover for this book, if possible.
@@ -66,7 +86,7 @@ class Book (Entity):
         """
         # FIXME: make non-blocking
         # FIXME: give user feedback
-        fname = os.path.join("covers", str(self.id) +".jpg")
+        fname = os.path.join(utils.COVERPATH, str(self.id) +".jpg")
         if url:
             print "Fetching cover: ", url
             u=urllib2.urlopen(url)
