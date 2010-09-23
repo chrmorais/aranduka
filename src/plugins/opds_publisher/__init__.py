@@ -12,15 +12,13 @@ class Plugin(Tool):
 
     def action(self):
         self.action = QtGui.QAction("Publish Catalog", None)
-        self.action.triggered.connect(self.publish)
-        print self.opds()
+        #self.action.triggered.connect(self.publish)
         return self.action
 
 
 
 
-TPL = """
-<?xml version="1.0" encoding="UTF-8"?>
+TPL = r"""<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"
       xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="http://opds-spec.org/2010/catalog">
@@ -101,6 +99,7 @@ if __name__ == "__main__":
                 pdf_fn,
                 mobi_fn,
             ])
+        response.content_type='application/atom+xml'
         return template.render(books = books)
 
     @route('/cover/:id')
