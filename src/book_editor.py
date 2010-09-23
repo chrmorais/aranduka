@@ -104,6 +104,10 @@ class BookEditor(QtGui.QWidget):
         for f in self.book.files:
             self.fileList.addItem(f.file_name)
 
+        self.tags.clear()
+        for t in self.book.tags:
+            self.tags.addItem(t.name)
+
         cname = os.path.join("covers",str(self.book.id)+".jpg")
         if os.path.isfile(cname):
             self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
@@ -147,17 +151,26 @@ class BookEditor(QtGui.QWidget):
                 print "Creating author:", a
                 author = models.Author(name = a)
             self.book.authors.append(author)
+
         for ident in self.book.identifiers:
             ident.delete()
         for i in range(self.ids.count()):
             t = unicode(self.ids.itemText(i))
             k, v = t.split(': ',1)
             i = models.Identifier(key = k, value = v, book = self.book)
+
         for old_file in self.book.files:
             old_file.delete()
         for file_name in [unicode(self.fileList.item(i).text()) for i in range(self.fileList.count())]:
             f = models.File(file_name=file_name, book=self.book)
-        # TODO: save the rest of the data
+
+        self.book.tags = []
+        for tag_name in [unicode(self.tags.item(i).text()) for i in range(self.tags.count())]:
+            t = models.Tag.get_by(name=tag_name)
+            if not t:
+                t = models.Tag(name=tag_name, value=tag_name)
+            self.book.tags.append(t)
+
         models.session.commit()
 
     @QtCore.pyqtSlot()
