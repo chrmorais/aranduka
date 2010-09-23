@@ -64,12 +64,15 @@ class Main(QtGui.QMainWindow):
                 self.treeWidget.setCurrentItem(item)
 
         for plugin in manager.getPluginsOfCategory("BookStore"):
-            # Ways to fill the shelves
+            # Ways to acquire books
             item = plugin.plugin_object.treeItem()
             item.handler = plugin.plugin_object
             item.title = plugin.plugin_object.title
             plugin.plugin_object.setWidget(self)
             self.treeWidget.addTopLevelItem(item)
+
+        for plugin in manager.getPluginsOfCategory("Tool"):
+            self.menuTools.addAction(plugin.plugin_object.action())
 
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)

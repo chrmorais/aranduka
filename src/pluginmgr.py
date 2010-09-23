@@ -10,6 +10,11 @@ from yapsy.PluginManager import PluginManager
 from yapsy.IPlugin import IPlugin
 
 # These classes define our plugin categories
+
+class Tool(object):
+    """A plugin that gets added to the Tools menu in the main.ui"""
+    pass
+
 class ShelveView(QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
@@ -90,6 +95,7 @@ manager = PluginManager(
         "ShelveView": ShelveView,
         "BookStore": BookStore,
         "Converter": Converter,
+        "Tool": Tool,
     })
 
 plugindir = os.path.join(
