@@ -180,8 +180,7 @@ class BookEditor(QtGui.QWidget):
 
     @QtCore.pyqtSlot()
     def on_remove_id_clicked(self):
-        current_index = self.ids.currentIndex()
-        self.ids.removeItem(current_index)
+        self.ids.removeItem(self.ids.currentIndex())
 
     @QtCore.pyqtSlot()
     def on_edit_id_clicked(self):
