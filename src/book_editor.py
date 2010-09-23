@@ -67,6 +67,17 @@ class IdentifierDialog(QtGui.QDialog):
         self.id_key.setText(id_key)
         self.id_value.setText(id_value)
 
+class TagDialog(QtGui.QDialog):
+    def __init__(self, tag_name, *args):
+        QtGui.QDialog.__init__(self,*args)
+        uifile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'tag.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
+        self._query = None
+        self.tag_name.setEditText(tag_name)
+
 class BookEditor(QtGui.QWidget):
     def __init__(self, book_id = None, *args):
         QtGui.QWidget.__init__(self,*args)
@@ -181,6 +192,18 @@ class BookEditor(QtGui.QWidget):
             return
         self.ids.setItemText(self.ids.currentIndex(), "%s: %s"%(
             dlg.id_key.text(), dlg.id_value.text()))
+
+    @QtCore.pyqtSlot()
+    def on_add_tag_clicked(self):
+        dlg = TagDialog('', self)
+        r = dlg.exec_()
+        if not r == dlg.Accepted:
+            return
+        self.tags.addItem(dlg.tag_name.currentText())
+
+    @QtCore.pyqtSlot()
+    def on_remove_tag_clicked(self):
+        self.tags.takeItem(self.tags.currentRow())
 
     def findBook(self):
         """

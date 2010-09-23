@@ -49,8 +49,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>730</width>
-        <height>437</height>
+        <width>740</width>
+        <height>448</height>
        </rect>
       </property>
       <attribute name="label">
@@ -171,8 +171,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>730</width>
-        <height>437</height>
+        <width>740</width>
+        <height>448</height>
        </rect>
       </property>
       <attribute name="label">
@@ -192,12 +192,12 @@
        <item row="0" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QListView" name="shelves"/>
+          <widget class="QListWidget" name="tags"/>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QToolButton" name="new_tag">
+            <widget class="QToolButton" name="add_tag">
              <property name="text">
               <string>+</string>
              </property>
@@ -207,13 +207,6 @@
             <widget class="QToolButton" name="remove_tag">
              <property name="text">
               <string>-</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="edit_tag">
-             <property name="text">
-              <string>Edit</string>
              </property>
             </widget>
            </item>
@@ -241,8 +234,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>730</width>
-        <height>437</height>
+        <width>740</width>
+        <height>448</height>
        </rect>
       </property>
       <attribute name="label">
