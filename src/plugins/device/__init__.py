@@ -5,6 +5,8 @@ import dbus
 import dbus.mainloop.qt
 from PyQt4 import QtCore
 
+# Mostly copied from here: 
+# http://blog.foxxtrot.net/2010/05/detecting-removable-storage-mounts-using-dbus-and-python.html
 
 class DeviceNotifier(Device):
     name = "Device Notifier"
