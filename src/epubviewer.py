@@ -4,62 +4,6 @@ import zipfile
 from elementtree.ElementTree import XML
 
 
-class DownloadReply(QtNetwork.QNetworkReply):
-
-    def __init__(self, parent, url, operation, w):
-        self._w = w
-        print"DR:", url, url.path()
-        QtNetwork.QNetworkReply.__init__(self, parent)
-        self.content = self._w.getData(unicode(url.path())[1:])
-        self.offset = 0
-
-        self.setHeader(QtNetwork.QNetworkRequest.ContentTypeHeader, QtCore.QVariant("application/binary"))
-        self.setHeader(QtNetwork.QNetworkRequest.ContentLengthHeader, QtCore.QVariant(len(self.content)))
-        QtCore.QTimer.singleShot(0, self, QtCore.SIGNAL("readyRead()"))
-        QtCore.QTimer.singleShot(0, self, QtCore.SIGNAL("finished()"))
-        self.open(self.ReadOnly | self.Unbuffered)
-        self.setUrl(url)
-
-    def abort(self):
-        pass
-
-    def bytesAvailable(self):
-        return len(self.content) - self.offset
-
-    def isSequential(self):
-        return True
-
-    def readData(self, maxSize):
-        print "readData"
-        if self.offset < len(self.content):
-            end = min(self.offset + maxSize, len(self.content))
-            data = self.content[self.offset:end]
-            self.offset = end
-            return data
-
-class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
-
-    def __init__(self, old_manager, w):
-        self._w = w
-        QtNetwork.QNetworkAccessManager.__init__(self)
-        self.old_manager = old_manager
-        self.setCache(old_manager.cache())
-        self.setCookieJar(old_manager.cookieJar())
-        self.setProxy(old_manager.proxy())
-        self.setProxyFactory(old_manager.proxyFactory())
-
-    def createRequest(self, operation, request, data):
-
-        if request.url().scheme() != "epub":
-            return QNetworkAccessManager.createRequest(self, operation, request, data)
-
-        if operation == self.GetOperation:
-            # Handle download:// URLs separately by creating custom
-            # QNetworkReply objects.
-            reply = DownloadReply(self, request.url(), self.GetOperation, self._w)
-            return reply
-        else:
-            return QNetworkAccessManager.createRequest(self, operation, request, data)
 
 class Main(QtGui.QMainWindow):
     def __init__(self, fname):
@@ -156,6 +100,65 @@ class Main(QtGui.QMainWindow):
 
     def unsupported(self, *args):
         print "UNSUP:", args
+
+class DownloadReply(QtNetwork.QNetworkReply):
+
+    def __init__(self, parent, url, operation, w):
+        self._w = w
+        print"DR:", url, url.path()
+        QtNetwork.QNetworkReply.__init__(self, parent)
+        self.content = self._w.getData(unicode(url.path())[1:])
+        self.offset = 0
+
+        self.setHeader(QtNetwork.QNetworkRequest.ContentTypeHeader, QtCore.QVariant("application/binary"))
+        self.setHeader(QtNetwork.QNetworkRequest.ContentLengthHeader, QtCore.QVariant(len(self.content)))
+        QtCore.QTimer.singleShot(0, self, QtCore.SIGNAL("readyRead()"))
+        QtCore.QTimer.singleShot(0, self, QtCore.SIGNAL("finished()"))
+        self.open(self.ReadOnly | self.Unbuffered)
+        self.setUrl(url)
+
+    def abort(self):
+        pass
+
+    def bytesAvailable(self):
+        return len(self.content) - self.offset
+
+    def isSequential(self):
+        return True
+
+    def readData(self, maxSize):
+        print "readData"
+        if self.offset < len(self.content):
+            end = min(self.offset + maxSize, len(self.content))
+            data = self.content[self.offset:end]
+            self.offset = end
+            return data
+
+class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
+
+    def __init__(self, old_manager, w):
+        self._w = w
+        QtNetwork.QNetworkAccessManager.__init__(self)
+        self.old_manager = old_manager
+        self.setCache(old_manager.cache())
+        self.setCookieJar(old_manager.cookieJar())
+        self.setProxy(old_manager.proxy())
+        self.setProxyFactory(old_manager.proxyFactory())
+
+    def createRequest(self, operation, request, data):
+
+        if request.url().scheme() != "epub":
+            return QNetworkAccessManager.createRequest(self, operation, request, data)
+
+        if operation == self.GetOperation:
+            # Handle download:// URLs separately by creating custom
+            # QNetworkReply objects.
+            reply = DownloadReply(self, request.url(), self.GetOperation, self._w)
+            return reply
+        else:
+            return QNetworkAccessManager.createRequest(self, operation, request, data)
+
+
 
 def main():
     # Again, this is boilerplate, it's going to be the same on
