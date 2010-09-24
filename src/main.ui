@@ -266,10 +266,17 @@ padding: .5em;
      <string>Devices</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionPlugins"/>
+   </widget>
    <addaction name="menuLibrary"/>
    <addaction name="menuBook"/>
    <addaction name="menuTools"/>
    <addaction name="menuDevices"/>
+   <addaction name="menuSettings"/>
   </widget>
   <widget class="QToolBar" name="searchBar">
    <property name="windowTitle">
@@ -322,6 +329,11 @@ padding: .5em;
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionPlugins">
+   <property name="text">
+    <string>Plugins...</string>
    </property>
   </action>
  </widget>

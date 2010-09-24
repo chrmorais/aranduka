@@ -9,6 +9,7 @@ from progress import progress
 from book_editor import BookEditor
 import rc_icons
 from pluginmgr import manager
+from pluginconf import PluginSettings
 
 class SearchWidget(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -100,6 +101,10 @@ class Main(QtGui.QMainWindow):
             dev_menu.addAction(plugin.plugin_object.actionNew())
             self.menuDevices.addMenu(dev_menu)
 
+    @QtCore.pyqtSlot()
+    def on_actionPlugins_triggered(self):
+        dlg = PluginSettings(self)
+        dlg.exec_()
 
     def viewModeChanged(self, id):
         item = self.treeWidget.currentItem()
