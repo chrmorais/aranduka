@@ -29,13 +29,25 @@
    </item>
    <item>
     <widget class="QToolButton" name="configure">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>20</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
       <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/icons/configure.svg</normaloff>:/icons/configure.svg</iconset>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -2,6 +2,7 @@ import os
 from PyQt4 import QtCore, QtGui, uic
 from utils import SCRIPTPATH
 from pluginmgr import manager
+import config
 
 class PluginSettings(QtGui.QDialog):
     def __init__(self, parent = None):
@@ -10,24 +11,42 @@ class PluginSettings(QtGui.QDialog):
         uifile = os.path.join(SCRIPTPATH,'pluginconf.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        self.pages = {}
+        self.plugin_widgets = []
+        enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
+        if enabled_plugins == set([None]):
+            enabled_plugins = set()
+            #Never configured... enable everything! (will change later ;-)
+            for c in manager.getCategories():
+                for p in manager.getPluginsOfCategory(c):
+                    enabled_plugins.add(p.name)
         for category in manager.getCategories():
             w = QtGui.QScrollArea()
             l = QtGui.QVBoxLayout()
             w.setLayout(l)
             for plugin in manager.getPluginsOfCategory(category):
-                l.addWidget(PluginWidget(plugin))
+                pw = PluginWidget(plugin, plugin.name in enabled_plugins)
+                self.plugin_widgets.append(pw)
+                l.addWidget(pw)
             l.addStretch(1)
             self.toolBox.addItem(w, category)
         self.toolBox.removeItem(0)
 
+    def accept(self):
+        enabled_plugins = []
+        for pw in self.plugin_widgets:
+            if pw.enabled.isChecked():
+                enabled_plugins.append(pw.plugin.name)
+        config.setValue("general","enabledPlugins", enabled_plugins)
+        return QtGui.QDialog.accept(self)
+
 class PluginWidget(QtGui.QWidget):
-    def __init__(self, plugin, parent = None):
+    def __init__(self, plugin, enabled, parent = None):
         QtGui.QWidget.__init__(self, parent)
 
         uifile = os.path.join(SCRIPTPATH,'pluginwidget.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-
+        self.plugin = plugin
         self.enabled.setText(plugin.name)
+        self.enabled.setChecked(enabled)
     

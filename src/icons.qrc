@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/configure.svg</file>
     <file>icons/next.svg</file>
     <file>icons/previous.svg</file>
     <file>icons/close.svg</file>

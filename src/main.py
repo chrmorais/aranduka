@@ -1,7 +1,7 @@
 """The user interface for our app"""
 
 import os,sys
-import models, importer
+import models, importer, config
 
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic
@@ -63,10 +63,20 @@ class Main(QtGui.QMainWindow):
         manager.locatePlugins()
         manager.loadPlugins()
 
+        enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
+        if enabled_plugins == set([None]):
+            enabled_plugins = set()
+            #Never configured... enable everything! (will change later ;-)
+            for c in manager.getCategories():
+                for p in manager.getPluginsOfCategory(c):
+                    enabled_plugins.add(p.name)
+
         self.treeWidget.clear()
 
         for plugin in manager.getPluginsOfCategory("ShelveView"):
             # Ways to fill the shelves
+            if plugin.name not in enabled_plugins:
+                continue
             item = plugin.plugin_object.treeItem()
             item.handler = plugin.plugin_object
             item.title = plugin.plugin_object.title
@@ -78,6 +88,8 @@ class Main(QtGui.QMainWindow):
 
         for plugin in manager.getPluginsOfCategory("BookStore"):
             # Ways to acquire books
+            if plugin.name not in enabled_plugins:
+                continue
             item = plugin.plugin_object.treeItem()
             item.handler = plugin.plugin_object
             item.title = plugin.plugin_object.title
@@ -87,11 +99,15 @@ class Main(QtGui.QMainWindow):
         self.menuTools.clear()
 
         for plugin in manager.getPluginsOfCategory("Tool"):
+            if plugin.name not in enabled_plugins:
+                continue
             self.menuTools.addAction(plugin.plugin_object.action())
 
         self.menuDevices.clear()
 
         for plugin in manager.getPluginsOfCategory("Device"):
+            if plugin.name not in enabled_plugins:
+                continue
             dev_menu = QtGui.QMenu(plugin.plugin_object.name, self)
             print "Adding menu:", plugin.plugin_object.name
             for a in plugin.plugin_object.deviceActions():
