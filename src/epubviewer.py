@@ -63,15 +63,17 @@ class Main(QtGui.QMainWindow):
             self.chapters.addItem(item)
 
         self.itemrefs = self.spine.findall('{http://www.idpf.org/2007/opf}itemref')
-        for e in self.itemrefs:
-            pass
-            #print e.attrib['idref'], self.manifest_dict[e.attrib['idref']]
-
-
+        self.spinerefs = [
+                self.manifest_dict[item.attrib['idref']] for item in self.itemrefs
+            ]
+        print self.spinerefs
+            
         self.old_manager = self.view.page().networkAccessManager()
         self.new_manager = NetworkAccessManager(self.old_manager, self)
         self.view.page().setNetworkAccessManager(self.new_manager)
 
+        self.openPath(self.spinerefs[0])
+        
     def on_chapters_itemClicked(self, item):
         self.openPath(item.contents)
 
