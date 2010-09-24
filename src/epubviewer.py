@@ -105,7 +105,7 @@ class Main(QtGui.QMainWindow):
         self.toc = XML(data)
         self.navmap = self.toc.find('{http://www.daisy.org/z3986/2005/ncx/}navMap')
         # FIXME: support nested navpoints
-        self.navpoints = self.navmap.findall('{http://www.daisy.org/z3986/2005/ncx/}navPoint')
+        self.navpoints = self.navmap.findall('.//{http://www.daisy.org/z3986/2005/ncx/}navPoint')
         self.tocentries = []
         for np in self.navpoints:
             label = np.find('{http://www.daisy.org/z3986/2005/ncx/}navLabel').find('{http://www.daisy.org/z3986/2005/ncx/}text').text
