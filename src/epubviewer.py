@@ -32,6 +32,7 @@ class Main(QtGui.QMainWindow):
         self.basepath = os.path.dirname(self.roots[0])+"/"
         if self.basepath == '/':
             self.basepath=""
+        print "BASEPATH:", self.basepath
             
         data = opf.read()
         self.opf=XML(data)
@@ -65,7 +66,7 @@ class Main(QtGui.QMainWindow):
 
         self.itemrefs = self.spine.findall('{http://www.idpf.org/2007/opf}itemref')
         self.spinerefs = [
-                self.manifest_dict[item.attrib['idref']] for item in self.itemrefs
+                self.manifest_dict[item.attrib['idref']][len(self.basepath):] for item in self.itemrefs
             ]
         self.old_manager = self.view.page().networkAccessManager()
         self.new_manager = NetworkAccessManager(self.old_manager, self)
