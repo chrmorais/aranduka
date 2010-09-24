@@ -84,14 +84,17 @@ class Main(QtGui.QMainWindow):
         for r in roots:
             self.roots.append(r.attrib['full-path'])
         opf = self.book.open(self.roots[0])
-        self.basepath = os.path.dirname(self.roots[0])
+        self.basepath = os.path.dirname(self.roots[0])+"/"
+        if self.basepath == '/':
+            self.basepath=""
+            
         data = opf.read()
         self.opf=XML(data)
         opf.close()
         self.manifest = self.opf.find('{http://www.idpf.org/2007/opf}manifest')
         self.manifest_dict = {}
         for elem in self.manifest.findall('{http://www.idpf.org/2007/opf}item'):
-            self.manifest_dict[elem.attrib['id']]=self.basepath+'/'+elem.attrib['href']
+            self.manifest_dict[elem.attrib['id']]=self.basepath+elem.attrib['href']
 
         self.spine = self.opf.find('{http://www.idpf.org/2007/opf}spine')
 
@@ -129,7 +132,7 @@ class Main(QtGui.QMainWindow):
         self.openPath(item.contents)
 
     def getData(self, path):
-        path = "%s/%s"%(self.basepath,path)
+        path = "%s%s"%(self.basepath,path)
         f = self.book.open(path)
         data = f.read()
         f.close()
@@ -137,6 +140,8 @@ class Main(QtGui.QMainWindow):
 
     def openPath(self, path, fragment=None):
         print "Opening:", path
+        if "#" in path:
+            path, fragment = path.split('#',1)
         xml = self.getData(path)
         self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"))
         if fragment:
