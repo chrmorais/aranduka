@@ -92,7 +92,10 @@ class Main(QtGui.QMainWindow):
 
     def getData(self, path):
         path = "%s%s"%(self.basepath,path)
-        f = self.book.open(path)
+        try:
+            f = self.book.open(path)
+        except KeyError: #File missing in the zip
+            return []
         data = f.read()
         f.close()
         return data
