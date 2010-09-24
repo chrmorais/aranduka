@@ -14,6 +14,7 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'epubviewer.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+        self.addAction(self.actionPageDown)
 
         # This is done according to this:
         # http://stackoverflow.com/questions/1388467/reading-epub-format
@@ -66,13 +67,24 @@ class Main(QtGui.QMainWindow):
         self.spinerefs = [
                 self.manifest_dict[item.attrib['idref']] for item in self.itemrefs
             ]
-        print self.spinerefs
-            
         self.old_manager = self.view.page().networkAccessManager()
         self.new_manager = NetworkAccessManager(self.old_manager, self)
         self.view.page().setNetworkAccessManager(self.new_manager)
 
         self.openPath(self.spinerefs[0])
+        
+    @QtCore.pyqtSlot()
+    def on_actionPageDown_triggered(self):
+        frame = self.view.page().mainFrame()
+        if frame.scrollBarMaximum(QtCore.Qt.Vertical) == \
+            frame.scrollPosition().y():
+                # Find where on the spine we are
+                curSpineRef= unicode(frame.url().toString())[12:]
+                curIdx = self.spinerefs.index(curSpineRef)
+                if curIdx < len(self.spinerefs):
+                    self.openPath(self.spinerefs[curIdx+1])
+        else:
+            frame.scroll(0,self.view.height())
         
     def on_chapters_itemClicked(self, item):
         self.openPath(item.contents)
@@ -89,7 +101,7 @@ class Main(QtGui.QMainWindow):
         if "#" in path:
             path, fragment = path.split('#',1)
         xml = self.getData(path)
-        self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"))
+        self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"+path))
         if fragment:
             pass
             # FIXME: figure out how to jump to the anchor
