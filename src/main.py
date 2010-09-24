@@ -47,9 +47,22 @@ class Main(QtGui.QMainWindow):
         self.searchBar.hide()
         self.searchWidget.closeBar.clicked.connect(self.searchBar.hide)
 
+        self._layout = QtGui.QVBoxLayout()
+        self.details.setLayout(self._layout)
+        self.book_editor = BookEditor(None)
+        self._layout.addWidget(self.book_editor)
+        print "Finished initializing main window"
+
+        self.loadPlugins()
+
+    def loadPlugins(self):
+        # FIXME: separate by category so you can load just one
+
         # Plugins
         manager.locatePlugins()
         manager.loadPlugins()
+
+        self.treeWidget.clear()
 
         for plugin in manager.getPluginsOfCategory("ShelveView"):
             # Ways to fill the shelves
@@ -70,8 +83,12 @@ class Main(QtGui.QMainWindow):
             plugin.plugin_object.setWidget(self)
             self.treeWidget.addTopLevelItem(item)
 
+        self.menuTools.clear()
+
         for plugin in manager.getPluginsOfCategory("Tool"):
             self.menuTools.addAction(plugin.plugin_object.action())
+
+        self.menuDevices.clear()
 
         for plugin in manager.getPluginsOfCategory("Device"):
             dev_menu = QtGui.QMenu(plugin.plugin_object.name, self)
@@ -83,11 +100,6 @@ class Main(QtGui.QMainWindow):
             dev_menu.addAction(plugin.plugin_object.actionNew())
             self.menuDevices.addMenu(dev_menu)
 
-        self._layout = QtGui.QVBoxLayout()
-        self.details.setLayout(self._layout)
-        self.book_editor = BookEditor(None)
-        self._layout.addWidget(self.book_editor)
-        print "Finished initializing main window"
 
     def viewModeChanged(self, id):
         item = self.treeWidget.currentItem()
