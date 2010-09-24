@@ -166,7 +166,7 @@ class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
     def createRequest(self, operation, request, data):
 
         if request.url().scheme() != "epub":
-            return QNetworkAccessManager.createRequest(self, operation, request, data)
+            return QtNetwork.QNetworkAccessManager.createRequest(self, operation, request, data)
 
         if operation == self.GetOperation:
             # Handle download:// URLs separately by creating custom
@@ -174,7 +174,7 @@ class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
             reply = DownloadReply(self, request.url(), self.GetOperation, self._w)
             return reply
         else:
-            return QNetworkAccessManager.createRequest(self, operation, request, data)
+            return QtNetwork.QNetworkAccessManager.createRequest(self, operation, request, data)
 
 
 
