@@ -56,6 +56,7 @@ class RSS2ePub(object):
             ['container.xml', 'META-INF/container.xml'],
             ['screen.css', 'screen.css'],
             ['style.css', 'style.css'],
+            ['cover_image.jpg', 'cover_image.jpg'],
             ['images/icons/external.png','images/icons/external.png'],
             ['images/icons/doc.png','images/icons/doc.png'],
             ['images/icons/pdf.png','images/icons/pdf.png'],
@@ -75,5 +76,5 @@ class RSS2ePub(object):
                 os.path.dirname(__file__)),sf),df)
         self.epub.close
 
-converter = RSS2ePub()
-converter.convert('http://lateral.netmanagers.com.ar/weblog/rss.xml','/home/ralsina/lateral.epub')
+if __name__ == "__main__":
+    RSS2ePub().convert('http://lateral.netmanagers.com.ar/weblog/rss.xml','lateral.epub')
