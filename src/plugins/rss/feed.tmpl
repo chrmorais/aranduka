@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css" type="text/css" media="screen, projection" />
 </head>
 <body>
-<h1>${feed.title}$</h1>
+<h1>${emit(feed.title)}$</h1>
     <ul>
     ${
         for i, post in enumerate(posts):
