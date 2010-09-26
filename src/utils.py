@@ -2,6 +2,7 @@
 
 import os
 import string
+import re
 
 def slugify(value):
     "Converts to lowercase, removes non-alpha chars and converts spaces to hyphens"
