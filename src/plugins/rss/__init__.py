@@ -11,6 +11,22 @@ class RSSWidget(QtGui.QWidget):
                 os.path.dirname(__file__)),'store.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+        
+    @QtCore.pyqtSlot()
+    def on_add_clicked(self):
+        pass
+
+    @QtCore.pyqtSlot()
+    def on_remove_clicked(self):
+        pass
+
+    @QtCore.pyqtSlot()
+    def on_edit_clicked(self):
+        pass
+    
+    @QtCore.pyqtSlot()
+    def on_refresh_clicked(self):
+        pass
 
 class RSSStore(BookStore):
     """Fetch RSS feeds as ePub"""
