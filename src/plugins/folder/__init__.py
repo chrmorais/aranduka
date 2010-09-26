@@ -8,10 +8,7 @@ import unicodedata
 import re
 import shutil
 
-def slugify(value):
-    "Converts to lowercase, removes non-alpha chars and converts spaces to hyphens"
-    value = re.sub('[^\w\s-]', '', value).strip().lower()
-    return re.sub('[-\s]+', '-', value)
+from utils import slugify
 
 class FolderDevice(object):
     """Syncs a set of tags' books to a folder, using specified

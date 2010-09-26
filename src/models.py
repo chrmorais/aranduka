@@ -44,8 +44,14 @@ class Book (Entity):
         # FIXME: check for name collisions and identical files
         # FIXME: make non-blocking
         # FIXME: give user feedback
+
+        authorlist = ""
+        for author in self.authors:
+            authorlist += author.name + "-"
+
         fname = os.path.abspath(
-            os.path.join(utils.BOOKPATH, str(self.id) +"."+extension))
+            os.path.join(utils.BOOKPATH,
+                slugify(str(self.id)+"-"+self.title+"-"+authorlist)+"."+extension))
         print "Fetching file: ", url
         u=urllib2.urlopen(url)
         data = u.read()

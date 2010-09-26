@@ -3,6 +3,11 @@
 import os
 import string
 
+def slugify(value):
+    "Converts to lowercase, removes non-alpha chars and converts spaces to hyphens"
+    value = re.sub('[^\w\s-]', '', value).strip().lower()
+    return re.sub('[-\s]+', '-', value)
+
 def validate_ISBN10(isbn):
     """
     Validate ISBN10 code. Returns the ISBN or False if is not valid.
