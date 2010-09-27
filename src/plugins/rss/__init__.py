@@ -62,13 +62,26 @@ class RSSWidget(QtGui.QWidget):
         self.saveFeeds()
         self.loadFeeds()
 
+    def on_feedList_currentRowChanged(self, row):
+        title, url = self.feeds[row]
+        self.title.setText(title)
+        self.url.setText(url)
+
     @QtCore.pyqtSlot()
     def on_edit_clicked(self):
+        i = self.feedList.currentRow()
+        if i==-1:
+            return
         self.splitter.setSizes([1,1])
 
     @QtCore.pyqtSlot()
     def on_save_clicked(self):
+        i = self.feedList.currentRow()
+        self.feeds[i] = [unicode(self.title.text()), unicode(self.url.text())]
+        self.saveFeeds()
+        self.loadFeeds()
         self.splitter.setSizes([1,0])
+        
     
     @QtCore.pyqtSlot()
     def on_refresh_clicked(self):
