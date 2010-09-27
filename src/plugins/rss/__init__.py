@@ -1,4 +1,4 @@
-from pluginmgr import BookStore
+from pluginmgr import BookStore, Tool
 from PyQt4 import QtCore, QtGui, uic
 import config
 import os
@@ -89,31 +89,8 @@ class RSSWidget(QtGui.QWidget):
         if i==-1:
             return
         title, url = self.feeds[i]
-        b = models.Book.get_by(title = 'RSS - %s'%(title))
-        if not b:
-            b = models.Book(title = 'RSS - %s'%(title))
-            models.session.commit()
-            self.updateShelves.emit()
-
-
-        # If there's an epub file for this book, overwrite it
-        files = b.files_for_format('epub')
-        
-        if files:
-            fname = files[0].file_name
-            need_import = False
-        else:
-            # There isn't one, create it
-            f = tempfile.NamedTemporaryFile(suffix='.epub', delete = False)
-            f.close()
-            fname = f.name
-            need_import = True
-        RSS2ePub().convert(url, fname)
-        if need_import:
-            b.fetch_file('file://%s'%fname, 'epub')
-        else:
-            self.updateBook(b)
-        
+        b = updateFeedBook(title, url)
+        self.updateBook.emit(b)
 
 class RSSStore(BookStore):
     """Fetch RSS feeds as ePub"""
@@ -155,3 +132,26 @@ class RSSStore(BookStore):
     def doSearch(self, *args):
         "No search here"
         pass
+
+def updateFeedBook(title, url):
+    b = models.Book.get_by(title = 'RSS - %s'%(title))
+    if not b:
+        b = models.Book(title = 'RSS - %s'%(title))
+        models.session.commit()
+        self.updateShelves.emit()
+    # If there's an epub file for this book, overwrite it
+    files = b.files_for_format('epub')
+
+    if files:
+        fname = files[0].file_name
+        need_import = False
+    else:
+        # There isn't one, create it
+        f = tempfile.NamedTemporaryFile(suffix='.epub', delete = False)
+        f.close()
+        fname = f.name
+        need_import = True
+    RSS2ePub().convert(url, fname)
+    if need_import:
+        b.fetch_file('file://%s'%fname, 'epub')
+    return b
