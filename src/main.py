@@ -21,6 +21,9 @@ class SearchWidget(QtGui.QWidget):
         self.ui = self
 
 class Main(QtGui.QMainWindow):
+    updateShelves = QtCore.pyqtSignal()
+    updateBook = QtCore.pyqtSignal(models.Book)
+    
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
 
@@ -29,7 +32,8 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        
+
+
         self.currentBook = None
 
         # View types toggles
@@ -51,6 +55,9 @@ class Main(QtGui.QMainWindow):
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
         self.book_editor = BookEditor(None)
+        self.book_editor.cancel.clicked.connect(self.viewModeChanged)
+        self.book_editor.save.clicked.connect(self.viewModeChanged)
+        self.book_editor.updateBook.connect(self.updateBook)
         self._layout.addWidget(self.book_editor)
         print "Finished initializing main window"
 
@@ -122,7 +129,7 @@ class Main(QtGui.QMainWindow):
         dlg = PluginSettings(self)
         dlg.exec_()
 
-    def viewModeChanged(self, id):
+    def viewModeChanged(self):
         item = self.treeWidget.currentItem()
         if not item: return
         self.on_treeWidget_itemClicked(item)
@@ -200,13 +207,6 @@ class Main(QtGui.QMainWindow):
         self.title.setText('Editing properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(1)
 
-    def show_shelves(self):
-        if self.store_handler:
-            del(self.store_handler)
-            self.store_handler = None
-        self.updateItem(self.books.currentItem())
-        self.stack.setCurrentIndex(0)
-
     @QtCore.pyqtSlot()
     def on_actionImport_Files_triggered(self):
         fname = unicode(QtGui.QFileDialog.getExistingDirectory(self, "Import Folder"))
@@ -220,7 +220,7 @@ class Main(QtGui.QMainWindow):
             status = importer.import_file(f)
             print status
         # Reload books
-        self.shelves_handler.loadBooks()
+        self.updateShelves.emit()
 
     @QtCore.pyqtSlot()
     def on_actionImport_File_triggered(self):
@@ -228,21 +228,8 @@ class Main(QtGui.QMainWindow):
         if not fname: return
         status = importer.import_file(fname)
         # FIXME: broken since we switched to plugins
-        self.shelves_handler.loadBooks()
-            
-    def updateItem(self, item):
-        """Updates one item with the data for its book"""
-
-        # Make sure we are updated from the DB
-        if not item:
-            # FIXME: broken since we switched to plugins
-            return
-            item.book = models.Book.get_by(id = item.book.id)
-            cname = item.book.cover()
-            item.setText(item.book.title)
-            icon =  QtGui.QIcon(QPixmap(cname).scaledToHeight(128))
-            item.setIcon(icon)
-        
+        self.updateShelves.emit()
+                    
 
 def main():
     # Init the database before doing anything else

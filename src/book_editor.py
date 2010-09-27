@@ -81,6 +81,9 @@ class TagDialog(QtGui.QDialog):
         self.tag_name.setEditText(tag_name)
 
 class BookEditor(QtGui.QWidget):
+    
+    updateBook = QtCore.pyqtSignal(models.Book)
+    
     def __init__(self, book_id = None, *args):
         QtGui.QWidget.__init__(self,*args)
         uifile = os.path.join(
@@ -171,6 +174,7 @@ class BookEditor(QtGui.QWidget):
             self.book.tags.append(t)
 
         models.session.commit()
+        self.updateBook.emit(self.book)
 
     @QtCore.pyqtSlot()
     def on_add_file_clicked(self):

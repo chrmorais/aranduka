@@ -49,8 +49,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>740</width>
-        <height>448</height>
+        <width>730</width>
+        <height>437</height>
        </rect>
       </property>
       <attribute name="label">
@@ -171,8 +171,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>740</width>
-        <height>448</height>
+        <width>730</width>
+        <height>437</height>
        </rect>
       </property>
       <attribute name="label">
@@ -234,8 +234,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>740</width>
-        <height>448</height>
+        <width>730</width>
+        <height>437</height>
        </rect>
       </property>
       <attribute name="label">
@@ -313,6 +313,13 @@
       <widget class="QPushButton" name="guess">
        <property name="text">
         <string>&amp;Guess</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel">
+       <property name="text">
+        <string>&amp;Cancel</string>
        </property>
       </widget>
      </item>

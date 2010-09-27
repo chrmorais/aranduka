@@ -36,6 +36,8 @@ class ShelveView(QtCore.QObject):
         
     def setWidget(self, widget):
         self.widget = widget
+        self.widget.updateShelves.connect(self.operate)
+        self.widget.updateBook.connect(self.updateBook)
 
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
@@ -48,6 +50,11 @@ class ShelveView(QtCore.QObject):
     
     def showList(self, search=None):
         """Show a list containing the (possibly filtered) books."""
+        pass
+
+    def updateBook(self, book):
+        """Update the item of this specific book, because
+        it has been edited"""
         pass
 
     operate = showGrid

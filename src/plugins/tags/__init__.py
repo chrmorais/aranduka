@@ -11,7 +11,8 @@ class Catalog(ShelveView):
 
     title = "Books By Tag"
     itemText = "Tags"
-
+    items = {}
+    
     def showList(self, search = None):
         """Get all books from the DB and show them"""
 
@@ -19,6 +20,7 @@ class Catalog(ShelveView):
             print "Call setWidget first"
             return
         self.operate = self.showList
+        self.items = {}
         css = '''
         ::item {
                 padding: 0;
@@ -56,6 +58,7 @@ class Catalog(ShelveView):
                 icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
                 item.book = b
+                self.items[b.id] = item
 
         self.widget.shelveStack.setWidget(self.shelf)
 
@@ -66,7 +69,8 @@ class Catalog(ShelveView):
             print "Call setWidget first"
             return
         self.operate = self.showGrid
-            
+        self.items = {}
+        
         self.widget.title.setText(self.title)
         css = '''
         ::item {
@@ -118,6 +122,17 @@ class Catalog(ShelveView):
                 icon =  QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, shelf)
                 item.book = b
+                self.items[b.id] = item
+                
         self.shelvesLayout.addStretch(1)
         self.widget.shelveStack.setWidget(self.shelves)
-        
+
+    def updateBook(self, book):
+        # This may get called when no books
+        # have been loaded in this view, so make it cheap
+        if self.items and book.id in self.items:
+            item = self.items[book.id]
+            icon = QtGui.QIcon(QtGui.QPixmap(book.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+            item.setText(book.title)
+            item.setIcon(icon)
+            item.book = book
