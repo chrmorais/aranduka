@@ -4,6 +4,9 @@ import config
 import os
 from feedfinder import feeds as findFeed
 import feedparser
+import models
+from rss2epub import RSS2ePub
+import tempfile
 
 class RSSWidget(QtGui.QWidget):
     def __init__(self, parent = None):
@@ -39,6 +42,11 @@ class RSSWidget(QtGui.QWidget):
         feed = feeds[0]
         data = feedparser.parse(feed)
         self.feeds.append([data.feed.title, feed])
+
+        # Create a book for this feed
+        b = models.Book(title = 'RSS - %s'%(data.feed.title))
+        models.session.commit()
+        
         self.saveFeeds()
         self.loadFeeds()
 
@@ -52,7 +60,32 @@ class RSSWidget(QtGui.QWidget):
     
     @QtCore.pyqtSlot()
     def on_refresh_clicked(self):
-        pass
+        i = self.feedList.currentRow()
+        if i==-1:
+            return
+        title, url = self.feeds[i]
+        b = models.Book.get_by(title = 'RSS - %s'%(title))
+        if not b:
+            b = models.Book(title = 'RSS - %s'%(title))
+            models.session.commit()
+
+
+        # If there's an epub file for this book, overwrite it
+        files = b.files_for_format('epub')
+        
+        if files:
+            fname = files[0].file_name
+            need_import = False
+        else:
+            # There isn't one, create it
+            f = tempfile.NamedTemporaryFile(suffix='.epub', delete = False)
+            f.close()
+            fname = f.name
+            need_import = True
+        RSS2ePub().convert(url, fname)
+        if need_import:
+            b.fetch_file('file://%s'%fname, 'epub')
+
 
 class RSSStore(BookStore):
     """Fetch RSS feeds as ePub"""
