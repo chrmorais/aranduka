@@ -42,6 +42,7 @@ class GuessDialog(QtGui.QDialog):
     def on_guess_clicked(self):
         # Try to guess based on the reliable data
         q=''
+        self.bookList.clear()
         if self.title.isChecked():
             q+='TITLE %s '%self.book.title
         if self.author.isChecked():
