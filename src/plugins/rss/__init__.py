@@ -18,8 +18,8 @@ class RSSWidget(QtGui.QWidget):
                 os.path.dirname(__file__)),'store.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-
         self.loadFeeds()
+        self.splitter.setSizes([1,0])
 
     def loadFeeds(self):
         self.feeds = config.getValue("RSSPlugin", "feeds", [])
@@ -55,11 +55,20 @@ class RSSWidget(QtGui.QWidget):
 
     @QtCore.pyqtSlot()
     def on_remove_clicked(self):
-        pass
+        i = self.feedList.currentRow()
+        if i==-1:
+            return
+        del(self.feeds[i])
+        self.saveFeeds()
+        self.loadFeeds()
 
     @QtCore.pyqtSlot()
     def on_edit_clicked(self):
-        pass
+        self.splitter.setSizes([1,1])
+
+    @QtCore.pyqtSlot()
+    def on_save_clicked(self):
+        self.splitter.setSizes([1,0])
     
     @QtCore.pyqtSlot()
     def on_refresh_clicked(self):
