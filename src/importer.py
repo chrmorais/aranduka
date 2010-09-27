@@ -4,8 +4,8 @@ from PyQt4 import QtCore, QtGui, uic
 import models
 from metadata import get_metadata
 from pprint import pprint
+from utils import VALID_EXTENSIONS
 
-VALID_EXTENSIONS = ['epub','fb2','mobi','pdf','txt','lit','html','htm']
 COMPRESSED_EXTENSIONS = ['gz','bz2','lzma']
 
 def clean_name (fname):
