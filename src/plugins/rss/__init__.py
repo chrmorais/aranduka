@@ -9,6 +9,8 @@ from rss2epub import RSS2ePub
 import tempfile
 
 class RSSWidget(QtGui.QWidget):
+    updateBook = QtCore.pyqtSignal(models.Book)
+    updateShelves = QtCore.pyqtSignal()
     def __init__(self, parent = None):
         QtGui.QWidget.__init__(self, parent)
         uifile = os.path.join(
@@ -21,6 +23,7 @@ class RSSWidget(QtGui.QWidget):
 
     def loadFeeds(self):
         self.feeds = config.getValue("RSSPlugin", "feeds", [])
+        self.feedList.clear()
         for title,url in self.feeds:
             i = QtGui.QListWidgetItem(title, self.feedList)
             self.feedList.addItem(i)
@@ -68,6 +71,7 @@ class RSSWidget(QtGui.QWidget):
         if not b:
             b = models.Book(title = 'RSS - %s'%(title))
             models.session.commit()
+            self.updateShelves.emit()
 
 
         # If there's an epub file for this book, overwrite it
@@ -85,7 +89,9 @@ class RSSWidget(QtGui.QWidget):
         RSS2ePub().convert(url, fname)
         if need_import:
             b.fetch_file('file://%s'%fname, 'epub')
-
+        else:
+            self.updateBook(b)
+        
 
 class RSSStore(BookStore):
     """Fetch RSS feeds as ePub"""
@@ -114,6 +120,8 @@ class RSSStore(BookStore):
         self.widget.title.setText(self.title)
         if not self.w:
             self.w = RSSWidget()
+            self.w.updateBook.connect(self.widget.updateBook)
+            self.w.updateShelves.connect(self.widget.updateShelves)
             self.pageNumber = self.widget.stack.addWidget(self.w)
         self.widget.stack.setCurrentIndex(self.pageNumber)
 
