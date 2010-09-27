@@ -119,6 +119,7 @@ class BookEditor(QtGui.QWidget):
 
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
+        # FIXME: send the visible data, not the ones stored on the DB
         dlg = GuessDialog(self.book, self)
         r = dlg.exec_()
         if not r == dlg.Accepted:
