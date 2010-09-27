@@ -2,6 +2,8 @@ from pluginmgr import BookStore
 from PyQt4 import QtCore, QtGui, uic
 import config
 import os
+from feedfinder import feeds as findFeed
+import feedparser
 
 class RSSWidget(QtGui.QWidget):
     def __init__(self, parent = None):
@@ -11,10 +13,34 @@ class RSSWidget(QtGui.QWidget):
                 os.path.dirname(__file__)),'store.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        
+
+        self.loadFeeds()
+
+    def loadFeeds(self):
+        self.feeds = config.getValue("RSSPlugin", "feeds", [])
+        for title,url in self.feeds:
+            i = QtGui.QListWidgetItem(title, self.feedList)
+            self.feedList.addItem(i)
+
+    def saveFeeds(self):
+        config.setValue("RSSPlugin", "feeds", self.feeds)
+
     @QtCore.pyqtSlot()
     def on_add_clicked(self):
-        pass
+        t, ok = QtGui.QInputDialog.getText(self, "Aranduka - Add Feed", "Enter the URL of the feed or site:")
+        if not ok:
+            return
+        t = unicode(t)
+        print t
+        # FIXME: make unblocking
+        # FIXME: make the user choose a feed
+        feeds = findFeed(unicode(t))
+        print feeds
+        feed = feeds[0]
+        data = feedparser.parse(feed)
+        self.feeds.append([data.feed.title, feed])
+        self.saveFeeds()
+        self.loadFeeds()
 
     @QtCore.pyqtSlot()
     def on_remove_clicked(self):
