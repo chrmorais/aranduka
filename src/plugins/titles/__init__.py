@@ -144,7 +144,7 @@ class Catalog(ShelveView):
                 item = QtGui.QListWidgetItem(icon, b.title, shelf)
                 item.book = b
                 self.items[b.id] = item
-
+        self.shelvesLayout.addStretch(1)
         self.widget.shelveStack.setWidget(self.shelves)
 
     def updateBook(self, book):
