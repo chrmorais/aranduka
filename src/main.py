@@ -227,7 +227,6 @@ class Main(QtGui.QMainWindow):
         fname = unicode(QtGui.QFileDialog.getOpenFileName(self, "Import File"))
         if not fname: return
         status = importer.import_file(fname)
-        # FIXME: broken since we switched to plugins
         self.updateShelves.emit()
                     
 

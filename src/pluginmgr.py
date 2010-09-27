@@ -36,8 +36,12 @@ class ShelveView(QtCore.QObject):
         
     def setWidget(self, widget):
         self.widget = widget
-        self.widget.updateShelves.connect(self.operate)
+        self.widget.updateShelves.connect(self.updateShelves)
         self.widget.updateBook.connect(self.updateBook)
+
+    def updateShelves(self):
+        """Refresh the book listings"""
+        pass
 
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
@@ -58,6 +62,10 @@ class ShelveView(QtCore.QObject):
         pass
 
     operate = showGrid
+
+    def updateShelves(self):
+        """Update the whole listing"""
+        self.operate()
 
     @QtCore.pyqtSlot()
     def doSearch(self, *args):

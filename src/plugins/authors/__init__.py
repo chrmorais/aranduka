@@ -137,3 +137,4 @@ class Catalog(ShelveView):
             item.setText(book.title)
             item.setIcon(icon)
             item.book = book
+
