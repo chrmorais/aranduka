@@ -51,7 +51,7 @@ class Book (Entity):
 
         fname = os.path.abspath(
             os.path.join(utils.BOOKPATH,
-                slugify(str(self.id)+"-"+self.title+"-"+authorlist)+"."+extension))
+                utils.slugify(str(self.id)+"-"+self.title+"-"+authorlist)+"."+extension))
         print "Fetching file: ", url
         u=urllib2.urlopen(url)
         data = u.read()
