@@ -5,7 +5,7 @@ import models
 from metadata import get_metadata
 from pprint import pprint
 
-VALID_EXTENSIONS = ['fb2','mobi','pdf','txt','lit','html','htm']
+VALID_EXTENSIONS = ['epub','fb2','mobi','pdf','txt','lit','html','htm']
 COMPRESSED_EXTENSIONS = ['gz','bz2','lzma']
 
 def clean_name (fname):
@@ -77,7 +77,7 @@ def import_file(fname):
     if extension in COMPRESSED_EXTENSIONS:
         extension = fname.split('.')[-2].lower()
     if extension not in VALID_EXTENSIONS:
-        print "Not an ebook"
+        print "Not an ebook: ", extension
         return 
     f = models.File.get_by(file_name = fname)
     if f:
