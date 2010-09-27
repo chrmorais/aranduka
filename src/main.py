@@ -227,6 +227,7 @@ class Main(QtGui.QMainWindow):
         fname = unicode(QtGui.QFileDialog.getOpenFileName(self, "Import File"))
         if not fname: return
         status = importer.import_file(fname)
+        # FIXME: broken since we switched to plugins
         self.shelves_handler.loadBooks()
             
     def updateItem(self, item):
@@ -234,6 +235,7 @@ class Main(QtGui.QMainWindow):
 
         # Make sure we are updated from the DB
         if not item:
+            # FIXME: broken since we switched to plugins
             return
             item.book = models.Book.get_by(id = item.book.id)
             cname = item.book.cover()
