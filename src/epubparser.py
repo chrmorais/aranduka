@@ -1,3 +1,4 @@
+import os
 import zipfile
 from elementtree.ElementTree import XML
 
