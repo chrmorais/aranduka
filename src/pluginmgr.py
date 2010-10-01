@@ -3,7 +3,7 @@
 from PyQt4 import QtCore, QtGui
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 
 import os
 from yapsy.PluginManager import PluginManager
@@ -11,6 +11,12 @@ from yapsy.IPlugin import IPlugin
 import utils
 
 # These classes define our plugin categories
+
+class Guesser(object):
+    """These plugins take a filename and guess data from it.
+    They can read the file itself, parse it and get data,
+    or could look it up on the internet"""
+    pass
 
 class Device(object):
     """A plugin that represents a device to read books.
