@@ -310,6 +310,9 @@
       </spacer>
      </item>
      <item>
+      <widget class="QComboBox" name="guessers"/>
+     </item>
+     <item>
       <widget class="QPushButton" name="guess">
        <property name="text">
         <string>&amp;Guess</string>

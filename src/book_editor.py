@@ -9,52 +9,7 @@ from PyQt4 import QtCore, QtGui, uic
 import models
 from utils import validate_ISBN, SCRIPTPATH
 from metadata import get_metadata
-
-service = BookService()
-
-class GuessDialog(QtGui.QDialog):
-    def __init__(self, book, *args):
-        QtGui.QDialog.__init__(self,*args)
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'guess.ui')
-        uic.loadUi(uifile, self)
-        self.ui = self
-        self._query = None
-
-        self.md=[]
-        self.currentMD=None
-        self.book = book
-        self.title.setText("Title: %s"%book.title)
-        self.author.setText("Author: %s"%(u', '.join([a.name for a in book.authors])))
-        ident = models.Identifier.get_by(key='ISBN',book=book)
-        if ident:
-            self.isbn.setText('ISBN: %s'%ident.value)
-            self._isbn=ident.value
-        else:
-            self.isbn.hide()
-
-    def on_bookList_currentRowChanged(self, row):
-        self.currentMD=self.md[row]
-        print "Selected: ",unicode(self.bookList.item(row).text())
-
-    @QtCore.pyqtSlot()
-    def on_guess_clicked(self):
-        # Try to guess based on the reliable data
-        q=''
-        self.bookList.clear()
-        if self.title.isChecked():
-            q+='TITLE %s '%self.book.title
-        if self.author.isChecked():
-            q+='AUTHOR %s '%u', '.join([a.name for a in self.book.authors])
-        if self.isbn.isChecked():
-            q+='ISBN %s'%self._isbn
-        self._query = q
-        if self._query:
-            self.md = get_metadata(self._query) or []
-        for candidate in self.md:
-            authors = ', '.join(candidate.authors)
-            self.bookList.addItem("%s by %s"%(candidate.title, authors))
+from pluginmgr import manager
 
 class IdentifierDialog(QtGui.QDialog):
     def __init__(self, id_key, id_value, *args):
@@ -117,15 +72,21 @@ class BookEditor(QtGui.QWidget):
         cname = self.book.cover()
         self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
 
+        self.guesser_dict={}
+        self.guessers.clear()
+        # Fill the guessers combo with appropiate names
+        for plugin in manager.getPluginsOfCategory("Guesser"):
+            if plugin.plugin_object.can_guess(self.book):
+                self.guessers.addItem(plugin.plugin_object.name)
+                self.guesser_dict[plugin.plugin_object.name] = plugin.plugin_object
+
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
-        # FIXME: send the visible data, not the ones stored on the DB
-        dlg = GuessDialog(self.book, self)
-        r = dlg.exec_()
-        if not r == dlg.Accepted:
+        name = unicode(self.guessers.currentText())
+        md = self.guesser_dict[name].guess(self.book)
+        if md is None:
             return
-        if dlg.currentMD:
-            md = dlg.currentMD
+        else:
             # A candidate was chosen, update data
             self.title.setText(md.title)
             self.authors.setText('|'.join(md.authors))

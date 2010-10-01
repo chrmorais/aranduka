@@ -3,7 +3,7 @@
 from PyQt4 import QtCore, QtGui
 
 import logging
-#logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 import os
 from yapsy.PluginManager import PluginManager
@@ -16,7 +16,28 @@ class Guesser(object):
     """These plugins take a filename and guess data from it.
     They can read the file itself, parse it and get data,
     or could look it up on the internet"""
-    pass
+
+    name = "Base Guesser"
+
+    def __init__(self):
+        print "INIT: ", self.name
+
+    def can_guess(self, book):
+        """Given a book object, it will return True if it
+        believes it can guess something.
+
+        For example, a guesser that parses ePub files will only
+        guess if the book has an ePub file assigned.
+        """
+        return False
+
+    def guess(self, book):
+        """Try to fill in as much metadata as possible,
+        offer the user alternatives if needed.
+
+        Returns an instance of Metadata, or None.
+        """
+        return None
 
 class Device(object):
     """A plugin that represents a device to read books.
@@ -125,6 +146,7 @@ manager = PluginManager(
         "Converter": Converter,
         "Tool": Tool,
         "Device": Device,
+        "Guesser": Guesser,
     })
 
 manager.setPluginPlaces(utils.PLUGINPATH)
