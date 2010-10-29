@@ -29,6 +29,9 @@ class PluginSettings(QtGui.QDialog):
                 l.addWidget(pw)
             l.addStretch(1)
             self.toolBox.addItem(w, category)
+        print self.page1
+        # FIXME: En vez de ocultar page1, sacarlo.
+        self.page1.hide()
         self.toolBox.removeItem(0)
 
     def accept(self):
