@@ -10,7 +10,7 @@ from book_editor import BookEditor
 import rc_icons
 from pluginmgr import manager
 from pluginconf import PluginSettings
-
+from about import AboutDialog
 class SearchWidget(QtGui.QWidget):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -228,6 +228,11 @@ class Main(QtGui.QMainWindow):
         if not fname: return
         status = importer.import_file(fname)
         self.updateShelves.emit()
+
+    @QtCore.pyqtSlot()
+    def on_actionAbout_triggered(self):
+        about = AboutDialog()
+        about.exec_()
                     
 
 def main():
