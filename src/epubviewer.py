@@ -2,6 +2,7 @@ from PyQt4 import QtNetwork, QtCore, QtGui, uic
 import os, sys
 from epubparser import EpubDocument
 
+
 class Main(QtGui.QMainWindow):
     def __init__(self, fname):
         QtGui.QMainWindow.__init__(self)
@@ -20,7 +21,8 @@ class Main(QtGui.QMainWindow):
             item = QtGui.QListWidgetItem(l)
             item.contents = c
             self.chapters.addItem(item)
-
+        
+        self.cur_path = ''
 
         self.old_manager = self.view.page().networkAccessManager()
         self.new_manager = NetworkAccessManager(self.old_manager, self)
@@ -49,11 +51,26 @@ class Main(QtGui.QMainWindow):
         print "Opening:", path
         if "#" in path:
             path, fragment = path.split('#',1)
-        xml = self.epub.getData(path)
-        self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"+path))
+        path = QtCore.QUrl.fromPercentEncoding(path)
+        
+        if self.cur_path <> path:
+            self.cur_path = path
+            xml = self.epub.getData(path)
+            self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"+path))
+            
         if fragment:
-            pass
-            # FIXME: figure out how to jump to the anchor
+            self.javascript('document.location.hash = "%s"'%fragment)
+        
+    def javascript(self, string, typ=None):
+        ans = self.view.page().mainFrame().evaluateJavaScript(string)
+        if typ == 'int':
+            ans = ans.toInt()
+            if ans[1]:
+                return ans[0]
+            return 0
+        if typ == 'string':
+            return unicode(ans.toString())
+        return ans
 
     def linkClicked(self, url):
         if url.isRelative(): #They all should be

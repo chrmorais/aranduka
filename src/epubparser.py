@@ -1,7 +1,9 @@
 import os
 import zipfile
-from elementtree.ElementTree import XML
-
+try:
+    from elementtree.ElementTree import XML
+except:
+    from xml.etree.ElementTree import XML
 
 class EpubDocument(object):
     """A class that parses and provides
