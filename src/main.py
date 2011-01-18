@@ -11,6 +11,8 @@ import rc_icons
 from pluginmgr import manager
 from pluginconf import PluginSettings
 from about import AboutDialog
+from epubviewer import Main as EpubViewer
+
 class SearchWidget(QtGui.QWidget):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -32,7 +34,7 @@ class Main(QtGui.QMainWindow):
                 os.path.dirname(__file__)),'main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-
+        self.viewers=[]
 
         self.currentBook = None
 
@@ -149,8 +151,10 @@ class Main(QtGui.QMainWindow):
         self.searchBar.show()
         self.searchWidget.text.setFocus(True)
 
-    def openEpub(self, url):
-        print url
+    def openEpub(self, fname):
+        viewer = EpubViewer(fname)
+        self.viewers.append(viewer)
+        viewer.show()
         
     def bookContextMenuRequested(self, book, point):
         """Given a book, and a place in the screen,
@@ -170,7 +174,7 @@ class Main(QtGui.QMainWindow):
             url = QtCore.QUrl.fromLocalFile(f.file_name)
             if f.file_name.endswith('epub'):
                 menu.addAction("Open %s"%os.path.basename(f.file_name),
-                    lambda f = f: self.openEpub(url))
+                    lambda f = f: self.openEpub(f.file_name))
             else:
                 menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: QtGui.QDesktopServices.openUrl(url))
