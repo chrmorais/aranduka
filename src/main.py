@@ -149,6 +149,9 @@ class Main(QtGui.QMainWindow):
         self.searchBar.show()
         self.searchWidget.text.setFocus(True)
 
+    def openEpub(self, url):
+        print url
+        
     def bookContextMenuRequested(self, book, point):
         """Given a book, and a place in the screen,
         shows a proper context menu for it"""
@@ -165,8 +168,12 @@ class Main(QtGui.QMainWindow):
             # A single file
             f = book.files[0]
             url = QtCore.QUrl.fromLocalFile(f.file_name)
-            menu.addAction("Open %s"%os.path.basename(f.file_name),
-                lambda f = f: QtGui.QDesktopServices.openUrl(url))
+            if f.file_name.endswith('epub'):
+                menu.addAction("Open %s"%os.path.basename(f.file_name),
+                    lambda f = f: self.openEpub(url))
+            else:
+                menu.addAction("Open %s"%os.path.basename(f.file_name),
+                    lambda f = f: QtGui.QDesktopServices.openUrl(url))
         elif formats:
             for f in book.files:
                 url = QtCore.QUrl.fromLocalFile(f.file_name)
