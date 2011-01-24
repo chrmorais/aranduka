@@ -2,7 +2,7 @@ import os, sys, codecs
 from feedparser import parse
 from templite import Templite
 import tempfile, zipfile
-
+from xml.sax.saxutils import escape
 
 class RSS2ePub(object):
 
@@ -35,7 +35,7 @@ class RSS2ePub(object):
 
         # The toc.ncx
         toctmpl = self.load_template('toc_ncx.tmpl')
-        self.save_file('toc.ncx', toctmpl.render(feed=data.feed, posts = data.entries))
+        self.save_file('toc.ncx', toctmpl.render(feed=data.feed, posts = data.entries, escape = escape))
 
         # The title page
         titletmpl = self.load_template('titlepage.tmpl')

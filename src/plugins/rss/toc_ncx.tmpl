@@ -20,7 +20,7 @@
       </navLabel>
       <content src="%s.html"/>
     </navPoint>        
-        '''%(i,i,post.get('title','No Title'),i))
+        '''%(i,i,escape(post.get('title','No Title')),i))
   }$
   </navMap>
 </ncx>
