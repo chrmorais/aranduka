@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
     <number>0</number>
@@ -42,7 +45,7 @@
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="details_page">
       <property name="geometry">
@@ -57,12 +60,6 @@
        <string>Book Details</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout">
-       <property name="fieldGrowthPolicy">
-        <enum>QFormLayout::ExpandingFieldsGrow</enum>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="label_6">
          <property name="text">
@@ -171,8 +168,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>151</width>
-        <height>75</height>
+        <width>740</width>
+        <height>458</height>
        </rect>
       </property>
       <attribute name="label">
@@ -234,8 +231,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>135</width>
-        <height>75</height>
+        <width>740</width>
+        <height>458</height>
        </rect>
       </property>
       <attribute name="label">

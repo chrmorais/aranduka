@@ -257,6 +257,10 @@ class BookEditor(QtGui.QWidget):
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     models.initDB()
-    ventana = BookEditor(int(sys.argv[1]))
+    if len(sys.argv) == 1:
+        # use a default book
+        ventana = BookEditor(models.Book.get_by().id)
+    else:
+        ventana = BookEditor(int(sys.argv[1]))
     ventana.show()
     sys.exit(app.exec_())
