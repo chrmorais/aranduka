@@ -2,7 +2,6 @@ from PyQt4 import QtCore, QtGui
 from pluginmgr import Tool
 import models
 from templite import Templite
-import processing
 
 from bottle import route, run, response
 import bottle
