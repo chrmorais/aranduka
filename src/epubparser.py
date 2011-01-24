@@ -40,6 +40,7 @@ class EpubDocument(object):
 
         self.toc_id = self.spine.attrib['toc']
         self.toc_fn = self.manifest_dict[self.toc_id]
+        print "TOC:", self.toc_fn
         f = self.book.open(self.toc_fn)
         data = f.read()
         self.toc = XML(data)
