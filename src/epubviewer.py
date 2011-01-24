@@ -1,6 +1,7 @@
 from PyQt4 import QtNetwork, QtCore, QtGui, uic
 import os, sys
 from epubparser import EpubDocument
+import feedparser
 
 
 class Main(QtGui.QMainWindow):
@@ -56,6 +57,8 @@ class Main(QtGui.QMainWindow):
         if self.cur_path <> path:
             self.cur_path = path
             xml = self.epub.getData(path)
+            encoding=feedparser._getCharacterEncoding({},xml)[0]
+            xml=xml.decode(encoding)
             self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"+path))
             
         if fragment:
