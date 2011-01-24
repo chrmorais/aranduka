@@ -153,5 +153,6 @@ def updateFeedBook(title, url):
         need_import = True
     RSS2ePub().convert(url, fname)
     if need_import:
+		if '\' in fname: fname = fname.replace('\','/')
         b.fetch_file('file://%s'%fname, 'epub')
     return b
