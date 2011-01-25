@@ -68,7 +68,7 @@ class AlibrisGuesser(Guesser):
                                     date=datetime.date(1970,1,1),
                                     subjects=[],
                                     authors=[x.get('author')], # FIXME: Check how to split this
-                                    identifiers= None if x['isbn'] == '' else [('isbn', x['isbn'])],
+                                    identifiers= None if 'isbn' not in x or x['isbn'] == '' else [('isbn', x['isbn'])],
                                     description='')
                         for x in md['book'] ]
             else:
