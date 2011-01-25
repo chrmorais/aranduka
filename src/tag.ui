@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Add Shelf</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -22,7 +22,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Shelve:</string>
+        <string>Shelf:</string>
        </property>
       </widget>
      </item>
