@@ -67,6 +67,13 @@ class GuessDialog(QtGui.QDialog):
         self._query = q
         if self._query:
             self.md = get_metadata(self._query) or []
-        for candidate in self.md:
-            authors = ', '.join(candidate.authors)
-            self.bookList.addItem("%s by %s"%(candidate.title, authors))
+        if self.md:
+            for candidate in self.md:
+                authors = ', '.join(candidate.authors)
+                self.bookList.addItem("%s by %s"%(candidate.title, authors))
+        else:
+            print "No matches found for the selected criteria"
+            QtGui.QMessageBox.information(self, \
+                                          u'No results', \
+                                          u'No results found matching your criteria')
+

@@ -112,13 +112,20 @@ class GuessDialog(QtGui.QDialog):
         self._query = q
         if self._query:
             self.md = self.search(self._query)
-            print self.md
         if 'status' in self.md \
             and self.md['status'] == '0': 
             if 'book' in self.md:
                 for candidate in self.md['book']:
-                    self.bookList.addItem("%s by %s"%(candidate['title'],candidate['author']))
+                    self.bookList.addItem("%s by %s" % \
+                                          (candidate['title'], \
+                                           candidate['author']))
             else:
                 print "No matches found for the selected criteria"
+                QtGui.QMessageBox.information(self, \
+                                              u'No results', \
+                                              u'No results found matching your criteria')
         else:
             print "Failed to load data from Alibris"
+            QtGui.QMessageBox.warning(self, \
+                                      u'Failed to load data', \
+                                      u'Failed to load data from Alibris')
