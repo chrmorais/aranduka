@@ -64,12 +64,12 @@ class AlibrisGuesser(Guesser):
             and md['status'] == '0': 
             if 'book' in md:
                 return [BookMetadata(title=x.get('title','No Title').decode('utf-8'),
-                                    thumbnail=x.get('thumbnail',''),
-                                    date=x.get('date',datetime.date(1970,1,1)),
-                                    subjects=x.get('subjects',[]),
+                                    thumbnail=x.get('imageurl',''),
+                                    date=datetime.date(1970,1,1),
+                                    subjects=[],
                                     authors=[x.get('author')], # FIXME: Check how to split this
                                     identifiers=[('isbn', x.get('isbn'))],
-                                    description=x.get('description',''))
+                                    description='')
                         for x in md['book'] ]
             else:
                 return None
