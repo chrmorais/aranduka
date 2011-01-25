@@ -67,7 +67,7 @@ class AlibrisGuesser(Guesser):
                                     thumbnail=x.get('imageurl',''),
                                     date=datetime.date(1970,1,1),
                                     subjects=[],
-                                    authors=[x.get('author')], # FIXME: Check how to split this
+                                    authors=[] if 'author' not in x or x['author'] == '' else [x['author']], # FIXME: Check how to split this
                                     identifiers= None if 'isbn' not in x or x['isbn'] == '' else [('isbn', x['isbn'])],
                                     description='')
                         for x in md['book'] ]
