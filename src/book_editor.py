@@ -86,22 +86,24 @@ class GuessDialog(QtGui.QDialog):
         if self._query:
             try:
                 self.md = self.guesser.guess(self._query) or []
-                if self.md:
-                    for candidate in self.md:
-                        authors = candidate.authors
-                        if isinstance(authors, list):
-                            authors = ', '.join(authors)
-                        self.bookList.addItem("%s by %s"%(candidate.title, authors))
-                else:
-                    print "No matches found for the selected criteria"
-                    QtGui.QMessageBox.information(self, \
-                                                  u'No results', \
-                                                  u'No results found matching your criteria')
             except Exception, e:
                 print "Guesser exception: %s"%str(e)
                 QtGui.QMessageBox.warning(self, \
                                           u'Failed to load data', \
                                           str(e))
+                return
+
+            if self.md:
+                for candidate in self.md:
+                    authors = candidate.authors
+                    if isinstance(authors, list):
+                        authors = ', '.join(authors)
+                    self.bookList.addItem("%s by %s"%(candidate.title, authors))
+            else:
+                print "No matches found for the selected criteria"
+                QtGui.QMessageBox.information(self, \
+                                              u'No results', \
+                                              u'No results found matching your criteria')
 
 
 class BookEditor(QtGui.QWidget):
