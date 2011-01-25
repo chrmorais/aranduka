@@ -70,6 +70,12 @@ class GuessDialog(QtGui.QDialog):
             query['authors'] = u', '.join([a.name for a in self.book.authors])
         if self.isbn.isChecked():
             query['isbn'] = self._isbn
+
+        if query['title'] is None and \
+           query['authors'] is None and \
+           query['isbn'] is None:
+           return
+
         self._query = BookMetadata(title=query['title'],
                                    thumbnail=None,
                                    date=None,
@@ -160,8 +166,9 @@ class BookEditor(QtGui.QWidget):
             self.authors.setText('|'.join(md.authors))
             # FIXME: maybe there are identifier conflicts?
             items = [unicode(self.ids.itemText(i)) for i in range(self.ids.count())]
-            for k,v in md.identifiers:
-                items.append("%s: %s"%(k,v))
+            if md.identifiers is not None:
+                for k,v in md.identifiers:
+                    items.append("%s: %s"%(k,v))
             items = list(set(items))
             items.sort()
             self.ids.clear()
