@@ -44,6 +44,7 @@ class Book (Entity):
         # FIXME: check for name collisions and identical files
         # FIXME: make non-blocking
         # FIXME: give user feedback
+        # FIXME: add support for file format check after downloading
 
         authorlist = ""
         for author in self.authors:
