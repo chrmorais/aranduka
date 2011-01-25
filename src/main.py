@@ -1,7 +1,7 @@
 """The user interface for our app"""
 
 import os,sys
-import models, importer, config
+import models, importer, config, ui
 
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic
@@ -16,9 +16,7 @@ from epubviewer import Main as EpubViewer
 class SearchWidget(QtGui.QWidget):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'searchwidget.ui')
+        uifile = ui.path('searchwidget.ui')
         uic.loadUi(uifile, self)
         self.ui = self
 
@@ -28,10 +26,7 @@ class Main(QtGui.QMainWindow):
     
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
-
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'main.ui')
+        uifile = ui.path('main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.viewers=[]

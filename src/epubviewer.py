@@ -2,6 +2,7 @@ from PyQt4 import QtNetwork, QtCore, QtGui, uic
 import os, sys
 from epubparser import EpubDocument
 import feedparser
+import ui
 
 
 class Main(QtGui.QMainWindow):
@@ -9,10 +10,7 @@ class Main(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self)
 
         self.epub = EpubDocument(fname)
-        
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'epubviewer.ui')
+        uifile = ui.path('epubviewer.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.addAction(self.actionPageDown)

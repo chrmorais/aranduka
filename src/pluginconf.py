@@ -3,12 +3,13 @@ from PyQt4 import QtCore, QtGui, uic
 from utils import SCRIPTPATH
 from pluginmgr import manager
 import config
+import ui
 
 class PluginSettings(QtGui.QDialog):
     def __init__(self, parent = None):
         QtGui.QDialog.__init__(self, parent)
 
-        uifile = os.path.join(SCRIPTPATH,'pluginconf.ui')
+        uifile = ui.path('pluginconf.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.plugin_widgets = []
@@ -46,7 +47,7 @@ class PluginWidget(QtGui.QWidget):
     def __init__(self, plugin, enabled, parent = None):
         QtGui.QWidget.__init__(self, parent)
 
-        uifile = os.path.join(SCRIPTPATH,'pluginwidget.ui')
+        uifile = ui.path('pluginwidget.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.plugin = plugin

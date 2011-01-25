@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, sys, urllib2
+import os, sys, urllib2, ui
 
 from gdata.books.service import BookService
 from PyQt4 import QtCore, QtGui, uic
@@ -14,9 +14,7 @@ from pluginmgr import manager
 class IdentifierDialog(QtGui.QDialog):
     def __init__(self, id_key, id_value, *args):
         QtGui.QDialog.__init__(self,*args)
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'identifier.ui')
+        uifile = ui.path('identifier.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self._query = None
@@ -26,9 +24,7 @@ class IdentifierDialog(QtGui.QDialog):
 class TagDialog(QtGui.QDialog):
     def __init__(self, tag_name, *args):
         QtGui.QDialog.__init__(self,*args)
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'tag.ui')
+        uifile = ui.path('tag.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self._query = None
@@ -42,9 +38,7 @@ class BookEditor(QtGui.QWidget):
     
     def __init__(self, book_id = None, *args):
         QtGui.QWidget.__init__(self,*args)
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'book_editor.ui')
+        uifile = ui.path('book_editor.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         if book_id is not None:
