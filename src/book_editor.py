@@ -8,7 +8,7 @@ from PyQt4 import QtCore, QtGui, uic
 
 import models
 from utils import validate_ISBN, SCRIPTPATH
-from metadata import get_metadata
+from metadata import BookMetadata
 from pluginmgr import manager
 
 class IdentifierDialog(QtGui.QDialog):
@@ -31,6 +31,72 @@ class TagDialog(QtGui.QDialog):
         for t in models.Tag.query.all():
             self.tag_name.addItem(t.name, t.name)
         self.tag_name.setEditText(tag_name)
+
+class GuessDialog(QtGui.QDialog):
+    def __init__(self, guesser, book, *args):
+        QtGui.QDialog.__init__(self,*args)
+        uifile = ui.path('guess.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
+        self.setWindowTitle('Guess book information')
+        self._query = None
+        self.md=[]
+        self.currentMD=None
+        self.book = book
+        self.guesser = guesser
+        self.title.setText("Title: %s"%book.title)
+        self.author.setText("Author: %s"%(u', '.join([a.name for a in book.authors])))
+        ident = models.Identifier.get_by(key='ISBN',book=book)
+        if ident:
+            self.isbn.setText('ISBN: %s'%ident.value)
+            self._isbn=ident.value
+        else:
+            self.isbn.hide()
+
+    def on_bookList_currentRowChanged(self, row):
+        self.currentMD=self.md[row]
+        print "Selected: ",unicode(self.bookList.item(row).text())
+
+    @QtCore.pyqtSlot()
+    def on_guess_clicked(self):
+        # Try to guess based on the reliable data
+        query = {'title': None, \
+                 'authors': None, \
+                 'isbn': None}
+        self.bookList.clear()
+        if self.title.isChecked():
+            query['title'] = self.book.title
+        if self.author.isChecked():
+            query['authors'] = u', '.join([a.name for a in self.book.authors])
+        if self.isbn.isChecked():
+            query['isbn'] = self._isbn
+        self._query = BookMetadata(title=query['title'],
+                                   thumbnail=None,
+                                   date=None,
+                                   subjects=None,
+                                   authors=query['authors'],
+                                   identifiers=[query['isbn']],
+                                   description=None)
+        if self._query:
+            try:
+                self.md = self.guesser.guess(self._query) or []
+                if self.md:
+                    for candidate in self.md:
+                        authors = candidate.authors
+                        if isinstance(authors, list):
+                            authors = ', '.join(authors)
+                        self.bookList.addItem("%s by %s"%(candidate.title, authors))
+                else:
+                    print "No matches found for the selected criteria"
+                    QtGui.QMessageBox.information(self, \
+                                                  u'No results', \
+                                                  u'No results found matching your criteria')
+            except Exception, e:
+                print "Guesser exception: %s"%str(e)
+                QtGui.QMessageBox.warning(self, \
+                                          u'Failed to load data', \
+                                          str(e))
+
 
 class BookEditor(QtGui.QWidget):
     
@@ -77,7 +143,15 @@ class BookEditor(QtGui.QWidget):
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
         name = unicode(self.guessers.currentText())
-        md = self.guesser_dict[name].guess(self.book)
+
+        # Display the Guess Dialog
+        dlg = GuessDialog(self.guesser_dict[name], self.book)
+        r = dlg.exec_()
+        if not r == dlg.Accepted:
+            md = None
+        elif dlg.currentMD:
+            md =  dlg.currentMD
+
         if md is None:
             return
         else:

@@ -2,7 +2,7 @@ import os, sys, time, re
 from PyQt4 import QtCore, QtGui, uic
 
 import models
-from metadata import get_metadata
+#from metadata import get_metadata
 from pprint import pprint
 from utils import VALID_EXTENSIONS
 

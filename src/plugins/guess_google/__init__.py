@@ -1,13 +1,10 @@
 import os, sys, urllib2
-
-from gdata.books.service import BookService
-from PyQt4 import QtCore, QtGui, uic
-
-import models
-from utils import validate_ISBN, SCRIPTPATH
-from metadata import get_metadata
-
+import datetime
+import gdata.books.service
+from metadata import BookMetadata
 from pluginmgr import Guesser
+
+google_books = gdata.books.service.BookService()
 
 class GoogleGuesser(Guesser):
     name = "Google Books"
@@ -15,65 +12,27 @@ class GoogleGuesser(Guesser):
     def can_guess(self, book):
         return True
 
-    def guess(self, book):
-        self.book = book
-        dlg = GuessDialog(self.book)
-        r = dlg.exec_()
-        if not r == dlg.Accepted:
+    def _translateQuery (self, query):
+        q = ''
+        if query.title is not None:
+            q += 'TITLE %s '%query.title
+        if query.authors is not None:
+            q += 'AUTHOR %s '%query.authors
+        if query.identifiers is not None:
+            q += 'ISBN %s '%query.identifiers
+        return q
+
+    def guess(self, query):
+        result = google_books.search(self._translateQuery(query))
+        if result.entry:
+            data = [x.to_dict() for x in result.entry]
+            return [BookMetadata(title=x.get('title','No Title').decode('utf-8'),
+                                thumbnail=x.get('thumbnail',''),
+                                date=x.get('date',datetime.date(1970,1,1)),
+                                subjects=x.get('subjects',[]),
+                                authors=x.get('authors',[]),
+                                identifiers=x.get('identifiers',()),
+                                description=x.get('description',''))
+                    for x in data ]
+        else:
             return None
-        if dlg.currentMD:
-            return dlg.currentMD
-        return None
-
-service = BookService()
-
-class GuessDialog(QtGui.QDialog):
-    def __init__(self, book, *args):
-        QtGui.QDialog.__init__(self,*args)
-        uifile = os.path.join(
-            os.path.abspath(
-                os.path.dirname(__file__)),'guess.ui')
-        uic.loadUi(uifile, self)
-        self.ui = self
-        self._query = None
-
-        self.md=[]
-        self.currentMD=None
-        self.book = book
-        self.title.setText("Title: %s"%book.title)
-        self.author.setText("Author: %s"%(u', '.join([a.name for a in book.authors])))
-        ident = models.Identifier.get_by(key='ISBN',book=book)
-        if ident:
-            self.isbn.setText('ISBN: %s'%ident.value)
-            self._isbn=ident.value
-        else:
-            self.isbn.hide()
-
-    def on_bookList_currentRowChanged(self, row):
-        self.currentMD=self.md[row]
-        print "Selected: ",unicode(self.bookList.item(row).text())
-
-    @QtCore.pyqtSlot()
-    def on_guess_clicked(self):
-        # Try to guess based on the reliable data
-        q=''
-        self.bookList.clear()
-        if self.title.isChecked():
-            q+='TITLE %s '%self.book.title
-        if self.author.isChecked():
-            q+='AUTHOR %s '%u', '.join([a.name for a in self.book.authors])
-        if self.isbn.isChecked():
-            q+='ISBN %s'%self._isbn
-        self._query = q
-        if self._query:
-            self.md = get_metadata(self._query) or []
-        if self.md:
-            for candidate in self.md:
-                authors = ', '.join(candidate.authors)
-                self.bookList.addItem("%s by %s"%(candidate.title, authors))
-        else:
-            print "No matches found for the selected criteria"
-            QtGui.QMessageBox.information(self, \
-                                          u'No results', \
-                                          u'No results found matching your criteria')
-
