@@ -14,7 +14,11 @@ class EpubDocument(object):
         # http://stackoverflow.com/questions/1388467/reading-epub-format
 
         print "Opening:", fname
-        self.book = zipfile.ZipFile(fname, "r")
+        try:
+            self.book = zipfile.ZipFile(fname, "r")
+        except zipfile.BadZipfile, e:
+            raise ValueError("Invalid format")
+
         f = self.book.open('META-INF/container.xml')
         self.container = XML(f.read())
         f.close()

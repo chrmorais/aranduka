@@ -147,7 +147,13 @@ class Main(QtGui.QMainWindow):
         self.searchWidget.text.setFocus(True)
 
     def openEpub(self, fname):
-        viewer = EpubViewer(fname)
+        try:
+            viewer = EpubViewer(fname)
+        except ValueError, e:
+            QtGui.QMessageBox.critical(self, \
+                                      u'Failed to open ePub file', \
+                                      u'The document you are trying to open is not a valid ePub file.')
+            return
         self.viewers.append(viewer)
         viewer.show()
         
