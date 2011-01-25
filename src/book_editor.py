@@ -97,8 +97,8 @@ class GuessDialog(QtGui.QDialog):
                 for candidate in self.md:
                     authors = candidate.authors
                     if isinstance(authors, list):
-                        authors = ', '.join(authors)
-                    self.bookList.addItem("%s by %s"%(candidate.title, authors))
+                        authors = u', '.join(authors)
+                    self.bookList.addItem(u'%s by %s'%(candidate.title, authors))
             else:
                 print "No matches found for the selected criteria"
                 QtGui.QMessageBox.information(self, \

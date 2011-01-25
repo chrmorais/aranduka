@@ -63,14 +63,36 @@ class AlibrisGuesser(Guesser):
         if 'status' in md \
             and md['status'] == '0': 
             if 'book' in md:
-                return [BookMetadata(title=x.get('title','No Title').decode('utf-8'),
-                                    thumbnail=x.get('imageurl',''),
-                                    date=datetime.date(1970,1,1),
-                                    subjects=[],
-                                    authors=[] if 'author' not in x or x['author'] == '' else [x['author']], # FIXME: Check how to split this
-                                    identifiers= None if 'isbn' not in x or x['isbn'] == '' else [('isbn', x['isbn'])],
-                                    description='')
-                        for x in md['book'] ]
+                bookList = []
+                for book in md['book']:
+                    title = book.get('title', 'No Title').decode('utf-8')
+                    thumbnail = book.get('imageurl','')
+                    date = datetime.date(1970,1,1)
+                    subjects = []
+                    authors = []
+                    identifiers = []
+                    description = ''
+
+                    if 'keywords' in book and book['keywords'] != '':
+                        subjects = [book['keywords']] # FIXME: Check which token use to split this
+
+                    if 'author' in book and book['author'] != '':
+                        authors = [book['author']] # FIXME: Check which token use to split this
+                    
+                    if 'isbn' in book and book['isbn'] != '':
+                        identifiers.append(('ISBN', book['isbn']))
+
+                    if 'bin' in book and book['bin'] != '':
+                        identifiers.append(('alibris_sku', book['bin']))
+
+                    bookList.append(BookMetadata(title=title,
+                                                 thumbnail=thumbnail,
+                                                 date=date,
+                                                 subjects=subjects,
+                                                 authors=authors,
+                                                 identifiers=identifiers,
+                                                 description=description))
+                return bookList        
             else:
                 return None
         else:
