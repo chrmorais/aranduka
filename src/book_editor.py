@@ -116,6 +116,7 @@ class BookEditor(QtGui.QWidget):
                 print "Creating author:", a
                 author = models.Author(name = a)
             self.book.authors.append(author)
+        models.Author.sanitize()
 
         for ident in self.book.identifiers:
             ident.delete()

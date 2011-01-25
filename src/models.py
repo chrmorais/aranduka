@@ -162,6 +162,14 @@ class Author (Entity):
     def __repr__(self):
         return '<author>%s</author>' % (self.name)
 
+    @classmethod
+    def sanitize (cls):
+        print "Sanitizing authors table"
+        authors = cls.query.filter_by(books=None).all()
+        if authors:
+            for author in authors:
+                author.delete()
+
 class Tag (Entity):
     using_options(tablename='tags')
     name = Field(Unicode(30))
