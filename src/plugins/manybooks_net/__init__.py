@@ -64,12 +64,10 @@ class Catalog(BookStore):
         self.openUrl(QtCore.QUrl(url))
 
     def openUrl(self, url):
-        print "CRUMBS:", self.crumbs
         if isinstance(url, QtCore.QUrl):
             url = url.toString()
         url = unicode(url)
         extension = url.split('.')[-1]
-        print "Opening:",url
         if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
             # Metadata is cached
@@ -107,7 +105,6 @@ class Catalog(BookStore):
         self.w.crumbs.setText(ctext)
 
     def showBranch(self, url):
-        print "Showing:", url
         data = parse(url)
         html = ["<h1>%s</h1>"%data.feed.title]
         if url.split('/')[-1].isdigit(): # It's a pageNumber
@@ -154,7 +151,6 @@ class Catalog(BookStore):
                         self.id_cache[l.href]=entry.get('id')
                         self.author_cache[l.href]=entry.author
                         self.title_cache[l.href]=entry.title
-                        print entry.title, entry.author
                 acq_fragment = []
                 for l in acq_links:
                     acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
