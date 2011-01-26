@@ -24,13 +24,13 @@
     <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>2</number>
    </property>
    <item>
     <widget class="QCheckBox" name="enabled">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>1</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
@@ -43,8 +43,8 @@
     <widget class="QToolButton" name="configure">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>24</horstretch>
-       <verstretch>24</verstretch>
+       <horstretch>0</horstretch>
+       <verstretch>20</verstretch>
       </sizepolicy>
      </property>
      <property name="text">
