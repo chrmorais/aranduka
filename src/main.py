@@ -228,6 +228,26 @@ class Main(QtGui.QMainWindow):
         self.book_editor.load_data(self.currentBook.id)
         self.title.setText(u'Editing properties of "%s"'%self.currentBook.title)
         self.stack.setCurrentIndex(1)
+
+    @QtCore.pyqtSlot()
+    def on_actionDelete_Book_triggered(self):
+        if not self.currentBook:
+            return
+        rsp = QtGui.QMessageBox.question(self, \
+                                   'Confirm delete', \
+                                   'Are you sure you want to delete the book "%s"?'%\
+                                   self.currentBook.title, \
+                                   QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
+        if rsp == QtGui.QMessageBox.Ok:
+            # Delete the book files
+            print "Deleting book: %s"%self.currentBook.title
+            for f in self.currentBook.files:
+                print "Deletin file: %s"%f.file_name
+                os.unlink(f.file_name)
+            self.currentBook.delete()
+            models.session.commit()
+            self.currentBook = None
+            self.viewModeChanged()
             
     def on_books_itemActivated(self, item):
         self.book_editor.load_data(item.book.id)
