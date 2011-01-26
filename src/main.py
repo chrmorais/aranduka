@@ -245,6 +245,7 @@ class Main(QtGui.QMainWindow):
                 print "Deletin file: %s"%f.file_name
                 os.unlink(f.file_name)
             self.currentBook.delete()
+            models.Author.sanitize() # In case we removed the only book from an author
             models.session.commit()
             self.currentBook = None
             self.viewModeChanged()
