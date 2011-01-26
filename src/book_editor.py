@@ -9,7 +9,7 @@ from PyQt4 import QtCore, QtGui, uic
 import models
 from utils import validate_ISBN, SCRIPTPATH
 from metadata import BookMetadata
-from pluginmgr import manager
+from pluginmgr import manager, isPluginEnabled
 
 class IdentifierDialog(QtGui.QDialog):
     def __init__(self, id_key, id_value, *args):
@@ -144,7 +144,7 @@ class BookEditor(QtGui.QWidget):
         self.guessers.clear()
         # Fill the guessers combo with appropiate names
         for plugin in manager.getPluginsOfCategory("Guesser"):
-            if plugin.plugin_object.can_guess(self.book):
+            if isPluginEnabled(plugin.name) and plugin.plugin_object.can_guess(self.book):
                 self.guessers.addItem(plugin.plugin_object.name)
                 self.guesser_dict[plugin.plugin_object.name] = plugin.plugin_object
 
