@@ -57,3 +57,5 @@ class PluginWidget(QtGui.QWidget):
         self.plugin = plugin
         self.enabled.setText(plugin.name)
         self.enabled.setChecked(enabled)
+        if not plugin.plugin_object.configurable:
+            self.configure.setVisible(False)
