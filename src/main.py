@@ -59,6 +59,13 @@ class Main(QtGui.QMainWindow):
         print "Finished initializing main window"
 
         self.loadPlugins()
+        geom = config.getValue("general", "geometry",None)
+        if geom is not None:
+            self.restoreGeometry(geom.decode('base64'))
+        
+    def closeEvent(self, event):
+        config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
+        QtGui.QMainWindow.closeEvent(self, event)
 
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
