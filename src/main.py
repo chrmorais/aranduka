@@ -214,9 +214,17 @@ class Main(QtGui.QMainWindow):
             print "Opening:", url
             QtGui.QDesktopServices.openUrl(url)
 
+    @QtCore.pyqtSlot()
+    def on_actionEdit_Book_triggered(self):
+        if not self.currentBook:
+            return
+        self.book_editor.load_data(self.currentBook.id)
+        self.title.setText(u'Editing properties of "%s"'%self.currentBook.title)
+        self.stack.setCurrentIndex(1)
+            
     def on_books_itemActivated(self, item):
         self.book_editor.load_data(item.book.id)
-        self.title.setText('Editing properties of "%s"'%item.book.title)
+        self.title.setText(u'Editing properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(1)
 
     @QtCore.pyqtSlot()
