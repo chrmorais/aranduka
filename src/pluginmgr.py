@@ -9,6 +9,7 @@ import os
 from yapsy.PluginManager import PluginManager
 from yapsy.IPlugin import IPlugin
 import utils
+import config
 
 # These classes define our plugin categories
 
@@ -138,6 +139,13 @@ class BookStore(object):
 
 
 class Converter(object): pass
+
+def isPluginEnabled (name):
+    enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
+    if enabled_plugins == set([None]):
+        return False
+    else:
+        return name in enabled_plugins
 
 manager = PluginManager(
     categories_filter={
