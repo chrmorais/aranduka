@@ -208,7 +208,7 @@ padding: .5em;
              <number>0</number>
             </property>
             <item>
-             <widget class="QScrollArea" name="shelveStack">
+             <widget class="QScrollArea" name="shelfStack">
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
