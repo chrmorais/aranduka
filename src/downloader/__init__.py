@@ -11,6 +11,8 @@ class Downloads(QtGui.QProgressBar):
         self.layout = QtGui.QVBoxLayout()
         self.popup.setLayout(self.layout)
         self.manager = QtNetwork.QNetworkAccessManager(self)
+        self.setVisible(False)
+        self.setMaximumWidth(100)
         
     def fetch(self, url, destination):
         if url in self.bars:
@@ -64,6 +66,10 @@ class Downloads(QtGui.QProgressBar):
         print tot, val
         self.setMaximum(tot)
         self.setValue(val)
+        if tot==0 or tot==val:
+            self.setVisible(False)
+        else:
+            self.setVisible(True)
 
 def main():
     app = QtGui.QApplication(sys.argv)
