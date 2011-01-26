@@ -100,13 +100,7 @@ class Book (Entity):
         # FIXME: give user feedback
         fname = os.path.join(utils.COVERPATH, str(self.id) +".jpg")
         if url:
-            print "Fetching cover: ", url
-            u=urllib2.urlopen(url)
-            data = u.read()
-            u.close()
-            thumb = open(fname,'wb')
-            thumb.write(data)
-            thumb.close()
+            downloader.downloader.fetch(url, fname)
         else:
             isbns = Identifier.query.filter_by(key = 'ISBN', book = self).all()
             for isbn in isbns:
