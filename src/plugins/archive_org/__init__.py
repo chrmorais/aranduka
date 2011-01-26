@@ -1,12 +1,14 @@
 from feedparser import parse
 from PyQt4 import QtGui, QtCore, QtWebKit, uic
 import sys, os, urllib
-from elementtree.ElementTree import XML
 from models import *
 from pprint import pprint
 from math import ceil
 from pluginmgr import BookStore
-from elementtree.ElementTree import XML
+try:
+    from elementtree.ElementTree import XML
+except:
+    from xml.etree.ElementTree import XML
 
 # This gets the main catalog from Archive.org.
 
