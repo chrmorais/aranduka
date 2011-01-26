@@ -62,7 +62,7 @@ class Main(QtGui.QMainWindow):
         self.loadPlugins()
 
         downloader.downloader = downloader.Downloads()
-        self.statusBar.addWidget(downloader.downloader)
+        self.statusBar.addPermanentWidget(downloader.downloader)
         
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
