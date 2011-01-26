@@ -10,6 +10,8 @@ class Downloads(QtGui.QDialog):
         self.layout = QtGui.QVBoxLayout()
         self.setLayout(self.layout)
         self.manager = QtNetwork.QNetworkAccessManager(self)
+        self.avgBar = QtGui.QProgressBar()
+        self.layout.addWidget(self.avgBar)
         
     def fetch(self, url):
         if url in self.bars:
@@ -29,6 +31,20 @@ class Downloads(QtGui.QDialog):
         _, bar, reply = self.bars[url]
         bar.setMaximum(total)
         bar.setValue(received)
+        
+        # Calculate average bar
+        tot = 0
+        val = 0
+        for u in self.bars:
+            bar = self.bars[u][1]
+            if bar.maximum() == -1:
+                tot += 100000 # Yes, this is evil
+            else:
+                tot += bar.maximum()
+            val += bar.value()
+        print tot, val
+        self.avgBar.setMaximum(tot)
+        self.avgBar.setValue(val)
 
 def main():
     app = QtGui.QApplication(sys.argv)
