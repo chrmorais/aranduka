@@ -23,14 +23,17 @@ class PluginSettings(QtGui.QDialog):
         for category in manager.getCategories():
             w = QtGui.QScrollArea()
             l = QtGui.QVBoxLayout()
-            w.setLayout(l)
+            w._widget = QtGui.QWidget()
+            w._widget.setLayout(l)
+            w.setWidget(w._widget)
+            w.setWidgetResizable(True)
             for plugin in manager.getPluginsOfCategory(category):
                 pw = PluginWidget(plugin, plugin.name in enabled_plugins)
                 self.plugin_widgets.append(pw)
                 l.addWidget(pw)
             l.addStretch(1)
+            w._widget.adjustSize()
             self.toolBox.addItem(w, category)
-            w.adjustSize()
         print self.page1
         # FIXME: En vez de ocultar page1, sacarlo.
         self.page1.hide()
@@ -54,6 +57,3 @@ class PluginWidget(QtGui.QWidget):
         self.plugin = plugin
         self.enabled.setText(plugin.name)
         self.enabled.setChecked(enabled)
-        h = max( self.enabled.sizeHint().height(), 44)
-        self.setFixedHeight(h)
-        self.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
