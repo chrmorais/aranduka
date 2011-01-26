@@ -29,6 +29,7 @@ class PluginSettings(QtGui.QDialog):
                 self.plugin_widgets.append(pw)
                 l.addWidget(pw)
             l.addStretch(1)
+            w.adjustSize()
             self.toolBox.addItem(w, category)
         print self.page1
         # FIXME: En vez de ocultar page1, sacarlo.
@@ -53,4 +54,6 @@ class PluginWidget(QtGui.QWidget):
         self.plugin = plugin
         self.enabled.setText(plugin.name)
         self.enabled.setChecked(enabled)
-    
+        h = max( self.enabled.sizeHint().height(), 24)
+        self.setMinimumSize(QtCore.QSize(h,0))
+        self.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
