@@ -8,6 +8,7 @@ import os
 import urllib2
 from elixir import *
 import utils
+import downloader
 
 def initDB():
     "Create or initialize the database"
@@ -54,17 +55,10 @@ class Book (Entity):
             os.path.join(utils.BOOKPATH,
                 utils.slugify(str(self.id)+"-"+self.title+"-"+authorlist)+"."+extension))
         print "Fetching file: ", url
-        u=urllib2.urlopen(url)
-        data = u.read()
-        u.close()
-        thumb = open(fname,'wb')
-        thumb.write(data)
-        thumb.close()
-
-        print "F1", self.files
+        # Queue the download
+        downloader.downloader.fetch(url, fname)
         f = File(file_name = fname)
         self.files.append(f)
-        print "F2", self.files
         session.commit()
 
     def files_for_format(self, extension):

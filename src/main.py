@@ -12,6 +12,7 @@ from pluginmgr import manager
 from pluginconf import PluginSettings
 from about import AboutDialog
 from epubviewer import Main as EpubViewer
+import downloader
 
 class SearchWidget(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -60,6 +61,9 @@ class Main(QtGui.QMainWindow):
 
         self.loadPlugins()
 
+        downloader.downloader = downloader.Downloads()
+        self.statusBar.addWidget(downloader.downloader)
+        
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
 

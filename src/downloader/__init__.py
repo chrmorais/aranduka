@@ -1,19 +1,18 @@
 from PyQt4 import QtGui, QtCore, QtNetwork
 import sys
 
-class Downloads(QtGui.QDialog):
+class Downloads(QtGui.QProgressBar):
 
     def __init__(self,parent=None):
-        super(Downloads,self).__init__(parent)        
-        self.bars={}
+        super(Downloads,self).__init__(parent)
+        self.popup = QtGui.QWidget()
         
+        self.bars={}        
         self.layout = QtGui.QVBoxLayout()
-        self.setLayout(self.layout)
+        self.popup.setLayout(self.layout)
         self.manager = QtNetwork.QNetworkAccessManager(self)
-        self.avgBar = QtGui.QProgressBar()
-        self.layout.addWidget(self.avgBar)
         
-    def fetch(self, url):
+    def fetch(self, url, destination):
         if url in self.bars:
             print "Already downloading:", url
             return
@@ -21,14 +20,34 @@ class Downloads(QtGui.QDialog):
         address = QtCore.QUrl(url)
         reply = self.manager.get(QtNetwork.QNetworkRequest(address))
         reply.downloadProgress.connect(self.progress)
+        reply.finished.connect(self.finished)
         bar = QtGui.QProgressBar()
         self.layout.addWidget(bar)
-        self.bars[url]=[url, bar, reply]
+        self.bars[url]=[url, bar, reply, destination]
                 
+    def finished(self):
+        reply = self.sender()
+        url = unicode(reply.url().toString())
+        _, bar, _, fname = self.bars[url]
+        redirURL = unicode(reply.attribute(QtNetwork.QNetworkRequest.RedirectionTargetAttribute).toString())
+        del self.bars[url]
+        bar.deleteLater()
+        if redirURL and redirURL != url:
+            # Need to redirect
+            print "Following redirect to:", redirURL
+            self.fetch (redirURL, fname)
+        else:
+            data = str(reply.readAll())
+            f = open(fname,'wb')
+            f.write(data)
+            f.close()
+            print "Finished downloading:", url
+        
+        
     def progress(self, received, total):
         url = unicode(self.sender().url().toString())
         print "progress:", url
-        _, bar, reply = self.bars[url]
+        _, bar, reply, fname = self.bars[url]
         bar.setMaximum(total)
         bar.setValue(received)
         
@@ -43,8 +62,8 @@ class Downloads(QtGui.QDialog):
                 tot += bar.maximum()
             val += bar.value()
         print tot, val
-        self.avgBar.setMaximum(tot)
-        self.avgBar.setValue(val)
+        self.setMaximum(tot)
+        self.setValue(val)
 
 def main():
     app = QtGui.QApplication(sys.argv)
