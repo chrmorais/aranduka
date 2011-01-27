@@ -45,7 +45,7 @@
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="details_page">
       <property name="geometry">
@@ -231,8 +231,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>740</width>
-        <height>458</height>
+        <width>135</width>
+        <height>75</height>
        </rect>
       </property>
       <attribute name="label">

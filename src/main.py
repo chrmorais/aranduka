@@ -59,6 +59,13 @@ class Main(QtGui.QMainWindow):
         print "Finished initializing main window"
 
         self.loadPlugins()
+        geom = config.getValue("general", "geometry",None)
+        if geom is not None:
+            self.restoreGeometry(geom.decode('base64'))
+        
+    def closeEvent(self, event):
+        config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
+        QtGui.QMainWindow.closeEvent(self, event)
 
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
@@ -77,7 +84,7 @@ class Main(QtGui.QMainWindow):
 
         self.treeWidget.clear()
 
-        for plugin in manager.getPluginsOfCategory("ShelveView"):
+        for plugin in manager.getPluginsOfCategory("ShelfView"):
             # Ways to fill the shelves
             if plugin.name not in enabled_plugins:
                 continue
@@ -214,9 +221,17 @@ class Main(QtGui.QMainWindow):
             print "Opening:", url
             QtGui.QDesktopServices.openUrl(url)
 
+    @QtCore.pyqtSlot()
+    def on_actionEdit_Book_triggered(self):
+        if not self.currentBook:
+            return
+        self.book_editor.load_data(self.currentBook.id)
+        self.title.setText(u'Editing properties of "%s"'%self.currentBook.title)
+        self.stack.setCurrentIndex(1)
+            
     def on_books_itemActivated(self, item):
         self.book_editor.load_data(item.book.id)
-        self.title.setText('Editing properties of "%s"'%item.book.title)
+        self.title.setText(u'Editing properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(1)
 
     @QtCore.pyqtSlot()

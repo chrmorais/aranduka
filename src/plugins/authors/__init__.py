@@ -1,13 +1,13 @@
 from PyQt4 import QtGui, QtCore
 import sys, os
 import models
-from pluginmgr import ShelveView
+from pluginmgr import ShelfView
 
 # This plugin lists the books by author
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(ShelveView):
+class Catalog(ShelfView):
 
     title = "Books By Author"
     itemText = "Authors"
@@ -61,7 +61,7 @@ class Catalog(ShelveView):
                 self.items[b.id] = item
 
         self.shelvesLayout.addStretch(1)
-        self.widget.shelveStack.setWidget(self.shelf)
+        self.widget.shelfStack.setWidget(self.shelf)
 
 
     def showGrid(self, search = None):
@@ -126,7 +126,7 @@ class Catalog(ShelveView):
                 self.items[b.id] = item
         print self.items
 
-        self.widget.shelveStack.setWidget(self.shelves)
+        self.widget.shelfStack.setWidget(self.shelves)
         
     def updateBook(self, book):
         # This may get called when no books

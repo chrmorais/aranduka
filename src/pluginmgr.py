@@ -9,6 +9,7 @@ import os
 from yapsy.PluginManager import PluginManager
 from yapsy.IPlugin import IPlugin
 import utils
+import config
 
 # These classes define our plugin categories
 
@@ -49,11 +50,11 @@ class Tool(object):
     """A plugin that gets added to the Tools menu in the main.ui"""
     configurable = False
 
-class ShelveView(QtCore.QObject):
+class ShelfView(QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
     
-    title = "Base ShelveView"
+    title = "Base ShelfView"
     itemText = "BASE"
     configurable = False
     
@@ -142,9 +143,16 @@ class BookStore(object):
 class Converter(object):
     configurable = False
 
+def isPluginEnabled (name):
+    enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
+    if enabled_plugins == set([None]):
+        return False
+    else:
+        return name in enabled_plugins
+
 manager = PluginManager(
     categories_filter={
-        "ShelveView": ShelveView,
+        "ShelfView": ShelfView,
         "BookStore": BookStore,
         "Converter": Converter,
         "Tool": Tool,

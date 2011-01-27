@@ -6,16 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>609</width>
-    <height>417</height>
+    <width>750</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Aranduka</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>aranduka-icon.png</normaloff>aranduka-icon.png</iconset>
+   <iconset resource="../icons.qrc">
+    <normaloff>:/aranduka-icon.png</normaloff>:/aranduka-icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -147,7 +147,7 @@ padding: .5em;
 </string>
             </property>
             <property name="icon">
-             <iconset resource="icons.qrc">
+             <iconset resource="../icons.qrc">
               <normaloff>:/icons/icon_view.svg</normaloff>
               <activeon>:/icons/icon_view_selected.svg</activeon>:/icons/icon_view.svg</iconset>
             </property>
@@ -180,7 +180,7 @@ padding: .5em;
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="icons.qrc">
+             <iconset resource="../icons.qrc">
               <normaloff>:/icons/list_view.svg</normaloff>
               <activeon>:/icons/list_view_selected.svg</activeon>:/icons/list_view.svg</iconset>
             </property>
@@ -208,7 +208,7 @@ padding: .5em;
              <number>0</number>
             </property>
             <item>
-             <widget class="QScrollArea" name="shelveStack">
+             <widget class="QScrollArea" name="shelfStack">
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
@@ -220,8 +220,8 @@ padding: .5em;
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>222</width>
-                 <height>326</height>
+                 <width>250</width>
+                 <height>465</height>
                 </rect>
                </property>
               </widget>
@@ -251,8 +251,8 @@ padding: .5em;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>609</width>
-     <height>24</height>
+     <width>750</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLibrary">
@@ -371,7 +371,7 @@ padding: .5em;
   </action>
  </widget>
  <resources>
-  <include location="icons.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>
