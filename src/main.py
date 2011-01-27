@@ -186,11 +186,21 @@ class Main(QtGui.QMainWindow):
             f = book.files[0]
             url = QtCore.QUrl.fromLocalFile(f.file_name)
             if f.file_name.endswith('epub'):
-                menu.addAction("Open %s"%os.path.basename(f.file_name),
+                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: self.openEpub(f.file_name))
             else:
-                menu.addAction("Open %s"%os.path.basename(f.file_name),
+                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: QtGui.QDesktopServices.openUrl(url))
+                    
+            # Issue 20: don't show files that are not there
+            # FIXME: add more validation
+            try:
+                f_info = os.stat(f.file_name)
+            except:
+                f_info = None
+            if f_info is None or f_info.st_size == 0:
+                action.setEnabled(False)
+            
         elif formats:
             for f in book.files:
                 url = QtCore.QUrl.fromLocalFile(f.file_name)
@@ -246,11 +256,7 @@ class Main(QtGui.QMainWindow):
         if rsp == QtGui.QMessageBox.Ok:
             # Delete the book files
             print "Deleting book: %s"%self.currentBook.title
-            for f in self.currentBook.files:
-                print "Deletin file: %s"%f.file_name
-                os.unlink(f.file_name)
             self.currentBook.delete()
-            models.Author.sanitize() # In case we removed the only book from an author
             models.session.commit()
             self.currentBook = None
             self.viewModeChanged()
