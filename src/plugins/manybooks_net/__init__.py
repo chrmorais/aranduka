@@ -75,15 +75,17 @@ class Catalog(BookStore):
             _author = self.author_cache[url]
             book_id = self.id_cache[url]
             book = Book.get_by(title = title)
+            book_tid = url.split('/')[-2]
             if not book:
-                ident = Identifier(key="ManyBooks.net_ID", value=book_id)
+                ident_urn = Identifier(key="ManyBooks.net_ID", value=book_id)
+                ident_tid = Identifier(key="ManyBooks.net_TID", value=book_tid)
                 author = Author.get_by (name = _author)
                 if not author:
                     author = Author(name = _author)
                 book = Book (
                     title = title,
                     authors = [author],
-                    identifiers = [ident],
+                    identifiers = [ident_urn, ident_tid],
                 )
             session.commit()
             
