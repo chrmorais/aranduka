@@ -59,7 +59,15 @@ class EpubDocument(object):
                 self.tocentries.append([label, content])
 
         self.itemrefs = self.spine.findall('{http://www.idpf.org/2007/opf}itemref')
+        print "IR:", self.itemrefs
         self.spinerefs = [ self.manifest_dict[item.attrib['idref']][len(self.basepath):] for item in self.itemrefs ]
+        # I found one book that has a spine but no navmap: "Der schwarze Baal" from manybooks.net
+        if not self.tocentries:
+            # Alternative toc
+            self.tocentries = [[item.attrib['idref'],self.manifest_dict[item.attrib['idref']][len(self.basepath):]] for item in self.itemrefs]
+            
+        print self.tocentries
+        print self.spinerefs
 
     def getData(self, path):
         """Return the contents of a file in the document"""

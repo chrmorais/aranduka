@@ -26,26 +26,50 @@ class Main(QtGui.QMainWindow):
         self.old_manager = self.view.page().networkAccessManager()
         self.new_manager = NetworkAccessManager(self.old_manager, self)
         self.view.page().setNetworkAccessManager(self.new_manager)
-
+        if self.epub.spinerefs[0] == self.epub.tocentries[0][1]:
+            self.chapters.setCurrentRow(0)
         self.openPath(self.epub.spinerefs[0])
+        self.actionClose.triggered.connect(self.close)
+        self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
         
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):
         frame = self.view.page().mainFrame()
         if frame.scrollBarMaximum(QtCore.Qt.Vertical) == \
             frame.scrollPosition().y():
-                # Find where on the spine we are
-                curSpineRef= unicode(frame.url().toString())[12:]
-                curIdx = self.epub.spinerefs.index(curSpineRef)
-                if curIdx < len(self.epub.spinerefs):
-                    self.chapters.setCurrentRow(curIdx)
-                    self.openPath(self.epub.spinerefs[curIdx+1])
+                self.on_actionNext_Chapter_triggered()
         else:
             frame.scroll(0,self.view.height())
-        
+
+    @QtCore.pyqtSlot()
+    def on_actionNext_Chapter_triggered(self):
+        # Find where on the spine we are
+        frame = self.view.page().mainFrame()
+        curSpineRef= unicode(frame.url().toString())[12:]
+        try:
+            curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
+        except ValueError:
+            curIdx = -1
+        if curIdx < len(self.epub.spinerefs):
+            self.chapters.setCurrentRow(curIdx+1)
+            self.openPath(self.epub.tocentries[curIdx+1][1])
+            
+    @QtCore.pyqtSlot()
+    def on_actionPrevious_Chapter_triggered(self):
+        # Find where on the spine we are
+        frame = self.view.page().mainFrame()
+        curSpineRef= unicode(frame.url().toString())[12:]
+        try:
+            curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
+        except ValueError:
+            curIdx = -1
+        if curIdx > 0:
+            self.chapters.setCurrentRow(curIdx-1)
+            self.openPath(self.epub.tocentries[curIdx-1][1])
+
+            
     def on_chapters_itemClicked(self, item):
         self.openPath(item.contents)
-
 
     def openPath(self, path, fragment=None):
         print "Opening:", path
@@ -84,7 +108,6 @@ class DownloadReply(QtNetwork.QNetworkReply):
 
     def __init__(self, parent, url, operation, w):
         self._w = w
-        print"DR:", url, url.path()
         QtNetwork.QNetworkReply.__init__(self, parent)
         self.content = self._w.epub.getData(unicode(url.path())[1:])
         self.offset = 0
@@ -106,7 +129,6 @@ class DownloadReply(QtNetwork.QNetworkReply):
         return True
 
     def readData(self, maxSize):
-        print "readData"
         if self.offset < len(self.content):
             end = min(self.offset + maxSize, len(self.content))
             data = self.content[self.offset:end]
