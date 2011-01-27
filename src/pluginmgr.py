@@ -19,7 +19,7 @@ class Guesser(object):
     or could look it up on the internet"""
 
     name = "Base Guesser"
-
+    configurable = False
     def __init__(self):
         print "INIT: ", self.name
 
@@ -44,18 +44,19 @@ class Device(object):
     """A plugin that represents a device to read books.
     These get added in the 'Devices' menu
     """
-    pass
+    configurable = False
 
 class Tool(object):
     """A plugin that gets added to the Tools menu in the main.ui"""
-    pass
+    configurable = False
 
-class ShelveView(QtCore.QObject):
+class ShelfView(QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
     
-    title = "Base ShelveView"
+    title = "Base ShelfView"
     itemText = "BASE"
+    configurable = False
     
     def __init__(self):
         print "INIT: ", self.title
@@ -120,6 +121,7 @@ class BookStore(object):
 
     title = "Base Bookstore"
     itemText = "BASE"
+    configurable = False
 
     def __init__(self):
         print "INIT:", self.title
@@ -138,7 +140,8 @@ class BookStore(object):
         self.search(unicode(self.widget.searchWidget.text.text()))
 
 
-class Converter(object): pass
+class Converter(object):
+    configurable = False
 
 def isPluginEnabled (name):
     enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
@@ -149,7 +152,7 @@ def isPluginEnabled (name):
 
 manager = PluginManager(
     categories_filter={
-        "ShelveView": ShelveView,
+        "ShelfView": ShelfView,
         "BookStore": BookStore,
         "Converter": Converter,
         "Tool": Tool,
