@@ -103,6 +103,12 @@
    </property>
   </action>
   <action name="actionShow_Contents">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../icons.qrc">
      <normaloff>:/icons/list_view_selected.svg</normaloff>:/icons/list_view_selected.svg</iconset>

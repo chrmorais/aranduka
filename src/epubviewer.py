@@ -30,6 +30,7 @@ class Main(QtGui.QMainWindow):
             self.chapters.setCurrentRow(0)
         self.openPath(self.epub.spinerefs[0])
         self.actionClose.triggered.connect(self.close)
+        self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
         
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):
