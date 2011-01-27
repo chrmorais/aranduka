@@ -39,6 +39,19 @@ class Book (Entity):
     def __repr__(self):
         return '<book>%s - %s</book>' % (self.title, self.authors)
 
+    def delete (self):
+        """Deletes a book attempting to delete all related
+           files, and performs a sanitization of Author table"""
+        for f in self.files:
+            print "Deleting file: %s"%f.file_name
+            try:
+                os.unlink(f.file_name)
+            except OSError:
+                pass
+            f.delete()
+        super(Entity, self).delete()
+        Author.sanitize()
+
     def fetch_file(self, url, extension):
         """Given a URL, and a file extension, downloads it and adds
         the file as belonging to this book"""
