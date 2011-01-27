@@ -50,11 +50,11 @@ class Tool(object):
     """A plugin that gets added to the Tools menu in the main.ui"""
     configurable = False
 
-class ShelveView(QtCore.QObject):
+class ShelfView(QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
     
-    title = "Base ShelveView"
+    title = "Base ShelfView"
     itemText = "BASE"
     configurable = False
     
@@ -152,7 +152,7 @@ def isPluginEnabled (name):
 
 manager = PluginManager(
     categories_filter={
-        "ShelveView": ShelveView,
+        "ShelfView": ShelfView,
         "BookStore": BookStore,
         "Converter": Converter,
         "Tool": Tool,
