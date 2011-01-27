@@ -60,10 +60,18 @@ class Main(QtGui.QMainWindow):
         print "Finished initializing main window"
 
         self.loadPlugins()
+        geom = config.getValue("general", "geometry",None)
+        if geom is not None:
+            self.restoreGeometry(geom.decode('base64'))
 
         downloader.downloader = downloader.Downloads()
         self.statusBar.addPermanentWidget(downloader.downloader)
         
+    def closeEvent(self, event):
+        config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
+        QtGui.QMainWindow.closeEvent(self, event)
+        
+
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
 
@@ -218,9 +226,38 @@ class Main(QtGui.QMainWindow):
             print "Opening:", url
             QtGui.QDesktopServices.openUrl(url)
 
+    @QtCore.pyqtSlot()
+    def on_actionEdit_Book_triggered(self):
+        if not self.currentBook:
+            return
+        self.book_editor.load_data(self.currentBook.id)
+        self.title.setText(u'Editing properties of "%s"'%self.currentBook.title)
+        self.stack.setCurrentIndex(1)
+
+    @QtCore.pyqtSlot()
+    def on_actionDelete_Book_triggered(self):
+        if not self.currentBook:
+            return
+        rsp = QtGui.QMessageBox.question(self, \
+                                   'Confirm delete', \
+                                   'Are you sure you want to delete the book "%s"?'%\
+                                   self.currentBook.title, \
+                                   QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
+        if rsp == QtGui.QMessageBox.Ok:
+            # Delete the book files
+            print "Deleting book: %s"%self.currentBook.title
+            for f in self.currentBook.files:
+                print "Deletin file: %s"%f.file_name
+                os.unlink(f.file_name)
+            self.currentBook.delete()
+            models.Author.sanitize() # In case we removed the only book from an author
+            models.session.commit()
+            self.currentBook = None
+            self.viewModeChanged()
+            
     def on_books_itemActivated(self, item):
         self.book_editor.load_data(item.book.id)
-        self.title.setText('Editing properties of "%s"'%item.book.title)
+        self.title.setText(u'Editing properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(1)
 
     @QtCore.pyqtSlot()
