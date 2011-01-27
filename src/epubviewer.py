@@ -29,27 +29,47 @@ class Main(QtGui.QMainWindow):
         if self.epub.spinerefs[0] == self.epub.tocentries[0][1]:
             self.chapters.setCurrentRow(0)
         self.openPath(self.epub.spinerefs[0])
+        self.actionClose.triggered.connect(self.close)
+        self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
         
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):
         frame = self.view.page().mainFrame()
         if frame.scrollBarMaximum(QtCore.Qt.Vertical) == \
             frame.scrollPosition().y():
-                # Find where on the spine we are
-                curSpineRef= unicode(frame.url().toString())[12:]
-                try:
-                    curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
-                except ValueError:
-                    curIdx = -1
-                if curIdx < len(self.epub.spinerefs):
-                    self.chapters.setCurrentRow(curIdx+1)
-                    self.openPath(self.epub.tocentries[curIdx+1][1])
+                self.on_action_NextChapter_triggered()
         else:
             frame.scroll(0,self.view.height())
-        
+
+    @QtCore.pyqtSlot()
+    def on_actionNext_Chapter_triggered(self):
+        # Find where on the spine we are
+        frame = self.view.page().mainFrame()
+        curSpineRef= unicode(frame.url().toString())[12:]
+        try:
+            curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
+        except ValueError:
+            curIdx = -1
+        if curIdx < len(self.epub.spinerefs):
+            self.chapters.setCurrentRow(curIdx+1)
+            self.openPath(self.epub.tocentries[curIdx+1][1])
+            
+    @QtCore.pyqtSlot()
+    def on_actionPrevious_Chapter_triggered(self):
+        # Find where on the spine we are
+        frame = self.view.page().mainFrame()
+        curSpineRef= unicode(frame.url().toString())[12:]
+        try:
+            curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
+        except ValueError:
+            curIdx = -1
+        if curIdx > 0:
+            self.chapters.setCurrentRow(curIdx-1)
+            self.openPath(self.epub.tocentries[curIdx-1][1])
+
+            
     def on_chapters_itemClicked(self, item):
         self.openPath(item.contents)
-
 
     def openPath(self, path, fragment=None):
         print "Opening:", path
