@@ -148,7 +148,6 @@ padding: .5em;
             </property>
             <property name="icon">
              <iconset resource="../icons.qrc">
-             <iconset resource="../icons.qrc">
               <normaloff>:/icons/icon_view.svg</normaloff>
               <activeon>:/icons/icon_view_selected.svg</activeon>:/icons/icon_view.svg</iconset>
             </property>
