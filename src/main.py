@@ -84,7 +84,7 @@ class Main(QtGui.QMainWindow):
 
         self.treeWidget.clear()
 
-        for plugin in manager.getPluginsOfCategory("ShelveView"):
+        for plugin in manager.getPluginsOfCategory("ShelfView"):
             # Ways to fill the shelves
             if plugin.name not in enabled_plugins:
                 continue
