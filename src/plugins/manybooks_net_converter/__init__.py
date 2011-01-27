@@ -24,7 +24,6 @@ _FILE_FORMATS = {u'ePub (.epub)': '1:epub:.epub:epub', \
                  u'zTXT (.pdb)': '1:wr:.pdb:w', \
                  u'JAR file': 'mnybksjar'}
 
-#_SERVICE_URL = 'http://manybooks.net/_scripts/send.php'
 _SERVICE_URL = 'http://manybooks.net/send'
 
 SUPPORTED = sorted(_FILE_FORMATS.keys())
