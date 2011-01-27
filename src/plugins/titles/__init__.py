@@ -1,14 +1,14 @@
 from PyQt4 import QtGui, QtCore
 import sys, os
 import models
-from pluginmgr import ShelveView
+from pluginmgr import ShelfView
 from functools import partial
 
 # This plugin lists the books by title
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(ShelveView):
+class Catalog(ShelfView):
 
     title = "Books By Title"
     itemText = "Titles"
@@ -145,7 +145,7 @@ class Catalog(ShelveView):
                 item.book = b
                 self.items[b.id] = item
         self.shelvesLayout.addStretch(1)
-        self.widget.shelveStack.setWidget(self.shelves)
+        self.widget.shelfStack.setWidget(self.shelves)
 
     def updateBook(self, book):
         # This may get called when no books

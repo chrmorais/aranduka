@@ -1,13 +1,13 @@
 from PyQt4 import QtGui, QtCore
 import sys, os
 import models
-from pluginmgr import ShelveView
+from pluginmgr import ShelfView
 
 # This plugin lists the books by tag
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
-class Catalog(ShelveView):
+class Catalog(ShelfView):
 
     title = "Books By Tag"
     itemText = "Tags"
@@ -60,7 +60,7 @@ class Catalog(ShelveView):
                 item.book = b
                 self.items[b.id] = item
 
-        self.widget.shelveStack.setWidget(self.shelf)
+        self.widget.shelfStack.setWidget(self.shelf)
 
 
     def showGrid(self, search = None):
