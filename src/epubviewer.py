@@ -38,6 +38,7 @@ class Main(QtGui.QMainWindow):
                 curSpineRef= unicode(frame.url().toString())[12:]
                 curIdx = self.epub.spinerefs.index(curSpineRef)
                 if curIdx < len(self.epub.spinerefs):
+                    self.chapters.setCurrentRow(curIdx)
                     self.openPath(self.epub.spinerefs[curIdx+1])
         else:
             frame.scroll(0,self.view.height())
