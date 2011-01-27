@@ -37,7 +37,7 @@ class Main(QtGui.QMainWindow):
         frame = self.view.page().mainFrame()
         if frame.scrollBarMaximum(QtCore.Qt.Vertical) == \
             frame.scrollPosition().y():
-                self.on_action_NextChapter_triggered()
+                self.on_actionNext_Chapter_triggered()
         else:
             frame.scroll(0,self.view.height())
 
