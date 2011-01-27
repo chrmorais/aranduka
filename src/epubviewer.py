@@ -26,7 +26,8 @@ class Main(QtGui.QMainWindow):
         self.old_manager = self.view.page().networkAccessManager()
         self.new_manager = NetworkAccessManager(self.old_manager, self)
         self.view.page().setNetworkAccessManager(self.new_manager)
-
+        if self.epub.spinerefs[0] == self.epub.tocentries[0][1]:
+            self.chapters.setCurrentRow(0)
         self.openPath(self.epub.spinerefs[0])
         
     @QtCore.pyqtSlot()
@@ -36,10 +37,13 @@ class Main(QtGui.QMainWindow):
             frame.scrollPosition().y():
                 # Find where on the spine we are
                 curSpineRef= unicode(frame.url().toString())[12:]
-                curIdx = self.epub.spinerefs.index(curSpineRef)
+                try:
+                    curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
+                except ValueError:
+                    curIdx = -1
                 if curIdx < len(self.epub.spinerefs):
-                    self.chapters.setCurrentRow(curIdx)
-                    self.openPath(self.epub.spinerefs[curIdx+1])
+                    self.chapters.setCurrentRow(curIdx+1)
+                    self.openPath(self.epub.tocentries[curIdx+1][1])
         else:
             frame.scroll(0,self.view.height())
         
@@ -84,7 +88,6 @@ class DownloadReply(QtNetwork.QNetworkReply):
 
     def __init__(self, parent, url, operation, w):
         self._w = w
-        print"DR:", url, url.path()
         QtNetwork.QNetworkReply.__init__(self, parent)
         self.content = self._w.epub.getData(unicode(url.path())[1:])
         self.offset = 0
@@ -106,7 +109,6 @@ class DownloadReply(QtNetwork.QNetworkReply):
         return True
 
     def readData(self, maxSize):
-        print "readData"
         if self.offset < len(self.content):
             end = min(self.offset + maxSize, len(self.content))
             data = self.content[self.offset:end]
