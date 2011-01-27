@@ -29,6 +29,7 @@ class Main(QtGui.QMainWindow):
         if self.epub.spinerefs[0] == self.epub.tocentries[0][1]:
             self.chapters.setCurrentRow(0)
         self.openPath(self.epub.spinerefs[0])
+        self.actionClose.triggered.connect(self.close)
         
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):
@@ -49,7 +50,6 @@ class Main(QtGui.QMainWindow):
         
     def on_chapters_itemClicked(self, item):
         self.openPath(item.contents)
-
 
     def openPath(self, path, fragment=None):
         print "Opening:", path
