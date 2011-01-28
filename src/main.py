@@ -8,7 +8,7 @@ from PyQt4 import QtCore, QtGui, uic
 from progress import progress
 from book_editor import BookEditor
 import rc_icons
-from pluginmgr import manager
+from pluginmgr import manager, isPluginEnabled
 from pluginconf import PluginSettings
 from about import AboutDialog
 from epubviewer import Main as EpubViewer
@@ -112,13 +112,6 @@ class Main(QtGui.QMainWindow):
             plugin.plugin_object.setWidget(self)
             self.treeWidget.addTopLevelItem(item)
 
-        self.menuTools.clear()
-
-        for plugin in manager.getPluginsOfCategory("Tool"):
-            if plugin.name not in enabled_plugins:
-                continue
-            self.menuTools.addAction(plugin.plugin_object.action())
-
         self.menuDevices.clear()
 
         for plugin in manager.getPluginsOfCategory("Device"):
@@ -138,6 +131,14 @@ class Main(QtGui.QMainWindow):
         dlg = PluginSettings(self)
         dlg.exec_()
 
+    @QtCore.pyqtSlot()
+    def on_menuTools_aboutToShow(self):
+        self.menuTools.clear()
+        for plugin in manager.getPluginsOfCategory("Tool"):
+            if isPluginEnabled(plugin.name):
+                self.menuTools.addAction(plugin.plugin_object.action())
+
+        
     def viewModeChanged(self):
         item = self.treeWidget.currentItem()
         if not item: return
