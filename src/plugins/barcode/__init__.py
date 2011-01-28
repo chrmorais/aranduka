@@ -20,8 +20,8 @@ class Plugin(Tool):
             ZBARPATH = which('zbarcam')
         print "ZBAR is:", ZBARPATH
         p=os.popen(ZBARPATH,'r')
-        # p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
-        p = "DEMO:0345400445"
+        p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
+        # p = "DEMO:0345400445"
         guesser = manager.getPluginsOfCategory('Guesser')[0]
         for code in p.splitlines():
             print "scanning"
