@@ -10,9 +10,9 @@ import tempfile
 
 class RSSTool(Tool):
     def action(self):
-        self.action = QtGui.QAction("Update Feeds", None)
-        self.action.triggered.connect(self.updateFeeds)
-        return self.action
+        self._action = QtGui.QAction("Update Feeds", None)
+        self._action.triggered.connect(self.updateFeeds)
+        return self._action
     
     def updateFeeds(self):
         self.feeds = config.getValue("RSSPlugin", "feeds", [])
