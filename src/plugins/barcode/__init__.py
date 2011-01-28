@@ -1,7 +1,8 @@
 from PyQt4 import QtCore, QtGui
-from pluginmgr import Tool
+from pluginmgr import Tool, manager
+from models import Book, Identifier, session, Author
 import sys, os, subprocess
-
+from book_editor import GuessDialog
 
 class Plugin(Tool):
 
@@ -20,14 +21,61 @@ class Plugin(Tool):
         print "ZBAR is:", ZBARPATH
         p=os.popen(ZBARPATH,'r')
         # p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
-        p = "DEMO: 0345400445"
+        p = "DEMO:0345400445"
+        guesser = manager.getPluginsOfCategory('Guesser')[0]
         for code in p.splitlines():
             print "scanning"
             if code:
                 print 'Got barcode:', code
                 isbn = code.split(':')[1]
-                QtGui.QDesktopServices.openUrl(QtCore.QUrl('http://www.goodreads.com/search/search?q=%s'%isbn))
+                # QtGui.QDesktopServices.openUrl(QtCore.QUrl('http://www.goodreads.com/search/search?q=%s'%isbn))
+                i = Identifier(key='ISBN', value=isbn)
+                # Create empty book
+                b = Book(identifiers = [i])
+                # We are supposed to have a ISBN, so assume we are getting it right.
+                dlg = GuessDialog(guesser.plugin_object, b)
+                dlg.isbn.setChecked(True)
+                dlg.on_guess_clicked()
+                # hack the dialog
+                dlg.guessButton.hide()
+                dlg.updateButton.setText('Create')
 
+                r = dlg.exec_()
+                
+                # FIXME this is copied from book_editor. 
+                # The Book class probably needs an "update from metadata" method.
+                md = None
+                if not r == dlg.Accepted:
+                    md = None
+                    b.delete()
+                elif dlg.currentMD:
+                    md =  dlg.currentMD
+
+                    if md is None:
+                        return
+                    else:
+                        # A candidate was chosen, update data
+                        print md
+                        b.title = md.title
+                        if md.identifiers is not None:
+                            for k,v in md.identifiers:
+                                i = Identifier(
+                                        key=k.upper(), 
+                                        value=v,
+                                        book=b)
+                        b.authors = []
+                        for a in md.authors:
+                            author = Author.get_by(name = a)
+                            if not author:
+                                print "Creating author:", a
+                                author = Author(name = a)
+                            b.authors.append(author)
+                        Author.sanitize()
+                        # FIXME: it seems Qt can't parse alibris cover images?
+                        # b.fetch_cover(md.thumbnail)
+                        b.fetch_cover()
+                    session.commit()
+                
 # This implementation of which is taken from http://bugs.python.org/file16441/which.py
         
 #!/usr/bin/env python
