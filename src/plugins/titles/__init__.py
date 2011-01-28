@@ -59,7 +59,7 @@ class Catalog(ShelfView):
             item.book = b
             self.items[b.id] = item
         self.shelvesLayout.addStretch(1)
-        self.widget.shelveStack.setWidget(self.shelf)
+        self.widget.shelfStack.setWidget(self.shelf)
 
 
     def showGrid(self, search=None):
