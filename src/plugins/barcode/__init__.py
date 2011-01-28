@@ -8,9 +8,9 @@ class Plugin(Tool):
     _proc = None
     
     def action(self):
-        self.action = QtGui.QAction("Scan Barcode", None)
-        self.action.triggered.connect(self.scan)
-        return self.action
+        self._action = QtGui.QAction("Scan Barcode", None)
+        self._action.triggered.connect(self.scan)
+        return self._action
 
     def scan(self): 
         if sys.platform == 'win32':
