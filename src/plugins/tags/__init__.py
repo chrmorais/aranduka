@@ -125,7 +125,7 @@ class Catalog(ShelfView):
                 self.items[b.id] = item
                 
         self.shelvesLayout.addStretch(1)
-        self.widget.shelveStack.setWidget(self.shelves)
+        self.widget.shelfStack.setWidget(self.shelves)
 
     def updateBook(self, book):
         # This may get called when no books
