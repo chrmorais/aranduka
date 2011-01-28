@@ -19,13 +19,14 @@ class Plugin(Tool):
             ZBARPATH = which('zbarcam')
         print "ZBAR is:", ZBARPATH
         p=os.popen(ZBARPATH,'r')
-        p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
+        # p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
+        p = "DEMO: 0345400445"
         for code in p.splitlines():
             print "scanning"
             if code:
                 print 'Got barcode:', code
                 isbn = code.split(':')[1]
-                QtGui.QDesktopServices.openUrl('http://www.goodreads.com/search/search?q=%s'%isbn)
+                QtGui.QDesktopServices.openUrl(QtCore.QUrl('http://www.goodreads.com/search/search?q=%s'%isbn))
 
 # This implementation of which is taken from http://bugs.python.org/file16441/which.py
         
