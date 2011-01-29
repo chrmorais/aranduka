@@ -145,10 +145,15 @@ class Converter(object):
 
 def isPluginEnabled (name):
     enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
+    print "EP:", enabled_plugins
     if enabled_plugins == set([None]):
-        return False
-    else:
-        return name in enabled_plugins
+        print "FLAG"
+        #Never configured... enable everything! (will change later ;-)
+        enabled_plugins = set()
+        for c in manager.getCategories():
+            for p in manager.getPluginsOfCategory(c):
+                enabled_plugins.add(p.name)
+    return name in enabled_plugins
 
 manager = PluginManager(
     categories_filter={
