@@ -55,7 +55,7 @@ class Catalog(ShelfView):
         for a in authors:
             a_item = QtGui.QListWidgetItem(a.name, self.shelf)
             for b in a.books:
-                icon =  QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
                 item.book = b
                 self.items[b.id] = item
@@ -66,6 +66,7 @@ class Catalog(ShelfView):
 
     def showGrid(self, search = None):
         """Get all books from the DB and show them"""
+        
         if not self.widget:
             print "Call setWidget first"
             return
@@ -126,6 +127,7 @@ class Catalog(ShelfView):
                 self.items[b.id] = item
         print self.items
 
+        self.shelvesLayout.addStretch(1)
         self.widget.shelfStack.setWidget(self.shelves)
         
     def updateBook(self, book):
