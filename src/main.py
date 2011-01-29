@@ -205,8 +205,13 @@ class Main(QtGui.QMainWindow):
         elif formats:
             for f in book.files:
                 url = QtCore.QUrl.fromLocalFile(f.file_name)
-                open_menu.addAction(os.path.basename(f.file_name),
-                    lambda f = f: QtGui.QDesktopServices.openUrl(url))
+                if f.file_name.endswith('epub'):
+                    action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                        lambda f = f: self.openEpub(f.file_name))
+                else:
+                    action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                        lambda f = f: QtGui.QDesktopServices.openUrl(url))
+                open_menu.addAction(action)
             menu.addMenu(open_menu)
 
         # Check what converters apply
