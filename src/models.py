@@ -49,6 +49,8 @@ class Book (Entity):
             except OSError:
                 pass
             f.delete()
+        if self.cover() != self.default_cover():
+            os.unlink(self.cover())        
         super(Entity, self).delete()
         Author.sanitize()
 
