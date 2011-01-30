@@ -217,9 +217,10 @@ class Main(QtGui.QMainWindow):
         # Check what converters apply
         converters = []
         for plugin in manager.getPluginsOfCategory("Converter"):
-            r = plugin.plugin_object.can_convert(book)
-            if r:
-                converters.append([plugin.plugin_object, r])
+            if isPluginEnabled(plugin.name):
+                r = plugin.plugin_object.can_convert(book)
+                if r:
+                    converters.append([plugin.plugin_object, r])
 
         if converters:
             # So, we can convert
