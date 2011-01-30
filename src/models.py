@@ -95,13 +95,16 @@ class Book (Entity):
             extensions.add(ext)
         return list(extensions)
 
+    def default_cover (self):
+        return os.path.join(utils.SCRIPTPATH,"nocover.png")
+
     def cover(self):
         """Returns the path for the cover image if available, or the
         default nocover picture"""
         coverfn = os.path.join(utils.COVERPATH,"%s.jpg"%(self.id))
         if os.path.isfile(coverfn):
             return coverfn
-        return os.path.join(utils.SCRIPTPATH,"nocover.png")
+        return self.default_cover()
 
     def fetch_cover(self, url = None):
         """Downloads and stores a cover for this book, if possible.
