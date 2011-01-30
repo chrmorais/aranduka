@@ -43,11 +43,6 @@ class Book (Entity):
         """Deletes a book attempting to delete all related
            files, and performs a sanitization of Author table"""
         for f in self.files:
-            print "Deleting file: %s"%f.file_name
-            try:
-                os.unlink(f.file_name)
-            except OSError:
-                pass
             f.delete()
         super(Entity, self).delete()
         Author.sanitize()
@@ -187,6 +182,15 @@ class File (Entity):
     file_name = Field(Unicode(300))
     file_size = Field(Unicode(30))
     book = ManyToOne('Book')
+
+    def delete (self):
+        """Deletes a file from the database and the filesystem"""
+        print "Deleting file: %s"%self.file_name
+        try:
+            os.unlink(self.file_name)
+        except OSError:
+            pass
+        super(Entity, self).delete()
 
     def __repr__(self):
         return '<file>%s</file>' %(self.file_name)
