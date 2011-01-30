@@ -2,7 +2,6 @@ import os, sys, time, re
 from PyQt4 import QtCore, QtGui, uic
 
 import models
-#from metadata import get_metadata
 from pprint import pprint
 from utils import VALID_EXTENSIONS
 from pluginmgr import Importer
@@ -35,7 +34,9 @@ def import_file(fname):
         metadata=[]
         try:
             print "Fetching: ",p
-            metadata = get_metadata(p) or []
+            # The guessers go here
+            # metadata = get_metadata(p) or []
+            metadata = []
             print "Candidates:", [d.title for d in metadata]
             time.sleep(2)
         except Exception, e:
