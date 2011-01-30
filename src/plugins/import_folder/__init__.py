@@ -5,6 +5,8 @@ import models
 #from metadata import get_metadata
 from pprint import pprint
 from utils import VALID_EXTENSIONS
+from pluginmgr import Importer
+from progress import progress
 
 COMPRESSED_EXTENSIONS = ['gz','bz2','lzma']
 
@@ -141,3 +143,35 @@ def file_status(fname):
         return 2
     return 1
 
+class ImportFolder(Importer):
+    def actions(self):
+        self._action1 = QtGui.QAction("Folder", None)
+        self._action1.triggered.connect(self.do_import_folder)
+        self._action2 = QtGui.QAction("File", None)
+        self._action2.triggered.connect(self.do_import_file)
+        return [self._action1, self._action2]
+    
+    def do_import_folder(self):
+        fname = unicode(QtGui.QFileDialog.getExistingDirectory(None, "Import Folder"))
+        if not fname: return
+        # Get a list of all files to be imported
+        flist = []
+        for data in os.walk(fname, followlinks = True):
+            for f in data[2]:
+                flist.append(os.path.join(data[0],f))
+        for f in progress(flist, "Importing Files","Stop"):
+            status = import_file(f)
+            print status
+            
+    def do_import_file(self):
+        fname = unicode(QtGui.QFileDialog.getExistingDirectory(self, "Import Folder"))
+        if not fname: return
+        # Get a list of all files to be imported
+        flist = []
+        for data in os.walk(fname, followlinks = True):
+            for f in data[2]:
+                flist.append(os.path.join(data[0],f))
+        for f in progress(flist, "Importing Files","Stop"):
+            status = import_file(f)
+            print status
+                        

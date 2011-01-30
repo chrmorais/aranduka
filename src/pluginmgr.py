@@ -50,6 +50,10 @@ class Tool(object):
     """A plugin that gets added to the Tools menu in the main.ui"""
     configurable = False
 
+class Importer(object):
+    """A plugin that gets added to the Tools menu in the main.ui"""
+    configurable = False
+    
 class ShelfView(QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
@@ -161,6 +165,7 @@ manager = PluginManager(
         "BookStore": BookStore,
         "Converter": Converter,
         "Tool": Tool,
+        "Importer": Importer,
         "Device": Device,
         "Guesser": Guesser,
     })
