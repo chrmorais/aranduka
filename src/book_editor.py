@@ -58,7 +58,7 @@ class GuessDialog(QtGui.QDialog):
         print "Selected: ",unicode(self.bookList.item(row).text())
 
     @QtCore.pyqtSlot()
-    def on_guess_clicked(self):
+    def on_guessButton_clicked(self):
         # Try to guess based on the reliable data
         query = {'title': None, \
                  'authors': None, \
