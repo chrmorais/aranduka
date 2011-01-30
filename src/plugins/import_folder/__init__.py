@@ -165,14 +165,9 @@ class ImportFolder(Importer):
             print status
             
     def do_import_file(self):
-        fname = unicode(QtGui.QFileDialog.getExistingDirectory(self, "Import Folder"))
+        fname = unicode(QtGui.QFileDialog.getOpenFileName(None, "Import File"))
         if not fname: return
         # Get a list of all files to be imported
-        flist = []
-        for data in os.walk(fname, followlinks = True):
-            for f in data[2]:
-                flist.append(os.path.join(data[0],f))
-        for f in progress(flist, "Importing Files","Stop"):
-            status = import_file(f)
-            print status
+        status = import_file(fname)
+        print status
                         
