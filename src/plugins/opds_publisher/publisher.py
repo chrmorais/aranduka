@@ -6,6 +6,16 @@ import models
 import bottle
 bottle.debug = True
 
+_default_addr = 'localhost'
+_default_port = 8080
+
+_host = None
+_port = None
+
+def get_url ():
+    if _host is None or _port is None:
+        return None
+    return "http://%s:%d"%(_host, _port)
 
 def real_publish():
     # FIXME: move to another process or something
@@ -71,8 +81,20 @@ def real_publish():
         response.content_type=mimetypes[extension]
         return (f)
 
+    def get_bind_address ():
+        return (_default_addr, _default_port)
 
-    run(host='localhost', port=8080)
+    def start ():
+        binded = False
+        _host, _port = get_bind_address()
+        while not binded:
+            try:
+                run(host=_host, port=_port)
+                binded = True
+            except Exception, e:
+                binded = False
+                _port +=1
+    start()
     
             
 TPL = r"""<?xml version="1.0" encoding="UTF-8"?>
