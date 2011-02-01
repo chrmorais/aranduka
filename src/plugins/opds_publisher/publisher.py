@@ -87,13 +87,12 @@ def real_publish():
     def start ():
         binded = False
         _host, _port = get_bind_address()
-        while not binded:
+        for n in xrange(1,1024):
             try:
                 run(host=_host, port=_port)
-                binded = True
+                break
             except Exception, e:
-                binded = False
-                _port +=1
+                _port += n
     start()
     
             
