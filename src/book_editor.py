@@ -44,14 +44,15 @@ class GuessDialog(QtGui.QDialog):
         self.currentMD=None
         self.book = book
         self.guesser = guesser
-        self.title.setText("Title: %s"%book.title)
-        self.author.setText("Author: %s"%(u', '.join([a.name for a in book.authors])))
+        self.titleText.setText(book.title)
+        self.authorText.setText(u', '.join([a.name for a in book.authors]))
         ident = models.Identifier.get_by(key='ISBN',book=book)
         if ident:
-            self.isbn.setText('ISBN: %s'%ident.value)
+            self.isbn.setText(ident.value)
             self._isbn=ident.value
         else:
             self.isbn.hide()
+            self.isbnText.hide()
 
     def on_bookList_currentRowChanged(self, row):
         self.currentMD=self.md[row]
@@ -65,11 +66,11 @@ class GuessDialog(QtGui.QDialog):
                  'isbn': None}
         self.bookList.clear()
         if self.title.isChecked():
-            query['title'] = self.book.title
+            query['title'] = unicode(self.titleText.text())
         if self.author.isChecked():
-            query['authors'] = u', '.join([a.name for a in self.book.authors])
+            query['authors'] = unicode(self.authorText.text())
         if self.isbn.isChecked():
-            query['isbn'] = self._isbn
+            query['isbn'] = unicode(self.isbnText.text())
 
         if query['title'] is None and \
            query['authors'] is None and \
