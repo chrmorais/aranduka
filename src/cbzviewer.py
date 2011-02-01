@@ -42,27 +42,27 @@ class Main(QtGui.QMainWindow):
     def on_actionNext_Chapter_triggered(self):
         # Find where on the spine we are
         frame = self.view.page().mainFrame()
-        curSpineRef= unicode(frame.url().toString())[12:]
+        curTocEntry= unicode(frame.url().toString())[12:]
         try:
-            curIdx = [j for i,j in self.doc.tocentries].index(curSpineRef)
+            curIdx = self.doc.tocentries.index(curTocEntry)
         except ValueError:
             curIdx = -1
-        if curIdx < len(self.doc.spinerefs):
+        if curIdx < len(self.doc.tocentries):
             self.chapters.setCurrentRow(curIdx+1)
-            self.openPath(self.doc.tocentries[curIdx+1][1])
+            self.openPath(self.doc.tocentries[curIdx+1])
             
     @QtCore.pyqtSlot()
     def on_actionPrevious_Chapter_triggered(self):
         # Find where on the spine we are
         frame = self.view.page().mainFrame()
-        curSpineRef= unicode(frame.url().toString())[12:]
+        curTocEntry= unicode(frame.url().toString())[12:]
         try:
-            curIdx = [j for i,j in self.doc.tocentries].index(curSpineRef)
+            curIdx = self.doc.tocentries.index(curTocEntry)
         except ValueError:
             curIdx = -1
         if curIdx > 0:
             self.chapters.setCurrentRow(curIdx-1)
-            self.openPath(self.doc.tocentries[curIdx-1][1])
+            self.openPath(self.doc.tocentries[curIdx-1])
 
             
     def on_chapters_itemClicked(self, item):
@@ -71,11 +71,9 @@ class Main(QtGui.QMainWindow):
     def openPath(self, path, fragment=None):
         print "Opening:", path
         path = QtCore.QUrl.fromPercentEncoding(path)
-        print "XX"
         if self.cur_path <> path:
             self.cur_path = path
-            self.view.page().mainFrame().setHtml(u"<img src=\"book:///%s\">"%path)
-            print self.view.page().mainFrame().toHtml()
+            self.view.page().mainFrame().setHtml(u"<img src=\"book:///%s\">"%path, QtCore.QUrl("epub://book/"+path))
                 
     def javascript(self, string, typ=None):
         ans = self.view.page().mainFrame().evaluateJavaScript(string)
@@ -137,13 +135,10 @@ class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
         self.setProxyFactory(old_manager.proxyFactory())
 
     def createRequest(self, operation, request, data):
-        print "F1"
         if operation == self.GetOperation:
-            print "F2"
             reply = DownloadReply(self, request.url(), self.GetOperation, self._w)
             return reply
         else:
-            print "F3"
             return QtNetwork.QNetworkAccessManager.createRequest(self, operation, request, data)
 
 
