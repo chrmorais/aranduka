@@ -43,14 +43,12 @@ class Book (Entity):
         """Deletes a book attempting to delete all related
            files, and performs a sanitization of Author table"""
         for f in self.files:
-            print "Deleting file: %s"%f.file_name
-            try:
-                os.unlink(f.file_name)
-            except OSError:
-                pass
             f.delete()
         if self.cover() != self.default_cover():
-            os.unlink(self.cover())        
+            try:
+                os.unlink(self.cover())        
+            except OSError:
+                pass
         super(Entity, self).delete()
         Author.sanitize()
 
@@ -97,16 +95,13 @@ class Book (Entity):
             extensions.add(ext)
         return list(extensions)
 
-    def default_cover (self):
-        return os.path.join(utils.SCRIPTPATH,"nocover.png")
-
     def cover(self):
         """Returns the path for the cover image if available, or the
         default nocover picture"""
         coverfn = os.path.join(utils.COVERPATH,"%s.jpg"%(self.id))
         if os.path.isfile(coverfn):
             return coverfn
-        return self.default_cover()
+        return os.path.join(utils.SCRIPTPATH,"nocover.png")
 
     def fetch_cover(self, url = None):
         """Downloads and stores a cover for this book, if possible.
@@ -192,6 +187,15 @@ class File (Entity):
     file_name = Field(Unicode(300))
     file_size = Field(Unicode(30))
     book = ManyToOne('Book')
+
+    def delete (self):
+        """Deletes a file from the database and the filesystem"""
+        print "Deleting file: %s"%self.file_name
+        try:
+            os.unlink(self.file_name)
+        except OSError:
+            pass
+        super(Entity, self).delete()
 
     def __repr__(self):
         return '<file>%s</file>' %(self.file_name)
