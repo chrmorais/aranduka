@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>398</width>
+    <height>428</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,25 +22,38 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="title">
-     <property name="text">
-      <string>CheckBox</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="author">
-     <property name="text">
-      <string>CheckBox</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="isbn">
-     <property name="text">
-      <string>CheckBox</string>
-     </property>
-    </widget>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="title">
+       <property name="text">
+        <string>Title:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="titleText"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="author">
+       <property name="text">
+        <string>Author:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="authorText"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="isbn">
+       <property name="text">
+        <string>ISBN:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="isbnText"/>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QLabel" name="label_2">
