@@ -104,7 +104,7 @@ def real_publish():
                 code, string = e
                 if code == errno.EADDRINUSE:
                     # If the port is in use, try another one
-                    _port += n
+                    _port += 1
                 else:
                     raise e
     start()
