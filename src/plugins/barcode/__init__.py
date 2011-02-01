@@ -42,7 +42,7 @@ class Plugin(Tool):
                 # We are supposed to have a ISBN, so assume we are getting it right.
                 dlg = GuessDialog(guesser.plugin_object, b)
                 dlg.isbn.setChecked(True)
-                dlg.on_guess_clicked()
+                dlg.on_guessButton_clicked()
                 # hack the dialog
                 dlg.guessButton.hide()
                 dlg.updateButton.setText('Create')
