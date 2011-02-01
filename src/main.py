@@ -1,7 +1,7 @@
 """The user interface for our app"""
 
 import os,sys
-import models, importer, config, ui
+import models, config, ui
 
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic
@@ -138,6 +138,13 @@ class Main(QtGui.QMainWindow):
             if isPluginEnabled(plugin.name):
                 self.menuTools.addAction(plugin.plugin_object.action())
 
+    @QtCore.pyqtSlot()
+    def on_menuImport_aboutToShow(self):
+        self.menuImport.clear()
+        for plugin in manager.getPluginsOfCategory("Importer"):
+            if isPluginEnabled(plugin.name):
+                for a in plugin.plugin_object.actions():
+                    self.menuImport.addAction(a)
         
     def viewModeChanged(self):
         item = self.treeWidget.currentItem()
@@ -217,9 +224,10 @@ class Main(QtGui.QMainWindow):
         # Check what converters apply
         converters = []
         for plugin in manager.getPluginsOfCategory("Converter"):
-            r = plugin.plugin_object.can_convert(book)
-            if r:
-                converters.append([plugin.plugin_object, r])
+            if isPluginEnabled(plugin.name):
+                r = plugin.plugin_object.can_convert(book)
+                if r:
+                    converters.append([plugin.plugin_object, r])
 
         if converters:
             # So, we can convert
@@ -271,28 +279,6 @@ class Main(QtGui.QMainWindow):
         self.book_editor.load_data(item.book.id)
         self.title.setText(u'Editing properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(1)
-
-    @QtCore.pyqtSlot()
-    def on_actionImport_Files_triggered(self):
-        fname = unicode(QtGui.QFileDialog.getExistingDirectory(self, "Import Folder"))
-        if not fname: return
-        # Get a list of all files to be imported
-        flist = []
-        for data in os.walk(fname, followlinks = True):
-            for f in data[2]:
-                flist.append(os.path.join(data[0],f))
-        for f in progress(flist, "Importing Files","Stop"):
-            status = importer.import_file(f)
-            print status
-        # Reload books
-        self.updateShelves.emit()
-
-    @QtCore.pyqtSlot()
-    def on_actionImport_File_triggered(self):
-        fname = unicode(QtGui.QFileDialog.getOpenFileName(self, "Import File"))
-        if not fname: return
-        status = importer.import_file(fname)
-        self.updateShelves.emit()
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):
