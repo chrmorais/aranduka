@@ -1,9 +1,12 @@
-from templite import Templite
-
-from bottle import route, run, response
 import os
 import models
 import bottle
+import socket
+import errno
+
+from templite import Templite
+from bottle import route, run, response
+
 bottle.debug = True
 
 _default_addr = 'localhost'
@@ -13,6 +16,7 @@ _host = None
 _port = None
 
 def get_url ():
+    """Returns the URL of the OPDS catalog"""
     if _host is None or _port is None:
         return None
     return "http://%s:%d"%(_host, _port)
@@ -82,17 +86,27 @@ def real_publish():
         return (f)
 
     def get_bind_address ():
+        """Get the configured network address and port
+           to bind the HTTP server"""
         return (_default_addr, _default_port)
 
     def start ():
-        binded = False
+        """Starts the HTTP server
+           It attempts to bind to the configured
+           address and port, and if they're in use,
+           it tries with another port"""
         _host, _port = get_bind_address()
         for n in xrange(1,1024):
             try:
                 run(host=_host, port=_port)
                 break
-            except Exception, e:
-                _port += n
+            except socket.error, e:
+                code, string = e
+                if code == errno.EADDRINUSE:
+                    # If the port is in use, try another one
+                    _port += n
+                else:
+                    raise e
     start()
     
             
