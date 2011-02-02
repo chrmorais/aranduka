@@ -57,9 +57,8 @@ class GuessDialog(QtGui.QDialog):
             self.isbn.hide()
             self.isbnText.hide()
 
-    def on_bookList_currentRowChanged(self, row):
-        self.currentMD=self.md[row]
-        print "Selected: ",unicode(self.bookList.item(row).text())
+        self.candidates.page().setLinkDelegationPolicy(self.candidates.page().DelegateAllLinks)
+            
 
     @QtCore.pyqtSlot()
     def on_guessButton_clicked(self):
@@ -102,7 +101,7 @@ class GuessDialog(QtGui.QDialog):
                 tpl = """
 <html>
 <body>
-${for candidate in md:}$
+${for i,candidate in enumerate(md):}$
 ${
     title = candidate.title
     thumb = candidate.thumbnail
@@ -112,17 +111,21 @@ ${
     identifiers = candidate.identifiers
     
 }$
-<div style="height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
- onmouseover="this.style.border='solid 3px lightgreen'; this.style.background='lightgreen';" 
- onmouseout="this.style.border='solid 3px lightgrey'; this.style.background='white';"
- onmouseclick="this.style.border='solid 3px darkred'; this.style.background='white';">
+<div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
+ onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; document.getElementById('submit-${i}$').style.opacity=1.0;" 
+ onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white'; document.getElementById('submit-${i}$').style.opacity=0;"
+ >
  
     <img width="64px" style="float: left; margin-right: 4px;" src="${thumb}$">
+    <div style="text-align: right; margin-top: 12px;">
     <b>${title}$</b><br>
     by ${authors}$<br>
     ${for identifier in identifiers:}$
         <small>${identifier[0]}$:${identifier[1]}$</small><br>
-    ${:end-for}$    
+    ${:end-for}$
+    <a href="/${i}$/" id="submit-${i}$" >Update</a>
+    </form>
+    </div>
 </div>
 ${:end-for}$
 """
@@ -142,6 +145,13 @@ ${:end-for}$
                                               u'No results', \
                                               u'No results found matching your criteria')
 
+            self.candidates.linkClicked.connect(self.updateWithCandidate)
+            
+    def updateWithCandidate(self, url):
+        cId = int(url.path()[1:-1])
+        self.currentMD=self.md[cId]
+        self.accept()
+                                              
 
 class BookEditor(QtGui.QWidget):
     

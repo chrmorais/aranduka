@@ -100,13 +100,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="updateButton">
-       <property name="text">
-        <string>Update</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
@@ -133,22 +126,6 @@
     <hint type="destinationlabel">
      <x>219</x>
      <y>282</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>updateButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>360</x>
-     <y>273</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>397</x>
-     <y>228</y>
     </hint>
    </hints>
   </connection>
