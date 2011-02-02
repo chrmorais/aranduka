@@ -36,7 +36,7 @@ class TagDialog(QtGui.QDialog):
         self.tag_name.setEditText(tag_name)
 
 class GuessDialog(QtGui.QDialog):
-    def __init__(self, guesser, book, *args):
+    def __init__(self, book, *args):
         QtGui.QDialog.__init__(self,*args)
         uifile = ui.path('guess.ui')
         uic.loadUi(uifile, self)
@@ -46,7 +46,6 @@ class GuessDialog(QtGui.QDialog):
         self.md=[]
         self.currentMD=None
         self.book = book
-        self.guesser = guesser
         self.titleText.setText(book.title or "")
         self.authorText.setText((u', '.join([a.name for a in book.authors]) or ""))
         ident = models.Identifier.get_by(key='ISBN',book=book)
@@ -59,7 +58,21 @@ class GuessDialog(QtGui.QDialog):
 
         self.candidates.page().setLinkDelegationPolicy(self.candidates.page().DelegateAllLinks)
             
-
+        self.guesser_dict={}
+        self.guessers.clear()
+        # Fill the guessers combo with appropiate names
+        for plugin in manager.getPluginsOfCategory("Guesser"):
+            if isPluginEnabled(plugin.name) and plugin.plugin_object.can_guess(self.book):
+                self.guessers.addItem(plugin.plugin_object.name)
+                self.guesser_dict[unicode(plugin.plugin_object.name)] = plugin.plugin_object
+        self.guesser = self.guesser_dict[unicode(self.guessers.currentText())]
+                
+    @QtCore.pyqtSlot("QString")
+    def on_guessers_currentIndexChanged(self, text):
+        print "CIC"
+        self.guesser = self.guesser_dict[unicode(text)]
+    
+                
     @QtCore.pyqtSlot()
     def on_guessButton_clicked(self):
         # Try to guess based on the reliable data
@@ -88,6 +101,7 @@ class GuessDialog(QtGui.QDialog):
                                    description=None)
         if self._query:
             try:
+                print self.guesser, type(self.guesser)
                 self.md = self.guesser.guess(self._query) or []
             except Exception, e:
                 print "Guesser exception: %s"%str(e)
@@ -187,20 +201,12 @@ class BookEditor(QtGui.QWidget):
         cname = self.book.cover()
         self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
 
-        self.guesser_dict={}
-        self.guessers.clear()
-        # Fill the guessers combo with appropiate names
-        for plugin in manager.getPluginsOfCategory("Guesser"):
-            if isPluginEnabled(plugin.name) and plugin.plugin_object.can_guess(self.book):
-                self.guessers.addItem(plugin.plugin_object.name)
-                self.guesser_dict[plugin.plugin_object.name] = plugin.plugin_object
 
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
-        name = unicode(self.guessers.currentText())
 
         # Display the Guess Dialog
-        dlg = GuessDialog(self.guesser_dict[name], self.book)
+        dlg = GuessDialog(self.book)
         r = dlg.exec_()
         if not r == dlg.Accepted:
             md = None

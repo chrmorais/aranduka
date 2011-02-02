@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
-    <height>428</height>
+    <width>422</width>
+    <height>526</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -87,16 +87,19 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="guessers"/>
      </item>
      <item>
       <widget class="QPushButton" name="guessButton">
        <property name="text">
         <string>Guess</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
