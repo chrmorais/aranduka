@@ -88,7 +88,7 @@ def import_file(fname):
         # return file_status(fname)
         
     # # First try the clean name as-is
-    # p = clean_name(fname)
+    p = clean_name(fname)
     # r1 = try_import(fname, u'TITLE '+p)
     # if r1:
         # return r1
