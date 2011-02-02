@@ -11,6 +11,9 @@ from utils import validate_ISBN, SCRIPTPATH
 from metadata import BookMetadata
 from pluginmgr import manager, isPluginEnabled
 
+from templite import Templite
+import time
+
 class IdentifierDialog(QtGui.QDialog):
     def __init__(self, id_key, id_value, *args):
         QtGui.QDialog.__init__(self,*args)
@@ -33,7 +36,7 @@ class TagDialog(QtGui.QDialog):
         self.tag_name.setEditText(tag_name)
 
 class GuessDialog(QtGui.QDialog):
-    def __init__(self, guesser, book, *args):
+    def __init__(self, book, *args):
         QtGui.QDialog.__init__(self,*args)
         uifile = ui.path('guess.ui')
         uic.loadUi(uifile, self)
@@ -43,7 +46,6 @@ class GuessDialog(QtGui.QDialog):
         self.md=[]
         self.currentMD=None
         self.book = book
-        self.guesser = guesser
         self.titleText.setText(book.title or "")
         self.authorText.setText((u', '.join([a.name for a in book.authors]) or ""))
         ident = models.Identifier.get_by(key='ISBN',book=book)
@@ -54,17 +56,30 @@ class GuessDialog(QtGui.QDialog):
             self.isbn.hide()
             self.isbnText.hide()
 
-    def on_bookList_currentRowChanged(self, row):
-        self.currentMD=self.md[row]
-        print "Selected: ",unicode(self.bookList.item(row).text())
-
+        self.candidates.page().setLinkDelegationPolicy(self.candidates.page().DelegateAllLinks)
+            
+        self.guesser_dict={}
+        self.guessers.clear()
+        # Fill the guessers combo with appropiate names
+        for plugin in manager.getPluginsOfCategory("Guesser"):
+            if isPluginEnabled(plugin.name) and plugin.plugin_object.can_guess(self.book):
+                self.guessers.addItem(plugin.plugin_object.name)
+                self.guesser_dict[unicode(plugin.plugin_object.name)] = plugin.plugin_object
+        self.guesser = self.guesser_dict[unicode(self.guessers.currentText())]
+                
+    @QtCore.pyqtSlot("QString")
+    def on_guessers_currentIndexChanged(self, text):
+        print "CIC"
+        self.guesser = self.guesser_dict[unicode(text)]
+    
+                
     @QtCore.pyqtSlot()
     def on_guessButton_clicked(self):
         # Try to guess based on the reliable data
         query = {'title': None, \
                  'authors': None, \
                  'isbn': None}
-        self.bookList.clear()
+        # self.bookList.clear()
         if self.title.isChecked():
             query['title'] = unicode(self.titleText.text())
         if self.author.isChecked():
@@ -86,6 +101,7 @@ class GuessDialog(QtGui.QDialog):
                                    description=None)
         if self._query:
             try:
+                print self.guesser, type(self.guesser)
                 self.md = self.guesser.guess(self._query) or []
             except Exception, e:
                 print "Guesser exception: %s"%str(e)
@@ -95,17 +111,61 @@ class GuessDialog(QtGui.QDialog):
                 return
 
             if self.md:
-                for candidate in self.md:
-                    authors = candidate.authors
-                    if isinstance(authors, list):
-                        authors = u', '.join(authors)
-                    self.bookList.addItem(u'%s by %s'%(candidate.title, authors))
+            
+                tpl = u"""
+<html>
+<body>
+${for i,candidate in enumerate(md):}$
+${
+    title = candidate.title
+    thumb = candidate.thumbnail
+    authors = candidate.authors
+    if isinstance(authors, list):
+        authors = u', '.join(authors)
+    identifiers = candidate.identifiers
+    
+}$
+<div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
+ onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; document.getElementById('submit-${i}$').style.opacity=1.0;" 
+ onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white'; document.getElementById('submit-${i}$').style.opacity=0;"
+ >
+ 
+    <img width="64px" style="float: left; margin-right: 4px;" src="${thumb}$">
+    <div style="text-align: right; margin-top: 12px;">
+    <b>${title}$</b><br>
+    by ${authors}$<br>
+    ${for identifier in identifiers:}$
+        <small>${identifier[0]}$:${identifier[1]}$</small><br>
+    ${:end-for}$
+    <a href="/${i}$/" id="submit-${i}$" >Update</a>
+    </form>
+    </div>
+</div>
+${:end-for}$
+"""
+                print self.md
+                self.template = Templite(tpl)
+                t1 = time.time()
+                html = self.template.render(
+                    md = self.md
+                    )
+                print "Rendered in: %s seconds"%(time.time()-t1)
+                open ("x.html","w").write(html)
+                self.candidates.page().mainFrame().setHtml(html)
+            
             else:
                 print "No matches found for the selected criteria"
                 QtGui.QMessageBox.information(self, \
                                               u'No results', \
                                               u'No results found matching your criteria')
 
+            self.candidates.linkClicked.connect(self.updateWithCandidate)
+            
+    def updateWithCandidate(self, url):
+        cId = int(url.path()[1:-1])
+        self.currentMD=self.md[cId]
+        self.accept()
+                                              
 
 class BookEditor(QtGui.QWidget):
     
@@ -141,20 +201,12 @@ class BookEditor(QtGui.QWidget):
         cname = self.book.cover()
         self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
 
-        self.guesser_dict={}
-        self.guessers.clear()
-        # Fill the guessers combo with appropiate names
-        for plugin in manager.getPluginsOfCategory("Guesser"):
-            if isPluginEnabled(plugin.name) and plugin.plugin_object.can_guess(self.book):
-                self.guessers.addItem(plugin.plugin_object.name)
-                self.guesser_dict[plugin.plugin_object.name] = plugin.plugin_object
 
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
-        name = unicode(self.guessers.currentText())
 
         # Display the Guess Dialog
-        dlg = GuessDialog(self.guesser_dict[name], self.book)
+        dlg = GuessDialog(self.book)
         r = dlg.exec_()
         if not r == dlg.Accepted:
             md = None
