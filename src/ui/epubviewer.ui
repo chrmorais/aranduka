@@ -66,6 +66,7 @@
    <addaction name="actionClose"/>
    <addaction name="separator"/>
    <addaction name="actionShow_Contents"/>
+   <addaction name="actionFull_Screen"/>
    <addaction name="separator"/>
    <addaction name="actionPrevious_Chapter"/>
    <addaction name="actionNext_Chapter"/>
@@ -119,6 +120,12 @@
    <property name="shortcut">
     <string>F4</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
+   <property name="priority">
+    <enum>QAction::NormalPriority</enum>
+   </property>
   </action>
   <action name="actionClose">
    <property name="icon">
@@ -127,6 +134,17 @@
    </property>
    <property name="text">
     <string>Close</string>
+   </property>
+  </action>
+  <action name="actionFull_Screen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Full Screen</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
    </property>
   </action>
  </widget>
