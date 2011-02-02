@@ -27,8 +27,8 @@ class Plugin(Tool):
             QtGui.QMessageBox.information(None, "Aranduka - Error", "Can't find zbarcam. Get it at http://zbarcam.sf.net")
             return
         p=os.popen(ZBARPATH,'r')
-        # p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
-        p = "DEMO:0345400445"
+        p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
+        # p = "DEMO:0345400445"
         guesser = manager.getPluginsOfCategory('Guesser')[0]
         for code in p.splitlines():
             print "scanning"
@@ -40,12 +40,9 @@ class Plugin(Tool):
                 # Create empty book
                 b = Book(identifiers = [i])
                 # We are supposed to have a ISBN, so assume we are getting it right.
-                dlg = GuessDialog(guesser.plugin_object, b)
+                dlg = GuessDialog(b)
                 dlg.isbn.setChecked(True)
                 dlg.on_guessButton_clicked()
-                # hack the dialog
-                dlg.guessButton.hide()
-                dlg.updateButton.setText('Create')
 
                 r = dlg.exec_()
                 
