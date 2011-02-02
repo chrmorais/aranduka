@@ -48,7 +48,7 @@ class GuessDialog(QtGui.QDialog):
         self.authorText.setText((u', '.join([a.name for a in book.authors]) or ""))
         ident = models.Identifier.get_by(key='ISBN',book=book)
         if ident:
-            self.isbn.setText(ident.value)
+            self.isbnText.setText(ident.value)
             self._isbn=ident.value
         else:
             self.isbn.hide()
