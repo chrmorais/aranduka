@@ -50,6 +50,10 @@ class Tool(object):
     """A plugin that gets added to the Tools menu in the main.ui"""
     configurable = False
 
+class Importer(object):
+    """A plugin that gets added to the Tools menu in the main.ui"""
+    configurable = False
+    
 class ShelfView(QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
@@ -145,10 +149,15 @@ class Converter(object):
 
 def isPluginEnabled (name):
     enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
+    print "EP:", enabled_plugins
     if enabled_plugins == set([None]):
-        return False
-    else:
-        return name in enabled_plugins
+        print "FLAG"
+        #Never configured... enable everything! (will change later ;-)
+        enabled_plugins = set()
+        for c in manager.getCategories():
+            for p in manager.getPluginsOfCategory(c):
+                enabled_plugins.add(p.name)
+    return name in enabled_plugins
 
 manager = PluginManager(
     categories_filter={
@@ -156,6 +165,7 @@ manager = PluginManager(
         "BookStore": BookStore,
         "Converter": Converter,
         "Tool": Tool,
+        "Importer": Importer,
         "Device": Device,
         "Guesser": Guesser,
     })

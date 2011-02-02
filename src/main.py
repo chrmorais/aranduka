@@ -1,14 +1,14 @@
 """The user interface for our app"""
 
 import os,sys
-import models, importer, config, ui
+import models, config, ui
 
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic
 from progress import progress
 from book_editor import BookEditor
 import rc_icons
-from pluginmgr import manager
+from pluginmgr import manager, isPluginEnabled
 from pluginconf import PluginSettings
 from about import AboutDialog
 from epubviewer import Main as EpubViewer
@@ -112,13 +112,6 @@ class Main(QtGui.QMainWindow):
             plugin.plugin_object.setWidget(self)
             self.treeWidget.addTopLevelItem(item)
 
-        self.menuTools.clear()
-
-        for plugin in manager.getPluginsOfCategory("Tool"):
-            if plugin.name not in enabled_plugins:
-                continue
-            self.menuTools.addAction(plugin.plugin_object.action())
-
         self.menuDevices.clear()
 
         for plugin in manager.getPluginsOfCategory("Device"):
@@ -138,6 +131,21 @@ class Main(QtGui.QMainWindow):
         dlg = PluginSettings(self)
         dlg.exec_()
 
+    @QtCore.pyqtSlot()
+    def on_menuTools_aboutToShow(self):
+        self.menuTools.clear()
+        for plugin in manager.getPluginsOfCategory("Tool"):
+            if isPluginEnabled(plugin.name):
+                self.menuTools.addAction(plugin.plugin_object.action())
+
+    @QtCore.pyqtSlot()
+    def on_menuImport_aboutToShow(self):
+        self.menuImport.clear()
+        for plugin in manager.getPluginsOfCategory("Importer"):
+            if isPluginEnabled(plugin.name):
+                for a in plugin.plugin_object.actions():
+                    self.menuImport.addAction(a)
+        
     def viewModeChanged(self):
         item = self.treeWidget.currentItem()
         if not item: return
@@ -186,24 +194,40 @@ class Main(QtGui.QMainWindow):
             f = book.files[0]
             url = QtCore.QUrl.fromLocalFile(f.file_name)
             if f.file_name.endswith('epub'):
-                menu.addAction("Open %s"%os.path.basename(f.file_name),
+                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: self.openEpub(f.file_name))
             else:
-                menu.addAction("Open %s"%os.path.basename(f.file_name),
+                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: QtGui.QDesktopServices.openUrl(url))
+                    
+            # Issue 20: don't show files that are not there
+            # FIXME: add more validation
+            try:
+                f_info = os.stat(f.file_name)
+            except:
+                f_info = None
+            if f_info is None or f_info.st_size == 0:
+                action.setEnabled(False)
+            
         elif formats:
             for f in book.files:
                 url = QtCore.QUrl.fromLocalFile(f.file_name)
-                open_menu.addAction(os.path.basename(f.file_name),
-                    lambda f = f: QtGui.QDesktopServices.openUrl(url))
+                if f.file_name.endswith('epub'):
+                    action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                        lambda f = f: self.openEpub(f.file_name))
+                else:
+                    action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                        lambda f = f: QtGui.QDesktopServices.openUrl(url))
+                open_menu.addAction(action)
             menu.addMenu(open_menu)
 
         # Check what converters apply
         converters = []
         for plugin in manager.getPluginsOfCategory("Converter"):
-            r = plugin.plugin_object.can_convert(book)
-            if r:
-                converters.append([plugin.plugin_object, r])
+            if isPluginEnabled(plugin.name):
+                r = plugin.plugin_object.can_convert(book)
+                if r:
+                    converters.append([plugin.plugin_object, r])
 
         if converters:
             # So, we can convert
@@ -246,11 +270,7 @@ class Main(QtGui.QMainWindow):
         if rsp == QtGui.QMessageBox.Ok:
             # Delete the book files
             print "Deleting book: %s"%self.currentBook.title
-            for f in self.currentBook.files:
-                print "Deletin file: %s"%f.file_name
-                os.unlink(f.file_name)
             self.currentBook.delete()
-            models.Author.sanitize() # In case we removed the only book from an author
             models.session.commit()
             self.currentBook = None
             self.viewModeChanged()
@@ -259,28 +279,6 @@ class Main(QtGui.QMainWindow):
         self.book_editor.load_data(item.book.id)
         self.title.setText(u'Editing properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(1)
-
-    @QtCore.pyqtSlot()
-    def on_actionImport_Files_triggered(self):
-        fname = unicode(QtGui.QFileDialog.getExistingDirectory(self, "Import Folder"))
-        if not fname: return
-        # Get a list of all files to be imported
-        flist = []
-        for data in os.walk(fname, followlinks = True):
-            for f in data[2]:
-                flist.append(os.path.join(data[0],f))
-        for f in progress(flist, "Importing Files","Stop"):
-            status = importer.import_file(f)
-            print status
-        # Reload books
-        self.updateShelves.emit()
-
-    @QtCore.pyqtSlot()
-    def on_actionImport_File_triggered(self):
-        fname = unicode(QtGui.QFileDialog.getOpenFileName(self, "Import File"))
-        if not fname: return
-        status = importer.import_file(fname)
-        self.updateShelves.emit()
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):

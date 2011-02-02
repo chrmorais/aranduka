@@ -39,6 +39,19 @@ class Book (Entity):
     def __repr__(self):
         return '<book>%s - %s</book>' % (self.title, self.authors)
 
+    def delete (self):
+        """Deletes a book attempting to delete all related
+           files, and performs a sanitization of Author table"""
+        for f in self.files:
+            f.delete()
+        if self.cover() != self.default_cover():
+            try:
+                os.unlink(self.cover())        
+            except OSError:
+                pass
+        super(Entity, self).delete()
+        Author.sanitize()
+
     def fetch_file(self, url, extension):
         """Given a URL, and a file extension, downloads it and adds
         the file as belonging to this book"""
@@ -174,6 +187,15 @@ class File (Entity):
     file_name = Field(Unicode(300))
     file_size = Field(Unicode(30))
     book = ManyToOne('Book')
+
+    def delete (self):
+        """Deletes a file from the database and the filesystem"""
+        print "Deleting file: %s"%self.file_name
+        try:
+            os.unlink(self.file_name)
+        except OSError:
+            pass
+        super(Entity, self).delete()
 
     def __repr__(self):
         return '<file>%s</file>' %(self.file_name)

@@ -1,7 +1,7 @@
 import os
 from PyQt4 import QtCore, QtGui, uic
 from utils import SCRIPTPATH
-from pluginmgr import manager
+from pluginmgr import manager, isPluginEnabled
 import config
 import ui
 
@@ -13,13 +13,6 @@ class PluginSettings(QtGui.QDialog):
         uic.loadUi(uifile, self)
         self.ui = self
         self.plugin_widgets = []
-        enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
-        if enabled_plugins == set([None]):
-            enabled_plugins = set()
-            #Never configured... enable everything! (will change later ;-)
-            for c in manager.getCategories():
-                for p in manager.getPluginsOfCategory(c):
-                    enabled_plugins.add(p.name)
         for category in manager.getCategories():
             w = QtGui.QScrollArea()
             w.setFrameStyle(w.NoFrame)
@@ -30,7 +23,7 @@ class PluginSettings(QtGui.QDialog):
             
             l = QtGui.QVBoxLayout()
             for plugin in manager.getPluginsOfCategory(category):
-                pw = PluginWidget(plugin, plugin.name in enabled_plugins)
+                pw = PluginWidget(plugin, isPluginEnabled(plugin.name))
                 self.plugin_widgets.append(pw)
                 l.addWidget(pw)
             l.addStretch(1)

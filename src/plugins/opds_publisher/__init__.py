@@ -8,9 +8,9 @@ class Plugin(Tool):
     _proc = None
     
     def action(self):
-        self.action = QtGui.QAction("Publish Catalog", None)
-        self.action.triggered.connect(self.publish)
-        return self.action
+        self._action = QtGui.QAction("Publish Catalog", None)
+        self._action.triggered.connect(self.publish)
+        return self._action
 
     def publish(self):        
         if not self._proc:
