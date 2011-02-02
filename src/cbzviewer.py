@@ -33,6 +33,14 @@ class Main(QtGui.QMainWindow):
         self.actionClose.triggered.connect(self.close)
         self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
         
+    @QtCore.pyqtSlot("bool")
+    def on_actionFull_Screen_toggled(self, b):
+        if b:
+            self.showFullScreen()
+            # self.actionShow_Contents.setChecked(False)
+        else:
+            self.showNormal()
+            # self.actionShow_Contents.setChecked(True)
         
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):

@@ -47,8 +47,6 @@ class Main(QtGui.QMainWindow):
         self.actionClose.triggered.connect(self.close)
         self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
         
-        
-        
     def closeEvent(self, ev):
         # Save position keyed by filename
         frame = self.view.page().mainFrame()
