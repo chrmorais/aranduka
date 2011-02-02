@@ -31,7 +31,6 @@ class Main(QtGui.QMainWindow):
         sv, curSpineRef = getValue("epubviewer", "position-"+hashlib.sha224(self.fname).hexdigest(),[0, None])
         row = -1
         if curSpineRef:
-            print self.epub.spinerefs.index(curSpineRef)
             try:
                 row = [j for i,j in self.epub.tocentries].index(curSpineRef)
             except ValueError:
@@ -51,14 +50,12 @@ class Main(QtGui.QMainWindow):
         
         
     def closeEvent(self, ev):
-        print "Closing"
         # Save position keyed by filename
         frame = self.view.page().mainFrame()
         sv = frame.scrollPosition().y()
         frame = self.view.page().mainFrame()
         curSpineRef= unicode(frame.url().toString())[12:]
         setValue("epubviewer", "position-"+hashlib.sha224(self.fname).hexdigest(),[sv, curSpineRef])
-        print [sv, curSpineRef]
         QtGui.QMainWindow.closeEvent(self, ev)
         
     @QtCore.pyqtSlot()
@@ -101,7 +98,6 @@ class Main(QtGui.QMainWindow):
         self.openPath(item.contents)
 
     def openPath(self, path, fragment=None):
-        print "Opening:", path
         if "#" in path:
             path, fragment = path.split('#',1)
         path = QtCore.QUrl.fromPercentEncoding(path)
