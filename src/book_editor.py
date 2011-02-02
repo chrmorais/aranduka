@@ -102,7 +102,6 @@ class GuessDialog(QtGui.QDialog):
                 tpl = """
 <html>
 <body>
-<table border=0 width=100%>
 ${for candidate in md:}$
 ${
     title = candidate.title
@@ -110,16 +109,24 @@ ${
     authors = candidate.authors
     if isinstance(authors, list):
         authors = u', '.join(authors)
+    identifiers = candidate.identifiers
+    
 }$
-<tr>
-<td>
-    <img width="64px" style="float: left;" src="${thumb}$">
-<td>
-    ${title}$<br>
-    by ${authors}$
+<div style="height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
+ onmouseover="this.style.border='solid 3px lightgreen'; this.style.background='lightgreen';" 
+ onmouseout="this.style.border='solid 3px lightgrey'; this.style.background='white';"
+ onmouseclick="this.style.border='solid 3px darkred'; this.style.background='white';">
+ 
+    <img width="64px" style="float: left; margin-right: 4px;" src="${thumb}$">
+    <b>${title}$</b><br>
+    by ${authors}$<br>
+    ${for identifier in identifiers:}$
+        <small>${identifier[0]}$:${identifier[1]}$</small><br>
+    ${:end-for}$    
+</div>
 ${:end-for}$
-</table>
 """
+                print self.md
                 self.template = Templite(tpl)
                 t1 = time.time()
                 html = self.template.render(
@@ -129,11 +136,6 @@ ${:end-for}$
                 open ("x.html","w").write(html)
                 self.candidates.page().mainFrame().setHtml(html)
             
-                # for candidate in self.md:
-                    # authors = candidate.authors
-                    # if isinstance(authors, list):
-                        # authors = u', '.join(authors)
-                    # self.bookList.addItem(u'%s by %s'%(candidate.title, authors))
             else:
                 print "No matches found for the selected criteria"
                 QtGui.QMessageBox.information(self, \
