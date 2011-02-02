@@ -143,14 +143,12 @@ ${
 </div>
 ${:end-for}$
 """
-                print self.md
                 self.template = Templite(tpl)
                 t1 = time.time()
                 html = self.template.render(
                     md = self.md
                     )
                 print "Rendered in: %s seconds"%(time.time()-t1)
-                open ("x.html","w").write(html)
                 self.candidates.page().mainFrame().setHtml(html)
             
             else:
