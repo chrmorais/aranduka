@@ -44,8 +44,8 @@ class GuessDialog(QtGui.QDialog):
         self.currentMD=None
         self.book = book
         self.guesser = guesser
-        self.titleText.setText(book.title)
-        self.authorText.setText(u', '.join([a.name for a in book.authors]))
+        self.titleText.setText(book.title or "")
+        self.authorText.setText((u', '.join([a.name for a in book.authors]) or ""))
         ident = models.Identifier.get_by(key='ISBN',book=book)
         if ident:
             self.isbn.setText(ident.value)
