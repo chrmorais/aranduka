@@ -112,7 +112,7 @@ class GuessDialog(QtGui.QDialog):
 
             if self.md:
             
-                tpl = """
+                tpl = u"""
 <html>
 <body>
 ${for i,candidate in enumerate(md):}$
