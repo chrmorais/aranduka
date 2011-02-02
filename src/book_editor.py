@@ -11,6 +11,9 @@ from utils import validate_ISBN, SCRIPTPATH
 from metadata import BookMetadata
 from pluginmgr import manager, isPluginEnabled
 
+from templite import Templite
+import time
+
 class IdentifierDialog(QtGui.QDialog):
     def __init__(self, id_key, id_value, *args):
         QtGui.QDialog.__init__(self,*args)
@@ -64,7 +67,7 @@ class GuessDialog(QtGui.QDialog):
         query = {'title': None, \
                  'authors': None, \
                  'isbn': None}
-        self.bookList.clear()
+        # self.bookList.clear()
         if self.title.isChecked():
             query['title'] = unicode(self.titleText.text())
         if self.author.isChecked():
@@ -95,11 +98,42 @@ class GuessDialog(QtGui.QDialog):
                 return
 
             if self.md:
-                for candidate in self.md:
-                    authors = candidate.authors
-                    if isinstance(authors, list):
-                        authors = u', '.join(authors)
-                    self.bookList.addItem(u'%s by %s'%(candidate.title, authors))
+            
+                tpl = """
+<html>
+<body>
+<table border=0 width=100%>
+${for candidate in md:}$
+${
+    title = candidate.title
+    thumb = candidate.thumbnail
+    authors = candidate.authors
+    if isinstance(authors, list):
+        authors = u', '.join(authors)
+}$
+<tr>
+<td>
+    <img width="64px" style="float: left;" src="${thumb}$">
+<td>
+    ${title}$<br>
+    by ${authors}$
+${:end-for}$
+</table>
+"""
+                self.template = Templite(tpl)
+                t1 = time.time()
+                html = self.template.render(
+                    md = self.md
+                    )
+                print "Rendered in: %s seconds"%(time.time()-t1)
+                open ("x.html","w").write(html)
+                self.candidates.page().mainFrame().setHtml(html)
+            
+                # for candidate in self.md:
+                    # authors = candidate.authors
+                    # if isinstance(authors, list):
+                        # authors = u', '.join(authors)
+                    # self.bookList.addItem(u'%s by %s'%(candidate.title, authors))
             else:
                 print "No matches found for the selected criteria"
                 QtGui.QMessageBox.information(self, \
