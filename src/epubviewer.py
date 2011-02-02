@@ -3,12 +3,14 @@ import os, sys
 from epubparser import EpubDocument
 import feedparser
 import ui
-
+from config import *
+import hashlib
 
 class Main(QtGui.QMainWindow):
     def __init__(self, fname):
         QtGui.QMainWindow.__init__(self)
 
+        self.fname = fname
         self.epub = EpubDocument(fname)
         uifile = ui.path('epubviewer.ui')
         uic.loadUi(uifile, self)
@@ -20,17 +22,44 @@ class Main(QtGui.QMainWindow):
             item = QtGui.QListWidgetItem(l)
             item.contents = c
             self.chapters.addItem(item)
-        
-        self.cur_path = ''
 
         self.old_manager = self.view.page().networkAccessManager()
         self.new_manager = NetworkAccessManager(self.old_manager, self)
         self.view.page().setNetworkAccessManager(self.new_manager)
-        if self.epub.spinerefs[0] == self.epub.tocentries[0][1]:
-            self.chapters.setCurrentRow(0)
-        self.openPath(self.epub.spinerefs[0])
+            
+        self.cur_path = ''
+        sv, curSpineRef = getValue("epubviewer", "position-"+hashlib.sha224(self.fname).hexdigest(),[0, None])
+        row = -1
+        if curSpineRef:
+            print self.epub.spinerefs.index(curSpineRef)
+            try:
+                row = [j for i,j in self.epub.tocentries].index(curSpineRef)
+            except ValueError:
+                pass
+        if row == -1:
+            if self.epub.spinerefs[0] == self.epub.tocentries[0][1]:
+                row = 0
+        if row != -1:
+            self.chapters.setCurrentRow(row)
+            self.openPath(self.epub.tocentries[row][1])
+        else: # The first spineref is not in the toc. Usually means the cover.
+            self.openPath(self.epub.spinerefs[0])
+            
         self.actionClose.triggered.connect(self.close)
         self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
+        
+        
+        
+    def closeEvent(self, ev):
+        print "Closing"
+        # Save position keyed by filename
+        frame = self.view.page().mainFrame()
+        sv = frame.scrollPosition().y()
+        frame = self.view.page().mainFrame()
+        curSpineRef= unicode(frame.url().toString())[12:]
+        setValue("epubviewer", "position-"+hashlib.sha224(self.fname).hexdigest(),[sv, curSpineRef])
+        print [sv, curSpineRef]
+        QtGui.QMainWindow.closeEvent(self, ev)
         
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):
