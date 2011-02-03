@@ -172,12 +172,13 @@ class ImportDialog(QtGui.QDialog):
         flist = []
         fname = unicode(self.folderName.text())
         if not fname: return
-        
         for data in os.walk(fname, followlinks = True):
             for f in data[2]:
                 flist.append(os.path.join(data[0],f))
+                self.files.addItem(f)
         self.progressBar.setMaximum(len(flist))
         for i,f in enumerate(flist):
+            self.files.setCurrentRow(i)
             status = import_file(f)
             self.progressBar.setValue(i)
     
