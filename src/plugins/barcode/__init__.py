@@ -28,7 +28,8 @@ class Plugin(Tool):
             return
         p=os.popen(ZBARPATH,'r')
         p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
-        # p = "DEMO:0345400445"
+        p = "DEMO:0345400445"
+        p += "\nDEMO:0099558815\n"
         guesser = manager.getPluginsOfCategory('Guesser')[0]
         for code in p.splitlines():
             print "scanning"
@@ -43,6 +44,13 @@ class Plugin(Tool):
                 dlg = GuessDialog(b)
                 dlg.isbn.setChecked(True)
                 dlg.on_guessButton_clicked()
+                dlg.title.setChecked(True)
+                dlg.author.setChecked(True)
+                dlg.titleText.setText(dlg.md[0].title)
+                if isinstance(dlg.md[0].authors, list):
+                    dlg.authorText.setText(','.join(dlg.md[0].authors))
+                else:
+                    dlg.authorText.setText(md[0].authors)
 
                 r = dlg.exec_()
                 
