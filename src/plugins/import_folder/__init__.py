@@ -1,10 +1,11 @@
 import os, sys, time, re
 from PyQt4 import QtCore, QtGui, uic
-
+import ui
+import time
 import models
 from pprint import pprint
 from utils import VALID_EXTENSIONS
-from pluginmgr import Importer
+from pluginmgr import Importer, manager, isPluginEnabled
 from progress import progress
 
 COMPRESSED_EXTENSIONS = ['gz','bz2','lzma']
@@ -144,6 +145,45 @@ def file_status(fname):
         return 2
     return 1
 
+class ImportDialog(QtGui.QDialog):
+    def __init__(self, *args):
+        QtGui.QDialog.__init__(self, *args)
+        uifile = ui.path('importer.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
+        self.setWindowTitle('Import ebooks')
+        self.guesser_dict={}
+        # Fill the guessers combo with appropiate names
+        for plugin in manager.getPluginsOfCategory("Guesser"):
+            if isPluginEnabled(plugin.name):
+                self.guessers.addItem(plugin.plugin_object.name)
+                self.guesser_dict[plugin.plugin_object.name] = plugin.plugin_object
+
+        
+    @QtCore.pyqtSlot()
+    def on_folderButton_clicked(self):
+        fname = unicode(QtGui.QFileDialog.getExistingDirectory(None, "Import Folder"))
+        if not fname: return
+        self.folderName.setText(fname)
+
+    @QtCore.pyqtSlot()
+    def on_importButton_clicked(self):
+        # Get a list of all files to be imported
+        flist = []
+        fname = unicode(self.folderName.text())
+        if not fname: return
+        for data in os.walk(fname, followlinks = True):
+            for f in data[2]:
+                flist.append(os.path.join(data[0],f))
+                self.files.addItem(f)
+        self.progressBar.setMaximum(len(flist))
+        for i,f in enumerate(flist):
+            self.files.setCurrentRow(i)
+            status = import_file(f)
+            self.progressBar.setValue(i)
+    
+        
+    
 class ImportFolder(Importer):
     def actions(self):
         self._action1 = QtGui.QAction("Folder", None)
@@ -153,16 +193,8 @@ class ImportFolder(Importer):
         return [self._action1, self._action2]
     
     def do_import_folder(self):
-        fname = unicode(QtGui.QFileDialog.getExistingDirectory(None, "Import Folder"))
-        if not fname: return
-        # Get a list of all files to be imported
-        flist = []
-        for data in os.walk(fname, followlinks = True):
-            for f in data[2]:
-                flist.append(os.path.join(data[0],f))
-        for f in progress(flist, "Importing Files","Stop"):
-            status = import_file(f)
-            print status
+        dlg =ImportDialog()
+        dlg.exec_()
             
     def do_import_file(self):
         fname = unicode(QtGui.QFileDialog.getOpenFileName(None, "Import File"))
