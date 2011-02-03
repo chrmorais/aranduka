@@ -91,6 +91,9 @@ class GuessDialog(QtGui.QDialog):
         if query['title'] is None and \
            query['authors'] is None and \
            query['isbn'] is None:
+           QtGui.QMessageBox.warning(self, \
+                                     u'Select something to search', \
+                                     u'You need to select at least one field to search')
            return
 
         self._query = BookMetadata(title=query['title'],
