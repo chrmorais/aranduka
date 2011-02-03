@@ -70,7 +70,6 @@ class GuessDialog(QtGui.QDialog):
                 
     @QtCore.pyqtSlot("QString")
     def on_guessers_currentIndexChanged(self, text):
-        print "CIC"
         self.guesser = self.guesser_dict[unicode(text)]
     
                 
