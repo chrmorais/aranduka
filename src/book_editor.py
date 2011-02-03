@@ -57,6 +57,7 @@ class GuessDialog(QtGui.QDialog):
             self.isbnText.hide()
 
         self.candidates.page().setLinkDelegationPolicy(self.candidates.page().DelegateAllLinks)
+        self.candidates.linkClicked.connect(self.updateWithCandidate)
             
         self.guesser_dict={}
         self.guessers.clear()
@@ -152,12 +153,7 @@ ${:end-for}$
                 self.candidates.page().mainFrame().setHtml(html)
             
             else:
-                print "No matches found for the selected criteria"
-                QtGui.QMessageBox.information(self, \
-                                              u'No results', \
-                                              u'No results found matching your criteria')
-
-            self.candidates.linkClicked.connect(self.updateWithCandidate)
+                self.candidates.page().mainFrame().setHtml(u"<h3>No matches found for the selected criteria</h3>")
             
     def updateWithCandidate(self, url):
         cId = int(url.path()[1:-1])
