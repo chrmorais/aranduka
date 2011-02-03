@@ -62,9 +62,20 @@ class EpubDocument(object):
         print "IR:", self.itemrefs
         self.spinerefs = [ self.manifest_dict[item.attrib['idref']][len(self.basepath):] for item in self.itemrefs ]
         # I found one book that has a spine but no navmap: "Der schwarze Baal" from manybooks.net
-        if not self.tocentries:
-            # Alternative toc
-            self.tocentries = [[item.attrib['idref'],self.manifest_dict[item.attrib['idref']][len(self.basepath):]] for item in self.itemrefs]
+        # Also another has more entries on the spine than on the navmap (Dinosauria, from feedbooks).
+        # So, we need to merge these suckers. I will assume it's not completely insane and the spine
+        # is always more complete.
+        
+        spinerefs2 = [[x,x] for x in self.spinerefs]
+        
+        for te in self.tocentries:
+            idx = self.spinerefs.index(te[1])
+            spinerefs2[idx]=te
+            
+        self.tocentries = spinerefs2
+        # if not self.tocentries:
+            # # Alternative toc
+            # self.tocentries = [[item.attrib['idref'],self.manifest_dict[item.attrib['idref']][len(self.basepath):]] for item in self.itemrefs]
             
         print self.tocentries
         print self.spinerefs

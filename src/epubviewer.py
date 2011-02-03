@@ -83,7 +83,7 @@ class Main(QtGui.QMainWindow):
             curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
         except ValueError:
             curIdx = -1
-        if curIdx < len(self.epub.spinerefs):
+        if curIdx+1 < len(self.epub.tocentries):
             self.chapters.setCurrentRow(curIdx+1)
             self.openPath(self.epub.tocentries[curIdx+1][1])
             

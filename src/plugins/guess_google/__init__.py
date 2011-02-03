@@ -27,12 +27,12 @@ class GoogleGuesser(Guesser):
         if result.entry:
             data = [x.to_dict() for x in result.entry]
             return [BookMetadata(title=x.get('title','No Title').decode('utf-8'),
-                                thumbnail=x.get('thumbnail',''),
-                                date=x.get('date',datetime.date(1970,1,1)),
-                                subjects=x.get('subjects',[]),
-                                authors=x.get('authors',[]),
+                                thumbnail=x.get('thumbnail','').decode('utf-8'),
+                                date=x.get('date',datetime.date(1970,1,1)).decode('utf-8'),
+                                subjects=[z.decode('utf-8') for z in x.get('subjects',[])],
+                                authors=[z.decode('utf-8') for z in x.get('authors',[])],
                                 identifiers=x.get('identifiers',()),
-                                description=x.get('description',''))
+                                description=x.get('description','').decode('utf-8'))
                     for x in data ]
         else:
             return None
