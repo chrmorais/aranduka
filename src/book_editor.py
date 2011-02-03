@@ -252,10 +252,10 @@ class BookEditor(QtGui.QWidget):
             k, v = t.split(': ',1)
             i = models.Identifier(key = k, value = v, book = self.book)
 
-        for old_file in self.book.files:
-            old_file.delete()
-        for file_name in [unicode(self.fileList.item(i).text()) for i in range(self.fileList.count())]:
-            f = models.File(file_name=file_name, book=self.book)
+        # for old_file in self.book.files:
+            # old_file.books = [self.book]
+        # for file_name in [unicode(self.fileList.item(i).text()) for i in range(self.fileList.count())]:
+            # f = models.File(file_name=file_name, book=self.book)
 
         self.book.tags = []
         for tag_name in [unicode(self.tags.item(i).text()) for i in range(self.tags.count())]:
