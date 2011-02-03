@@ -18,8 +18,8 @@ class GoogleGuesser(Guesser):
             q += 'TITLE %s '%query.title
         if query.authors is not None:
             q += 'AUTHOR %s '%query.authors
-        if query.identifiers is not None:
-            q += 'ISBN %s '%query.identifiers
+        if query.identifiers[0] is not None:
+            q += 'ISBN %s '%query.identifiers[0]
         return q
 
     def guess(self, query):
@@ -28,7 +28,7 @@ class GoogleGuesser(Guesser):
             data = [x.to_dict() for x in result.entry]
             return [BookMetadata(title=x.get('title','No Title').decode('utf-8'),
                                 thumbnail=x.get('thumbnail','').decode('utf-8'),
-                                date=x.get('date',datetime.date(1970,1,1)).decode('utf-8'),
+                                date=x.get('date',datetime.date(1970,1,1)),
                                 subjects=[z.decode('utf-8') for z in x.get('subjects',[])],
                                 authors=[z.decode('utf-8') for z in x.get('authors',[])],
                                 identifiers=x.get('identifiers',()),
