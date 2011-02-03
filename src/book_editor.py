@@ -64,8 +64,8 @@ class GuessDialog(QtGui.QDialog):
         # Fill the guessers combo with appropiate names
         for plugin in manager.getPluginsOfCategory("Guesser"):
             if isPluginEnabled(plugin.name) and plugin.plugin_object.can_guess(self.book):
-                self.guessers.addItem(plugin.plugin_object.name)
                 self.guesser_dict[unicode(plugin.plugin_object.name)] = plugin.plugin_object
+                self.guessers.addItem(plugin.plugin_object.name)
         self.guesser = self.guesser_dict[unicode(self.guessers.currentText())]
                 
     @QtCore.pyqtSlot("QString")
