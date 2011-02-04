@@ -6,20 +6,14 @@ import errno
 
 from templite import Templite
 from bottle import route, run, response
+from multiprocessing import Queue
 
 bottle.debug = True
 
 _default_addr = 'localhost'
 _default_port = 8080
 
-_host = None
-_port = None
-
-def get_url ():
-    """Returns the URL of the OPDS catalog"""
-    if _host is None or _port is None:
-        return None
-    return "http://%s:%d"%(_host, _port)
+queue = Queue()
 
 def real_publish():
     # FIXME: move to another process or something
@@ -90,23 +84,36 @@ def real_publish():
            to bind the HTTP server"""
         return (_default_addr, _default_port)
 
+    def get_address ():
+        """Returns a host:port tuple available for binding"""
+        _host, _port = get_bind_address()
+        for n in xrange(1,1024):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                sock.bind((_host, _port))
+                sock.close()
+                break
+            except socket.error, e:
+                sock.close()
+                code, string = e
+                if code == errno.EADDRINUSE:
+                    # If the port is in use, try another one        
+                    _port += 1
+                else:
+                    raise e
+        return (_host, _port)
+
+
     def start ():
         """Starts the HTTP server
            It attempts to bind to the configured
            address and port, and if they're in use,
            it tries with another port"""
-        _host, _port = get_bind_address()
-        for n in xrange(1,1024):
-            try:
-                run(host=_host, port=_port)
-                break
-            except socket.error, e:
-                code, string = e
-                if code == errno.EADDRINUSE:
-                    # If the port is in use, try another one
-                    _port += 1
-                else:
-                    raise e
+        (_host, _port) =  get_address()
+        url = "http://%s:%d"%(_host, _port)
+        print "Appending URL to queue: %s"%url
+        queue.put(url)
+        run(host=_host, port=_port, quiet=True)
     start()
     
             
