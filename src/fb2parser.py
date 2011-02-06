@@ -115,13 +115,15 @@ class FB2Document(object):
             title = tag2text(section.find('{http://www.gribuser.ru/xml/fictionbook/2.0}title'))
             self.sections.append(title)
             self.sectionlinks.append("Book#%d"%id(section))
-        print zip(self.sections,self.sectionlinks)
         self.html = tag2html(body)
         
         
         
         #TODO: create TOC
-        self.tocentries = ["Cover","Book"]+self.sectionlinks
+        self.tocentries = [("Cover","Cover"),
+            ("Book","Book")]+zip(self.sections,self.sectionlinks)
+            
+        print self.tocentries
 
     def getData(self, path):
         """Return the contents of a file in the binary tags of the document, or the document itself for Book"""

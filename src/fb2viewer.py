@@ -18,9 +18,9 @@ class Main(QtGui.QMainWindow):
         self.ui = self
         self.addAction(self.actionPageDown)
 
-        for n in self.doc.tocentries:
-            item = QtGui.QListWidgetItem(n)
-            item.contents = n
+        for l,c in self.doc.tocentries:
+            item = QtGui.QListWidgetItem(l)
+            item.contents = c
             self.chapters.addItem(item)
         
         self.cur_path = ''
@@ -29,9 +29,9 @@ class Main(QtGui.QMainWindow):
         self.new_manager = NetworkAccessManager(self.old_manager, self)
         self.view.page().setNetworkAccessManager(self.new_manager)
         self.chapters.setCurrentRow(0)
-        self.openPath(self.doc.tocentries[0])
         self.actionClose.triggered.connect(self.close)
         self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
+        self.openPath(self.doc.tocentries[0][1])
         
     @QtCore.pyqtSlot("bool")
     def on_actionFull_Screen_toggled(self, b):
