@@ -29,6 +29,10 @@ templates = {
     "image": Templite("""<img src="${print tag.attrib["{http://www.w3.org/1999/xlink}href"][1:]}$"/>"""),
     
     "strong": Templite("""<b>${print text}$${print children2html(tag)}$</b>"""),
+
+    "emphasis": Templite("""<i>${print text}$${print children2html(tag)}$</i>"""),
+    
+    "empty-line": Templite("</br></br>"),
 }
     
 def tag2html(tag):
@@ -90,7 +94,10 @@ class FB2Document(object):
         
         # The body element contains the book proper
         body = doc.find('{http://www.gribuser.ru/xml/fictionbook/2.0}body')
+        
         self.html = tag2html(body)
+        
+        
         
         #TODO: create TOC
         self.tocentries = ["Cover","Book"]
