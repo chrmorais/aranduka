@@ -14,6 +14,13 @@ except:
 
 # TODO: some 30 mote templates
 templates = {
+    "body" : Templite("""
+    <!DOCTYPE html 
+         PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+    <html xmlns='http://www.w3.org/1999/xhtml'> 
+    <head></head><body>${print text}$${print children2html(tag)}$</h1></body></html>
+    """),
     "title" : Templite("<h1>${print text}$${print children2html(tag)}$</h1>"),
     "p" : Templite("""<p>${print text}$${print children2html(tag)}$</p>"""),
 }
@@ -56,13 +63,24 @@ class FB2Document(object):
         
         #TODO: stylesheet, description, binary
 
+        # Handle binary tags
+        binaries = doc.findall('{http://www.gribuser.ru/xml/fictionbook/2.0}binary')
+        for b in binaries:
+            print b.attrib['id']
+        
         # The body element contains the book proper
         body = doc.find('{http://www.gribuser.ru/xml/fictionbook/2.0}body')
         self.html = tag2html(body)
         
+        #TODO: create TOC
+        self.tocentries = ["Book"]
+
     def getData(self, path):
-        """Return the contents of a file in the binary tags of the document"""
-        pass
+        """Return the contents of a file in the binary tags of the document, or the document itself for Book"""
+        print "PATH:", path
+        if path == "Book":
+            print "returning HTML data"
+            return self.html.encode('utf-8')
 
 def main(fname):
     doc = FB2Document(sys.argv[1])
