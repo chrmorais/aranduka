@@ -7,28 +7,44 @@ import sys, os
 class Plugin(Tool):
 
     _proc = None
+    _action = None
     
     def action(self):
-        self._action = QtGui.QAction("Publish Catalog", None)
-        self._action.triggered.connect(self.publish)
+        if self._action is None:
+            self._action = QtGui.QAction("Publish Catalog", None)
+            self._action.setCheckable(True)
+            self._action.triggered.connect(self.publish)
         return self._action
 
     def check_url (self):
         publisher = __import__('publisher')
         try:
-            url = publisher.queue.get(False)
-            if url is not None:
-                QtGui.QMessageBox.information(None, \
-                                              u'Catalog published', \
-                                              u'You can access your catalog on: %s'%url, \
-                                              QtGui.QMessageBox.Ok, \
-                                              QtGui.QMessageBox.NoButton, \
-                                              QtGui.QMessageBox.NoButton)
+            data = publisher.queue.get(False)
+            if data is not None:
+                if 'url' in data:
+                    QtGui.QMessageBox.information(None, \
+                                                  u'Catalog published', \
+                                                  u'You can access your catalog on: %s'%data['url'], \
+                                                  QtGui.QMessageBox.Ok, \
+                                                  QtGui.QMessageBox.NoButton, \
+                                                  QtGui.QMessageBox.NoButton)
+                elif 'error' in data:
+                    print "Error publishing catalog: %s"%data['error']
+                    QtGui.QMessageBox.critical(self, \
+                                              u'Failed to publish catalog', \
+                                              u'An error ocurred while trying to publish your catalog.')
                 self.timer.stop()
         except Queue.Empty:
             pass
 
-    def publish(self):        
+    def publish(self, checked):
+        print "Publish: ", checked
+        if not checked and self._proc:
+            print "Stopping OPDS server"
+            self._proc.terminate()
+            self._proc = None
+            return 
+
         if not self._proc:
             dirname = os.path.join(
                 os.path.abspath(

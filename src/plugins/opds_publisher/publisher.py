@@ -100,19 +100,22 @@ def real_publish():
                     # If the port is in use, try another one        
                     _port += 1
                 else:
+                    queue.put({'error': str(e)})
                     raise e
         return (_host, _port)
-
 
     def start ():
         """Starts the HTTP server
            It attempts to bind to the configured
            address and port, and if they're in use,
            it tries with another port"""
-        (_host, _port) =  get_address()
+        try:
+            (_host, _port) =  get_address()
+        except Exception:
+            return
         url = "http://%s:%d"%(_host, _port)
         print "Appending URL to queue: %s"%url
-        queue.put(url)
+        queue.put({'url': url})
         run(host=_host, port=_port, quiet=True)
     start()
     
