@@ -86,7 +86,7 @@ class Catalog(BookStore):
             if not book:
                 # Let's create a lot of data
                 tags = []
-                for tag in bookdata.tags:
+                for tag in bookdata.get('tags',[]):
                     t = Tag.get_by(name = tag.label)
                     if not t:
                         t = Tag(name = tag.label)
