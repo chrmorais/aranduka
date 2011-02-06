@@ -58,9 +58,8 @@ class FB2Document(object):
 
         # The body element contains the book proper
         body = doc.find('{http://www.gribuser.ru/xml/fictionbook/2.0}body')
-        x = tag2html(body)
-        open('x.html','w').write(x.encode('utf-8'))
-
+        self.html = tag2html(body)
+        
     def getData(self, path):
         """Return the contents of a file in the binary tags of the document"""
         pass
