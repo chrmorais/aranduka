@@ -26,7 +26,9 @@ templates = {
     
     "p" : Templite("""<p>${print text}$${print children2html(tag)}$</p>"""),
     
-    "image": Templite("""<img src="${print tag.attrib["{http://www.w3.org/1999/xlink}href"][1:]}$"/>""")
+    "image": Templite("""<img src="${print tag.attrib["{http://www.w3.org/1999/xlink}href"][1:]}$"/>"""),
+    
+    "strong": Templite("""<b>${print text}$${print children2html(tag)}$</b>"""),
 }
     
 def tag2html(tag):
