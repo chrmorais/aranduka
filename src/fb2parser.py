@@ -1,7 +1,7 @@
 import sys, os, codecs
 from templite import Templite
-import pdb
-
+import re
+from urllib import quote
 try:
     from elementtree.ElementTree import XML
 except:
@@ -22,7 +22,10 @@ templates = {
     <head></head><body>${print text}$${print children2html(tag)}$</h1></body></html>
     """),
     
-    "title" : Templite("<h1>${print text}$${print children2html(tag)}$</h1>"),
+    "title" : Templite("""
+    <a name="${print id(tag)}$">${print id(tag)}$</a>
+    <h1>${print text}$${print children2html(tag)}$</h1>
+    """),
     
     "p" : Templite("""<p>${print text}$${print children2html(tag)}$</p>"""),
     
@@ -34,6 +37,12 @@ templates = {
     
     "empty-line": Templite("</br></br>"),
 }
+
+def tag2text(tag):
+    "Strips a tag's contents aggresively, returning text"
+    if tag: 
+        return re.sub(' +',' ',' '.join(re.sub('<[^<>]+>','',tag2html(tag)).splitlines())).strip()
+    return ""
     
 def tag2html(tag):
     tpl = Templite("${print text}$${print children2html(tag)}$")
@@ -45,8 +54,14 @@ def tag2html(tag):
         text=tag.text
     else:
         text = ""
+    tpl = Templite("${print text}$${print children2html(tag)}$")
     tpl = templates.get(tagname, tpl)
-    rendered = tpl.render(tag=tag, text=text, children2html=children2html,tag2html=tag2html)
+    rendered = tpl.render(tag=tag, 
+        text=text, 
+        children2html=children2html,
+        tag2html=tag2html,
+        id = id,
+        )
     return rendered
     
 def children2html(tag):
@@ -89,18 +104,24 @@ class FB2Document(object):
             print "LINK:", coverpage[0][0].attrib["{http://www.w3.org/1999/xlink}href"][1:]
             self.coverpage=tag2html(coverpage[0])
             open("cover.html","w+").write(self.coverpage)
-
-        
         
         # The body element contains the book proper
         body = doc.find('{http://www.gribuser.ru/xml/fictionbook/2.0}body')
         
+        self.sections=[]
+        self.sectionlinks=[]
+        sections = doc.findall('.//{http://www.gribuser.ru/xml/fictionbook/2.0}section')
+        for section in sections:
+            title = tag2text(section.find('{http://www.gribuser.ru/xml/fictionbook/2.0}title'))
+            self.sections.append(title)
+            self.sectionlinks.append("Book#%d"%id(section))
+        print zip(self.sections,self.sectionlinks)
         self.html = tag2html(body)
         
         
         
         #TODO: create TOC
-        self.tocentries = ["Cover","Book"]
+        self.tocentries = ["Cover","Book"]+self.sectionlinks
 
     def getData(self, path):
         """Return the contents of a file in the binary tags of the document, or the document itself for Book"""

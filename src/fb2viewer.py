@@ -67,8 +67,8 @@ class Main(QtGui.QMainWindow):
     def openPath(self, path, fragment=None):
         if "#" in path:
             path, fragment = path.split('#',1)
+        print "PF", path, fragment
         path = QtCore.QUrl.fromPercentEncoding(path)
-        
         if self.cur_path <> path:
             self.cur_path = path
             print path
@@ -78,7 +78,7 @@ class Main(QtGui.QMainWindow):
             self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"+path))
             
         if fragment:
-            self.javascript('document.location.hash = "%s"'%fragment)
+            self.javascript('document.location.hash = "%s";'%fragment)
                 
     def javascript(self, string, typ=None):
         ans = self.view.page().mainFrame().evaluateJavaScript(string)
