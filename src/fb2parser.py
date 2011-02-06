@@ -21,8 +21,12 @@ templates = {
     <html xmlns='http://www.w3.org/1999/xhtml'> 
     <head></head><body>${print text}$${print children2html(tag)}$</h1></body></html>
     """),
+    
     "title" : Templite("<h1>${print text}$${print children2html(tag)}$</h1>"),
+    
     "p" : Templite("""<p>${print text}$${print children2html(tag)}$</p>"""),
+    
+    "image": Templite("""<img src="${print tag.attrib["{http://www.w3.org/1999/xlink}href"][1:]}$"/>""")
 }
     
 def tag2html(tag):
@@ -64,23 +68,43 @@ class FB2Document(object):
         #TODO: stylesheet, description, binary
 
         # Handle binary tags
-        binaries = doc.findall('{http://www.gribuser.ru/xml/fictionbook/2.0}binary')
-        for b in binaries:
+        binelems = doc.findall('{http://www.gribuser.ru/xml/fictionbook/2.0}binary')
+        self.binaries = {}
+        for b in binelems:
             print b.attrib['id']
+            self.binaries[b.attrib['id']] = b.text.decode('base64')
+        
+        # The description element contains metadata
+        description = doc.find('{http://www.gribuser.ru/xml/fictionbook/2.0}description')
+        
+        # Cover page
+        coverpage=description.findall('.//{http://www.gribuser.ru/xml/fictionbook/2.0}coverpage')
+        if coverpage:
+            print "LINK:", coverpage[0][0].attrib["{http://www.w3.org/1999/xlink}href"][1:]
+            self.coverpage=tag2html(coverpage[0])
+            open("cover.html","w+").write(self.coverpage)
+
+        
         
         # The body element contains the book proper
         body = doc.find('{http://www.gribuser.ru/xml/fictionbook/2.0}body')
         self.html = tag2html(body)
         
         #TODO: create TOC
-        self.tocentries = ["Book"]
+        self.tocentries = ["Cover","Book"]
 
     def getData(self, path):
         """Return the contents of a file in the binary tags of the document, or the document itself for Book"""
         print "PATH:", path
         if path == "Book":
-            print "returning HTML data"
             return self.html.encode('utf-8')
+        elif path == "Cover":
+            return self.coverpage.encode('utf-8')        
+        elif path in self.binaries:
+            return self.binaries[path]
+            
+        print "Requested unkown path:", path
+        return "Missing"
 
 def main(fname):
     doc = FB2Document(sys.argv[1])
