@@ -12,8 +12,8 @@ except:
 # the template should figure out how to produce correct
 # html from it.
 
+# TODO: some 30 mote templates
 templates = {
-
     "title" : Templite("<h1>${print text}$${print children2html(tag)}$</h1>"),
     "p" : Templite("""<p>${print text}$${print children2html(tag)}$</p>"""),
 }
