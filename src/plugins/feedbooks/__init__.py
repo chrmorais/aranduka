@@ -68,8 +68,14 @@ class Catalog(BookStore):
         url = unicode(url)
         extension = url.split('.')[-1]
         print "Opening:",url
+        if 'page=' in url.split('/')[-1]: # A page
+            if 'page=' in self.crumbs[-1][1].split('/')[-1]: 
+                #last one was also a page
+                del self.crumbs[-1]
+            self.showBranch(url)
         if url.split('/')[-1].isdigit():
             # A details page
+            print "DETAILS"
             self.crumbs.append(["#%s"%url.split('/')[-1],url])
             self.showCrumbs()
             self.w.store_web.load(QtCore.QUrl(url))
@@ -108,6 +114,7 @@ class Catalog(BookStore):
             book.fetch_cover("http://www.feedbooks.com/book/%s.jpg"%book_id)
             
         else:
+            print "SBRANCH"
             self.showBranch(url)
 
     def showCrumbs(self):
