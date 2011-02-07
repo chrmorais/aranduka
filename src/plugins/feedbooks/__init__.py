@@ -135,20 +135,22 @@ class Catalog(BookStore):
     @QtCore.pyqtSlot()
     def parseBranch(self):
         """Replaces the content of the web page (which is assumed to be
-        an Atom feed from Feedbooks) with the generated HTML"""
+        an Atom feed from Feedbooks) with the generated HTML.        
+        """
         self.w.store_web.page().mainFrame().loadFinished.disconnect(self.parseBranch)
         url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())
         print "Parsing the branch:", url
         t1 = time.time()
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
         print "Parsed branch in: %s seconds"%(time.time()-t1)
-        
-        crumb = [data.feed.title.split("|")[0].split("/")[-1].strip(), url]
-        try:
-            r=self.crumbs.index(crumb)
-            self.crumbs=self.crumbs[:r+1]
-        except ValueError:
-            self.crumbs.append(crumb)
+        title = data.feed.get('title','')
+        if title:
+            crumb = [title.split("|")[0].split("/")[-1].strip(), url]
+            try:
+                r=self.crumbs.index(crumb)
+                self.crumbs=self.crumbs[:r+1]
+            except ValueError:
+                self.crumbs.append(crumb)
         self.showCrumbs()
         books = []
         links = []        
@@ -172,7 +174,7 @@ class Catalog(BookStore):
 
         t1 = time.time()
         html = self.template.render(
-            title = data.feed.title,
+            title = title,
             books = books,
             links = links,
             url = url,
