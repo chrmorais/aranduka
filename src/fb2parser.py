@@ -21,9 +21,15 @@ templates = {
     <html xmlns='http://www.w3.org/1999/xhtml'> 
     <head></head><body>${print text}$${print children2html(tag)}$</h1></body></html>
     """),
+
     
+    
+    "section": Templite("""
+        <a name="${print id(tag)}$"></a>
+        ${print text}$${print children2html(tag)}$
+        """),
+
     "title" : Templite("""
-    <a name="${print id(tag)}$">${print id(tag)}$</a>
     <h1>${print text}$${print children2html(tag)}$</h1>
     """),
     

@@ -78,7 +78,7 @@ class Main(QtGui.QMainWindow):
             self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"+path))
             
         if fragment:
-            self.javascript('document.location.hash = "%s";'%fragment)
+            self.javascript('document.location.hash = "%s"'%fragment)
                 
     def javascript(self, string, typ=None):
         ans = self.view.page().mainFrame().evaluateJavaScript(string)
