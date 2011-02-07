@@ -81,11 +81,14 @@ ${ if totPages > 1: }$
 Pages:&nbsp;
 ${
     if curPage > 3:
-        emit('<span style="background-color: lightgreen; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>...'%(base_url,1,1))
+        emit('<span style="border: solid 1px lightgrey; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>...'%(base_url,1,1))
     for p in range(max(1,curPage-3), min(curPage+3,totPages+1)):
-        emit('<span style="background-color: lightgreen; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
+        if p == curPage:
+            emit('<span style="border: 1px solid black; background-color: lightgreen; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
+        else:
+            emit('<span style="border: solid 1px lightgrey; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
     if curPage+3 < totPages+1:
-        emit('...<span style="background-color: lightgreen; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,totPages+1,totPages+1))
+        emit('...<span style="border: solid 1px lightgrey; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,totPages+1,totPages+1))
 }$
 </div>
 ${:endif}$
