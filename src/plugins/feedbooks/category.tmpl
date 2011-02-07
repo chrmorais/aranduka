@@ -65,6 +65,8 @@ ${
         icon_url = 'ADDMISSING.jpg'
     title = link.title
     subtitle = link.get('subtitle','')
+    if '<' not in subtitle:
+	    subtitle = subtitle.replace('\n','<p>')
 }$
      <img width="64px" style="float: right; margin-right: 4px;" src="${icon_url}$">
 	 <div style="text-align: left; margin-top: 12px;">		
