@@ -66,6 +66,9 @@ class Catalog(BookStore):
         if isinstance(url, QtCore.QUrl):
             url = url.toString()
         url = unicode(url)
+        # This happens for catalogs by language
+        if url.startswith('/'):
+            url=urlparse.urljoin('http://feedbooks.com',url)
         extension = url.split('.')[-1]
         print "Opening:",url
         if 'page=' in url.split('/')[-1]: # A page
@@ -144,7 +147,7 @@ class Catalog(BookStore):
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
         print "Parsed branch in: %s seconds"%(time.time()-t1)
         title = data.feed.get('title','')
-        if title:
+        if title and not 'page=' in url:
             crumb = [title.split("|")[0].split("/")[-1].strip(), url]
             try:
                 r=self.crumbs.index(crumb)
