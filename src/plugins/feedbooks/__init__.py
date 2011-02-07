@@ -174,5 +174,5 @@ class Catalog(BookStore):
             curPage = int(curPage)
             )
         print "Rendered in: %s seconds"%(time.time()-t1)
-            
+        # open('x.html','w+').write(html)
         self.w.store_web.page().mainFrame().setHtml(html)

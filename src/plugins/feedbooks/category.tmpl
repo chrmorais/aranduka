@@ -1,3 +1,5 @@
+<html>
+<body>
 <h1>${title}$</h1>
 
 ${ if totPages > 1: }$
@@ -5,19 +7,18 @@ ${ if totPages > 1: }$
 Pages:&nbsp;
 ${
     if curPage > 3:
-        emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>...'%(base_url,1,1))
+        emit('<span style="border: solid 3px lightgrey; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>...'%(base_url,1,1))
     for p in range(max(1,curPage-3), min(curPage+3,totPages+1)):
         if p == curPage:
-            emit('<span style="border: 1px solid red; background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
+            emit('<span style="border: 3px solid red; background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
         else:
-            emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
+            emit('<span style="border: solid 3px lightgrey; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
     if curPage+3 < totPages+1:
-        emit('...<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,totPages+1,totPages+1))
+        emit('...<span style="border: solid 3px lightgrey; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,totPages+1,totPages+1))
 }$
 </div>
 ${:endif}$
 
-<table>
 ${for book in books:}$
 ${
     iurl = book.links[0].href
@@ -34,11 +35,12 @@ ${
         if l.rel == "http://opds-spec.org/acquisition":
             acq_links.append('<a href="%s">%s</a>'%(l.href, l.href.split('.')[-1]))
 }$
-<tr>
-    <td style="text-align: right;">
-        <img src="${iurl}$.jpg" height="64">
-    </td>
-    <td>
+<div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
+ onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; "
+ onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';"
+ >
+     <img width="64px" style="float: left; margin-right: 4px;" src="${iurl}$.jpg">
+	 <div style="text-align: right; margin-top: 12px;">		
         ${title}$ by ${author}$</br>
         ${
             if non_acq_links:
@@ -46,10 +48,9 @@ ${
             if acq_links:
                 emit("Download: "+"&nbsp;".join(acq_links))
         }$
-    </td>
-</tr>
+	</div>
+</div>
 ${:end-for}$
-</table>
 
 <table>
 ${for link in links:}$
