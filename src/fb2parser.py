@@ -7,6 +7,9 @@ try:
 except:
     from xml.etree.ElementTree import XML
 
+# The best information I found about the format:
+# http://wiki.mobileread.com/wiki/FB2
+    
 # These are templates indexed by tag name.
 # So, for example, when we find a "title" tag,
 # the template should figure out how to produce correct
