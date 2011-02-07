@@ -51,10 +51,12 @@ ${
 	</div>
 </div>
 ${:end-for}$
-AAA
 
-<table>
 ${for link in links:}$
+<div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
+ onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; "
+ onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';"
+ >
 ${
     iurl = link.links[0].href
     if len(link.links) > 1:
@@ -66,19 +68,13 @@ ${
     if subtitle:
         title = title+": "
 }$
-<tr>
-<td>
-        <img src="${icon_url}$">
-        <a href="${iurl}$">${title}$</a>
-</td>
-<tr>
-<td>
+     <img width="64px" style="float: right; margin-right: 4px;" src="${icon_url}$">
+	 <div style="text-align: left; margin-top: 12px;">		
+        <b><a href="${iurl}$">${title}$</a></b></br>
         ${subtitle}$
-</td>
-</tr>
+	 </div>		
+</div>
 ${:end-for}$
-</table>
-BBBB
 
 ${ if totPages > 1: }$
 <div style="text-align: right; width:90%; margin-left: 5%; margin-bottom: 8px;">
