@@ -71,11 +71,6 @@ class Catalog(BookStore):
             url=urlparse.urljoin('http://feedbooks.com',url)
         extension = url.split('.')[-1]
         print "Opening:",url
-        if 'page=' in url.split('/')[-1]: # A page
-            if 'page=' in self.crumbs[-1][1].split('/')[-1]: 
-                #last one was also a page
-                del self.crumbs[-1]
-            self.showBranch(url)
         if url.split('/')[-1].isdigit():
             # A details page
             print "DETAILS"
@@ -147,7 +142,12 @@ class Catalog(BookStore):
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
         print "Parsed branch in: %s seconds"%(time.time()-t1)
         title = data.feed.get('title','')
-        if title and not 'page=' in url:
+        if 'page=' in url: # A page
+            print "DELETING LAST CRUMB" 
+            if 'page=' in self.crumbs[-1][1]: 
+                #last one was also a page
+                del self.crumbs[-1]
+        if title:
             crumb = [title.split("|")[0].split("/")[-1].strip(), url]
             try:
                 r=self.crumbs.index(crumb)
@@ -181,7 +181,6 @@ class Catalog(BookStore):
             books = books,
             links = links,
             url = url,
-            base_url = url.split('?')[0],
             totPages = totPages,
             curPage = int(curPage)
             )
