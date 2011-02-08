@@ -22,7 +22,7 @@
      <item>
       <widget class="QLabel" name="crumbs">
        <property name="styleSheet">
-        <string notr="true">font: 65%;</string>
+        <string notr="true">font: 65%; padding: 3px;</string>
        </property>
        <property name="text">
         <string/>
