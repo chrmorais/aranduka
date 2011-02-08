@@ -5,6 +5,11 @@ from models import *
 from pprint import pprint
 from math import ceil
 from pluginmgr import BookStore
+import time
+import codecs
+import urlparse
+from templite import Templite
+
 try:
     from elementtree.ElementTree import XML
 except:
@@ -24,6 +29,16 @@ class Catalog(BookStore):
         self.w = None
         self.cover_cache={}
 
+    def setWidget (self, widget):
+        tplfile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'category.tmpl')
+
+        tplfile = codecs.open(tplfile,'r','utf-8')
+        self.template = Templite(tplfile.read())
+        tplfile.close()
+        self.widget = widget
+                
     def operate(self):
         "Show the store"
         if not self.widget:
@@ -41,6 +56,9 @@ class Catalog(BookStore):
             self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
+            self.w.store_web.loadStarted.connect(self.loadStarted)
+            self.w.store_web.loadProgress.connect(self.loadProgress)
+            self.w.store_web.loadFinished.connect(self.loadFinished)
             
         self.widget.stack.setCurrentIndex(self.pageNumber)
         
@@ -57,6 +75,9 @@ class Catalog(BookStore):
         if isinstance(url, QtCore.QUrl):
             url = url.toString()
         url = unicode(url)
+        print "URL:", url
+        if not url.startswith('http'):
+            url=urlparse.urljoin('http://bookserver.archive.org/catalog/',url)
         extension = url.split('.')[-1]
         print "Opening:",url
         if extension in EBOOK_EXTENSIONS:
@@ -72,6 +93,7 @@ class Catalog(BookStore):
                 tags = tags.text.split(';')
             else:
                 tags = []
+            self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
             if not book:
                 _tags = []
@@ -118,14 +140,36 @@ class Catalog(BookStore):
         self.w.crumbs.setText(ctext)
 
     def showBranch(self, url):
+        """Trigger download of the branch, then trigger
+        parseBranch when it's downloaded"""
         print "Showing:", url
-        data = parse(url)
-        html = ["<h1>%s</h1>"%data.feed.title]
+        # Disable updates to prevent flickering
+        self.w.store_web.setUpdatesEnabled(False)
+        self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
+        self.setStatusMessage.emit(u"Loading: "+url)
+        self.w.store_web.page().loadFinished.connect(self.parseBranch)
+        return
+       
+    @QtCore.pyqtSlot()        
+    def parseBranch(self):
+        """Replaces the content of the web page (which is assumed to be
+        an Atom feed from Archive.org) with the generated HTML.        
+        """
+        self.w.store_web.page().loadFinished.disconnect(self.parseBranch)
+        url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())
+        print "Parsing the branch:", url
+        t1 = time.time()
+        data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
+
+        title = data.feed.get('title',data.feed.get('subtitle','###'))
+        
         if url.split('/')[-1].isdigit(): # It's a pageNumber
             pn = int(url.split('/')[-1])+1
-            crumb = [data.feed.title.split("books",1)[-1]+"[%d]"%pn, url]
+            crumb = [title.split("books",1)[-1]+"[%d]"%pn, url]
+            if self.crumbs[-1][1].split('/')[-1].isdigit(): # Don't show two numbered pages
+                del(self.crumbs[-1])
         else:
-            crumb = [data.feed.title.split("-")[-1].strip(), url]
+            crumb = [title.split("-")[-1].strip(), url]
         try:
             r=self.crumbs.index(crumb)
             self.crumbs=self.crumbs[:r+1]
@@ -135,58 +179,39 @@ class Catalog(BookStore):
 
         self.cover_cache={}
         
+        books = []
+        links = []
         for entry in data.entries:
-            iurl = entry.links[0].href
+            # iurl = entry.links[0].href
             if entry.links[0].type == u'application/atom+xml':
                 # A category
-                item = """
-                <dd>
-                    <a href="%s">%s</a>: %s
-                </dd>
-                """%(
-                    iurl,
-                    entry.title,
-                    entry.get('subtitle',''),
-                    )
+                links.append(entry)
             else: # A book
-                cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/image'][0]
-                # Find acquisition links
-                acq_links = []
-                for l in entry.links:
-                    if l.rel==u'http://opds-spec.org/acquisition':
-                        acq_links.append(l.href)
-                        self.cover_cache[l.href]=cover_url
-                acq_fragment = []
-                for l in acq_links:
-                    acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
-                acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
+                books.append(entry)
+                print entry
 
-                item = """
-                <table><tr>
-                    <td style="height: 80px; width: 80px;">
-                    <img src=%s style="height: 64px;">
-                    <td>
-                        %s</br>
-                        Download: %s
-                </table>
-                """%(
-                    cover_url,
-                    entry.title,
-                    acq_fragment,
-                    )
+        nextPage = ''
+        prevPage = ''
+        for l in data.feed.get('links',[]):
+            print "LINK:", l
+            if l.rel == 'next':
+                nextPage = '<a href="%s">Next Page</a>'%l.href
+            elif l.rel == 'prev':
+                prevPage = '<a href="%s">Previous Page</a>'%l.href
 
-            html.append(item)
-
-        # Maybe it's paginated
-        # If it has previous
-        html.append('<div>')
-        for l in data.feed.links:
-            if l.rel == u'previous':
-                html.append('<a href="%s">Previous Page</a>'%l.href)
-        for l in data.feed.links:
-            if l.rel == u'next':
-                html.append('<a href="%s">Next Page</a>'%l.href)
-        html.append('</div>')
-            
-        html='\n'.join(html)
+        t1 = time.time()
+        html = self.template.render(
+            title = title,
+            books = books,
+            links = links,
+            url = url,
+            nextPage = nextPage,
+            prevPage = prevPage
+            )
+        print "Rendered in: %s seconds"%(time.time()-t1)
+        # open('x.html','w+').write(html)        
+        self.w.store_web.setHtml(html)
+        self.w.store_web.setUpdatesEnabled(True)
+        
+        # html='\n'.join(html)
         self.w.store_web.setHtml(html)
