@@ -75,6 +75,7 @@ class Catalog(BookStore):
                 tags = tags.text.split(';')
             else:
                 tags = []
+            self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
             if not book:
                 _tags = []
