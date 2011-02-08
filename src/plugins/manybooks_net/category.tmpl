@@ -61,6 +61,7 @@ ${
 	 <div style="text-align: right; margin-top: 12px;">		
         <b>${title}$</b> by ${author}$</br>
         ${
+            emit(book.get('subtitle','').replace('Subtitle: </strong><br /><br />','')+'</br>')
             if non_acq_links:
                 emit("&nbsp;".join(non_acq_links)+"</br>")
             if acq_links:
@@ -71,21 +72,23 @@ ${
 ${:end-for}$
 
 ${for link in links:}$
-<div style="border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
- onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; "
- onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';"
- >
 ${
     iurl = link.links[0].href
     if len(link.links) > 1:
         icon_url = link.links[1].href
+        h = 'min-height: 128px;'
     else:
-        icon_url = 'ADDMISSING.jpg'
+        icon_url = None
+        h = ''
     title = link.title
     subtitle = link.get('subtitle','')
     if '<' not in subtitle:
 	    subtitle = subtitle.replace('\n','<p>')
 }$
+<div style="${h}$ border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
+ onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; "
+ onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';"
+ >
      <img width="64px" style="float: right; margin-right: 4px;" src="${icon_url}$">
 	 <div style="text-align: left; margin-top: 12px;">		
         <b><a href="${iurl}$">${title}$</a></b></br>

@@ -151,15 +151,15 @@ class Catalog(BookStore):
         books = []
         links = []        
         for entry in data.entries:
-            print "========================"
-            print entry
-            print
-            print
-            print
+            # print "========================"
+            # print entry
+            # print
+            # print
+            # print
             # Find acquisition links
             acq_links = [l.href for l in entry.links if l.rel=='http://opds-spec.org/acquisition']
 
-            if acq_links or 'title_detail' in entry.links[0].href:
+            if acq_links:
                 # A book
                 books.append(entry)
             else:
