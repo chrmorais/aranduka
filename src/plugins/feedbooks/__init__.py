@@ -75,7 +75,9 @@ class Catalog(BookStore):
         print "Opening:",url
         if url.split('/')[-1].isdigit() or url.split('/')[-2].isdigit():
             # A details page
-            self.crumbs.append(["#%s"%url.split('/')[-1],url])
+            crumb = ["#%s"%url.split('/')[-1],url]
+            if crumb not in self.crumbs:
+                self.crumbs.append(crumb)
             self.showCrumbs()
             self.w.store_web.load(QtCore.QUrl(url))
         elif extension in EBOOK_EXTENSIONS:
