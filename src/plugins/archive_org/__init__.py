@@ -7,7 +7,9 @@ from math import ceil
 from pluginmgr import BookStore
 import time
 import codecs
+import urlparse
 from templite import Templite
+
 try:
     from elementtree.ElementTree import XML
 except:
@@ -73,6 +75,9 @@ class Catalog(BookStore):
         if isinstance(url, QtCore.QUrl):
             url = url.toString()
         url = unicode(url)
+        print "URL:", url
+        if not url.startswith('http'):
+            url=urlparse.urljoin('http://bookserver.archive.org/catalog/',url)
         extension = url.split('.')[-1]
         print "Opening:",url
         if extension in EBOOK_EXTENSIONS:
@@ -135,14 +140,36 @@ class Catalog(BookStore):
         self.w.crumbs.setText(ctext)
 
     def showBranch(self, url):
+        """Trigger download of the branch, then trigger
+        parseBranch when it's downloaded"""
         print "Showing:", url
-        data = parse(url)
-        # html = ["<h1>%s</h1>"%data.feed.title]
+        # Disable updates to prevent flickering
+        self.w.store_web.setUpdatesEnabled(False)
+        self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
+        self.setStatusMessage.emit(u"Loading: "+url)
+        self.w.store_web.page().loadFinished.connect(self.parseBranch)
+        return
+       
+    @QtCore.pyqtSlot()        
+    def parseBranch(self):
+        """Replaces the content of the web page (which is assumed to be
+        an Atom feed from Archive.org) with the generated HTML.        
+        """
+        self.w.store_web.page().loadFinished.disconnect(self.parseBranch)
+        url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())
+        print "Parsing the branch:", url
+        t1 = time.time()
+        data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
+
+        title = data.feed.get('title',data.feed.get('subtitle','###'))
+        
         if url.split('/')[-1].isdigit(): # It's a pageNumber
             pn = int(url.split('/')[-1])+1
-            crumb = [data.feed.title.split("books",1)[-1]+"[%d]"%pn, url]
+            crumb = [title.split("books",1)[-1]+"[%d]"%pn, url]
+            if self.crumbs[-1][1].split('/')[-1].isdigit(): # Don't show two numbered pages
+                del(self.crumbs[-1])
         else:
-            crumb = [data.feed.title.split("-")[-1].strip(), url]
+            crumb = [title.split("-")[-1].strip(), url]
         try:
             r=self.crumbs.index(crumb)
             self.crumbs=self.crumbs[:r+1]
@@ -151,7 +178,6 @@ class Catalog(BookStore):
         self.showCrumbs()
 
         self.cover_cache={}
-        title = data.feed.get('title',data.feed.get('subtitle','###'))
         
         books = []
         links = []
