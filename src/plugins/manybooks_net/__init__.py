@@ -84,6 +84,7 @@ class Catalog(BookStore):
             title = self.title_cache[url]
             _author = self.author_cache[url]
             book_id = self.id_cache[url]
+            self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
             book_tid = url.split('/')[-2]
             if not book:
@@ -137,7 +138,16 @@ class Catalog(BookStore):
         print "Parsing the branch:", url
         t1 = time.time()
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
-        print "Parsed branch in: %s seconds"%(time.time()-t1)
+        
+        nextPage = ''
+        prevPage = ''
+        for l in data.feed.get('links',[]):
+            print "LINK:", l
+            if l.rel == 'next':
+                nextPage = '<a href="%s">Next Page</a>'%l.href
+            elif l.rel == 'previous':
+                prevPage = '<a href="%s">Next Page</a>'%l.href
+        
         title = data.feed.get('title',data.feed.get('subtitle',''))
         # FIXME manupulate crumbs correctly
         crumb = ["XXX", url]
@@ -152,13 +162,8 @@ class Catalog(BookStore):
         books = []
         links = []        
         for entry in data.entries:
-            # print "========================"
-            # print entry
-            # print
-            # print
-            # print
             # Find acquisition links
-            acq_links = [l.href for l in entry.links if l.rel=='http://opds-spec.org/acquisition']
+            acq_links = [l.href for l in entry.get('links',[]) if l.rel=='http://opds-spec.org/acquisition']
 
             if acq_links:
                 # A book
@@ -257,8 +262,8 @@ class Catalog(BookStore):
             books = books,
             links = links,
             url = url,
-            totPages = 1,
-            curPage = 1
+            nextPage = nextPage,
+            prevPage = prevPage
             )
         print "Rendered in: %s seconds"%(time.time()-t1)
         # open('x.html','w+').write(html)        

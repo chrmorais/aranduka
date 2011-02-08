@@ -3,42 +3,28 @@
 <h3>${title}$</h3>
 
 ${
-import re
-def patch_url_page(url, page):
-	if 'page=' in url:
-		return re.sub('page=[0-9]+','page=%d'%page,url)
-	elif '?' in url:
-		return url+'&page=%d'%page
-	else:
-		return url+'?page=%d'%page
 		
-def page_link(number, color, bordercolor):
-    return '<span style="border: solid 1px %s; background_color: %s;margin:4px; padding: 4px;"><a href="%s">%s</a></span>'%(bordercolor, color, patch_url_page(url,number),number)
+def page_link(link):
+    return '<span style="border: solid 1px lightgrey; background_color: white; margin:4px; padding: 4px;">%s</span>'%(link)
 		
 def pager():
     result = ''
-    if curPage > 3:
-        result += page_link(1, 'white', 'lightgrey')+'...'
-    for p in range(max(1,curPage-2), min(curPage+3, totPages+1)):
-        if p == curPage:
-            result += page_link(p,'lightgreen', 'black')
-        else:
-            result += page_link(p,'white','lightgrey')
-    if curPage+2 < totPages:
-	    result += '...'+page_link(totPages,'white','lightgrey')
+    if prevPage: result +=page_link(prevPage)
+    if nextPage: result +=page_link(nextPage)
     return result
 }$
 
 
-${ if totPages > 1: }$
+${ if prevPage or nextPage: }$
 <div style="text-align: right; width:90%; margin-left: 5%; margin-bottom: 8px;">
-Pages:&nbsp;
 ${print pager()}$
 </div>
 ${:endif}$
 
 ${for book in books:}$
 ${
+    if not book.get('links',[]):
+        continue
     iurl = book.links[0].href
     title = book.title
     author = book.author
@@ -73,6 +59,8 @@ ${:end-for}$
 
 ${for link in links:}$
 ${
+    if not link.get('links',[]):
+        continue
     iurl = link.links[0].href
     if len(link.links) > 1:
         icon_url = link.links[1].href
@@ -97,10 +85,8 @@ ${
 </div>
 ${:end-for}$
 
-${ if totPages > 1: }$
+${ if prevPage or nextPage: }$
 <div style="text-align: right; width:90%; margin-left: 5%; margin-bottom: 8px;">
-Pages:&nbsp;
-
 ${print pager()}$
 </div>
 ${:endif}$
