@@ -35,11 +35,27 @@ class EpubDocument(object):
         data = opf.read()
         self.opf=XML(data)
         opf.close()
+        
         self.manifest = self.opf.find('{http://www.idpf.org/2007/opf}manifest')
         self.manifest_dict = {}
         for elem in self.manifest.findall('{http://www.idpf.org/2007/opf}item'):
             self.manifest_dict[elem.attrib['id']]=self.basepath+elem.attrib['href']
+            
+        # Parse the guide, it's optional, but has interesting data
+        self.guide = self.opf.find('{http://www.idpf.org/2007/opf}guide')        
+        # End of guide parsing
 
+        # Searching for the cover image
+        # The cover may be on a meta tag
+        self.coverpath = None
+        self.metas = self.opf.findall('.//{http://www.idpf.org/2007/opf}meta')
+        for meta in self.metas:
+            cover_id = meta.attrib['content']
+            self.coverpath = self.manifest_dict[cover_id]
+        # End of search for the cover image
+        
+        
+        # The spine has all the flow of the book
         self.spine = self.opf.find('{http://www.idpf.org/2007/opf}spine')
 
         self.toc_id = self.spine.attrib['toc']
@@ -80,6 +96,11 @@ class EpubDocument(object):
         print self.tocentries
         print self.spinerefs
 
+    def getCover(self):
+        if self.coverpath:
+            return self.getData(self.coverpath)
+        return None
+        
     def getData(self, path):
         """Return the contents of a file in the document"""
 
