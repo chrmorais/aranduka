@@ -33,7 +33,6 @@ class Catalog(BookStore):
         tplfile.close()
         self.widget = widget
 
-
     def operate(self):
         "Show the store"
         if not self.widget:
@@ -71,9 +70,8 @@ class Catalog(BookStore):
             url=urlparse.urljoin('http://feedbooks.com',url)
         extension = url.split('.')[-1]
         print "Opening:",url
-        if url.split('/')[-1].isdigit():
+        if url.split('/')[-1].isdigit() or url.split('/')[-2].isdigit():
             # A details page
-            print "DETAILS"
             self.crumbs.append(["#%s"%url.split('/')[-1],url])
             self.showCrumbs()
             self.w.store_web.load(QtCore.QUrl(url))
