@@ -144,6 +144,7 @@ class Catalog(BookStore):
         self.crumbs.append(crumb)
         self.showCrumbs()
 
+        # FIXME: this leaks memory forever (not very much, though)
         self.cover_cache={}
         self.id_cache={}
         self.author_cache={}
@@ -161,7 +162,15 @@ class Catalog(BookStore):
 
             if acq_links:
                 # A book
+                cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/cover']
+                if cover_url:
+                    cover_url = cover_url[0]
                 books.append(entry)
+                for href in acq_links:
+                    self.cover_cache[href]=cover_url
+                    self.id_cache[href]=entry.get('id')
+                    self.author_cache[href]=entry.author
+                    self.title_cache[href]=entry.title
             else:
                 # A category
                 links.append(entry)
