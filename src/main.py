@@ -159,6 +159,8 @@ class Main(QtGui.QMainWindow):
     def loadProgress(self, p):
         self.progBar.setVisible(True)
         self.progBar.setValue(p)
+        if p == 100:
+            self.statusBar.clearMessage()
     @QtCore.pyqtSlot("PyQt_PyObject")
     def setStatusMessage(self, msg):
         self.statusBar.showMessage(msg)

@@ -91,6 +91,7 @@ class Catalog(BookStore):
                 
             bookdata = bookdata.entries[0]
             title = bookdata.title
+            self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
             if not book:
                 # Let's create a lot of data

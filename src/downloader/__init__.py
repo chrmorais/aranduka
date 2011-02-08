@@ -28,7 +28,6 @@ class Downloads(QtGui.QProgressBar):
         bar = QtGui.QProgressBar()
         self.layout.addWidget(bar)
         self.bars[url]=[url, bar, reply, destination]
-        self.setStatusMessage.emit(u"Downloading: "+url)
                 
     def finished(self):
         reply = self.sender()
@@ -71,6 +70,7 @@ class Downloads(QtGui.QProgressBar):
         self.setValue(val)
         if tot==0 or tot==val:
             self.setVisible(False)
+            self.setStatusMessage.emit(u"")
         else:
             self.setVisible(True)
 
