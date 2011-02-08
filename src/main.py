@@ -4,7 +4,7 @@ import os,sys
 import models, config, ui
 
 # Import Qt modules
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui, uic, QtWebKit
 from progress import progress
 from book_editor import BookEditor
 import rc_icons
@@ -35,6 +35,14 @@ class Main(QtGui.QMainWindow):
 
         self.currentBook = None
 
+        # Set default stylesheet for all web views in the app
+        wksettings = QtWebKit.QWebSettings.globalSettings()
+        # FIXME: this doesn't work
+        wksettings.setMaximumPagesInCache(0)
+        ssurl = QtCore.QUrl().fromLocalFile(os.path.join(os.path.dirname(__file__), 'master.css'))
+        wksettings.setUserStyleSheetUrl(ssurl)
+        
+        
         # View types toggles
         self.viewGroup = QtGui.QButtonGroup(self)
         self.viewGroup.setExclusive(True)
