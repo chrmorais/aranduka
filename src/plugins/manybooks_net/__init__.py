@@ -62,10 +62,6 @@ class Catalog(BookStore):
         
     showGrid = operate
     showList = operate
-
-    @QtCore.pyqtSlot()
-    def doSearch(self, *args):
-        self.search(unicode(self.widget.searchWidget.text.text()))
         
     def search (self, terms):
         url = "http://manybooks.net/opds/search.php?"+urllib.urlencode(dict(q=terms))
