@@ -5,6 +5,8 @@ from models import *
 from pprint import pprint
 from math import ceil
 from pluginmgr import BookStore
+import codecs
+from templite import Templite
 
 # This gets the main catalog from ManyBooks.net.
 
@@ -13,6 +15,7 @@ EBOOK_EXTENSIONS=['epub','mobi','pdf']
 class Catalog(BookStore):
 
     title = "ManyBooks.net: Free and Public Domain Books"
+    itemText = "ManyBooks.net"
     
     def __init__(self):
         print "INIT: ManyBooks.net"
@@ -25,12 +28,14 @@ class Catalog(BookStore):
         self.title_cache={}
         
     def setWidget (self, widget):
-        self.widget = widget
+        tplfile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'category.tmpl')
 
-    def treeItem(self):
-        """Returns a QTreeWidgetItem representing this
-        plugin"""
-        return QtGui.QTreeWidgetItem(["ManyBooks.net"])
+        tplfile = codecs.open(tplfile,'r','utf-8')
+        self.template = Templite(tplfile.read())
+        tplfile.close()
+        self.widget = widget
 
     def operate(self):
         "Show the store"
