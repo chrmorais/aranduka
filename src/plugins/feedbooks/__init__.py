@@ -63,7 +63,6 @@ class Catalog(BookStore):
         self.openUrl(QtCore.QUrl(url))
 
     def openUrl(self, url):
-        print "CRUMBS:", self.crumbs
         if isinstance(url, QtCore.QUrl):
             url = url.toString()
         url = unicode(url)
@@ -117,7 +116,6 @@ class Catalog(BookStore):
             book.fetch_cover("http://www.feedbooks.com/book/%s.jpg"%book_id)
             
         else:
-            print "SBRANCH"
             self.showBranch(url)
 
     def showCrumbs(self):
