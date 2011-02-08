@@ -67,6 +67,10 @@ class Main(QtGui.QMainWindow):
 
         downloader.downloader = downloader.Downloads()
         self.statusBar.addPermanentWidget(downloader.downloader)
+        self.progBar = QtGui.QProgressBar()
+        self.progBar.setMaximumWidth(100)
+        self.statusBar.addPermanentWidget(self.progBar)
+        self.progBar.setVisible(False)
         
     def closeEvent(self, event):
         config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
@@ -107,15 +111,13 @@ class Main(QtGui.QMainWindow):
             # Ways to acquire books
             if plugin.name not in enabled_plugins:
                 continue
-            def xx():
-                print "Load Started"
-            print "1"
-            print plugin.plugin_object
-            print "2"
-            print plugin.name
-            if plugin.plugin_object.loadStarted:
-                QtCore.QObject.connect(plugin.plugin_object, QtCore.SIGNAL("loadStarted()"),xx)
-            print "3"
+
+            # Hook progress report signals
+            plugin.plugin_object.loadStarted.connect(self.loadStarted)
+            plugin.plugin_object.loadFinished.connect(self.loadFinished)
+            plugin.plugin_object.loadProgress.connect(self.loadProgress)
+            
+            # Add to the Store list
             item = plugin.plugin_object.treeItem()
             item.handler = plugin.plugin_object
             item.title = plugin.plugin_object.title
@@ -136,6 +138,18 @@ class Main(QtGui.QMainWindow):
             dev_menu.addAction(plugin.plugin_object.actionNew())
             self.menuDevices.addMenu(dev_menu)
 
+    @QtCore.pyqtSlot()
+    def loadStarted(self):
+        self.progBar.setVisible(True)
+    @QtCore.pyqtSlot()
+    def loadFinished(self):
+        self.progBar.setVisible(False)
+    @QtCore.pyqtSlot("int")
+    def loadProgress(self, p):
+        self.progBar.setVisible(True)
+        self.progBar.setValue(p)
+
+            
     @QtCore.pyqtSlot()
     def on_actionPlugins_triggered(self):
         dlg = PluginSettings(self)

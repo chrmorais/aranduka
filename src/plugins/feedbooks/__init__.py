@@ -50,6 +50,9 @@ class Catalog(BookStore):
             self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
+            self.w.store_web.loadStarted.connect(self.loadStarted)
+            self.w.store_web.loadProgress.connect(self.loadProgress)
+            self.w.store_web.loadFinished.connect(self.loadFinished)
         self.widget.stack.setCurrentIndex(self.pageNumber)
 
     showGrid = operate
@@ -124,6 +127,8 @@ class Catalog(BookStore):
         """Trigger download of the branch, then trigger
         parseBranch when it's downloaded"""
         print "Showing:", url
+        # Disable updates to prevent flickering
+        self.w.store_web.setUpdatesEnabled(False)
         self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
         self.w.store_web.page().mainFrame().loadFinished.connect(self.parseBranch)
         return
@@ -185,3 +190,4 @@ class Catalog(BookStore):
         print "Rendered in: %s seconds"%(time.time()-t1)
         # open('x.html','w+').write(html)
         self.w.store_web.page().mainFrame().setHtml(html)
+        self.w.store_web.setUpdatesEnabled(True)

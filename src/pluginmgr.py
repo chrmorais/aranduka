@@ -126,7 +126,12 @@ class BookStore(QtCore.QObject):
     title = "Base Bookstore"
     itemText = "BASE"
     configurable = False
+    
+    # These are signals the plugin uses to provide feedback
+    # to the main UI
     loadStarted = QtCore.pyqtSignal()
+    loadFinished = QtCore.pyqtSignal()
+    loadProgress = QtCore.pyqtSignal("int")
     
     def __init__(self):
         print "INIT:", self.title
