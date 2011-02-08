@@ -1,23 +1,42 @@
-<h1>${title}$</h1>
+<html>
+<body>
+<h3>${title}$</h3>
+
+${
+import re
+def patch_url_page(url, page):
+	if 'page=' in url:
+		return re.sub('page=[0-9]+','page=%d'%page,url)
+	elif '?' in url:
+		return url+'&page=%d'%page
+	else:
+		return url+'?page=%d'%page
+		
+def page_link(number, color, bordercolor):
+    return '<span style="border: solid 1px %s; background_color: %s;margin:4px; padding: 4px;"><a href="%s">%s</a></span>'%(bordercolor, color, patch_url_page(url,number),number)
+		
+def pager():
+    result = ''
+    if curPage > 3:
+        result += page_link(1, 'white', 'lightgrey')+'...'
+    for p in range(max(1,curPage-2), min(curPage+3, totPages+1)):
+        if p == curPage:
+            result += page_link(p,'lightgreen', 'black')
+        else:
+            result += page_link(p,'white','lightgrey')
+    if curPage+2 < totPages:
+	    result += '...'+page_link(totPages,'white','lightgrey')
+    return result
+}$
+
 
 ${ if totPages > 1: }$
 <div style="text-align: right; width:90%; margin-left: 5%; margin-bottom: 8px;">
 Pages:&nbsp;
-${
-    if curPage > 3:
-        emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>...'%(base_url,1,1))
-    for p in range(max(1,curPage-3), min(curPage+3,totPages+1)):
-        if p == curPage:
-            emit('<span style="border: 1px solid red; background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
-        else:
-            emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
-    if curPage+3 < totPages+1:
-        emit('...<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,totPages+1,totPages+1))
-}$
+${print pager()}$
 </div>
 ${:endif}$
 
-<table>
 ${for book in books:}$
 ${
     iurl = book.links[0].href
@@ -34,25 +53,28 @@ ${
         if l.rel == "http://opds-spec.org/acquisition":
             acq_links.append('<a href="%s">%s</a>'%(l.href, l.href.split('.')[-1]))
 }$
-<tr>
-    <td style="text-align: right;">
-        <img src="${iurl}$.jpg" height="64">
-    </td>
-    <td>
-        ${title}$ by ${author}$</br>
+<div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
+ onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; "
+ onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';"
+ >
+     <img width="64px" style="float: left; margin-right: 4px;" src="${iurl}$.jpg">
+	 <div style="text-align: right; margin-top: 12px;">		
+        <b>${title}$</b> by ${author}$</br>
         ${
             if non_acq_links:
                 emit("&nbsp;".join(non_acq_links)+"</br>")
             if acq_links:
                 emit("Download: "+"&nbsp;".join(acq_links))
         }$
-    </td>
-</tr>
+	</div>
+</div>
 ${:end-for}$
-</table>
 
-<table>
 ${for link in links:}$
+<div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
+ onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; "
+ onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';"
+ >
 ${
     iurl = link.links[0].href
     if len(link.links) > 1:
@@ -61,32 +83,21 @@ ${
         icon_url = 'ADDMISSING.jpg'
     title = link.title
     subtitle = link.get('subtitle','')
-    if subtitle:
-        title = title+": "
+    if '<' not in subtitle:
+	    subtitle = subtitle.replace('\n','<p>')
 }$
-<tr>
-<td>
-        <img src="${icon_url}$">
-        <a href="${iurl}$">${title}$</a>
-</td>
-<tr>
-<td>
+     <img width="64px" style="float: right; margin-right: 4px;" src="${icon_url}$">
+	 <div style="text-align: left; margin-top: 12px;">		
+        <b><a href="${iurl}$">${title}$</a></b></br>
         ${subtitle}$
-</td>
-</tr>
+	 </div>		
+</div>
 ${:end-for}$
-</table>
 
 ${ if totPages > 1: }$
 <div style="text-align: right; width:90%; margin-left: 5%; margin-bottom: 8px;">
 Pages:&nbsp;
-${
-    if curPage > 3:
-        emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>...'%(base_url,1,1))
-    for p in range(max(1,curPage-3), min(curPage+3,totPages+1)):
-        emit('<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,p,p))
-    if curPage+3 < totPages+1:
-        emit('...<span style="background-color: yellow; margin:4px; padding: 4px;"><a href="%s?page=%s">%s</a></span>'%(base_url,totPages+1,totPages+1))
-}$
+
+${print pager()}$
 </div>
 ${:endif}$

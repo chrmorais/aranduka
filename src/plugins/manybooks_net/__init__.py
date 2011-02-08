@@ -16,6 +16,7 @@ class Catalog(BookStore):
     
     def __init__(self):
         print "INIT: ManyBooks.net"
+        BookStore.__init__(self)
         self.widget = None
         self.w = None
         self.cover_cache={}
