@@ -132,6 +132,7 @@ class BookStore(QtCore.QObject):
     loadStarted = QtCore.pyqtSignal()
     loadFinished = QtCore.pyqtSignal()
     loadProgress = QtCore.pyqtSignal("int")
+    setStatusMessage = QtCore.pyqtSignal("PyQt_PyObject")
     
     def __init__(self):
         print "INIT:", self.title

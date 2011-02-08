@@ -130,6 +130,7 @@ class Catalog(BookStore):
         # Disable updates to prevent flickering
         self.w.store_web.setUpdatesEnabled(False)
         self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
+        self.setStatusMessage.emit(u"Loading: "+url)
         self.w.store_web.page().mainFrame().loadFinished.connect(self.parseBranch)
         return
         

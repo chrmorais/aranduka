@@ -124,6 +124,7 @@ class Main(QtGui.QMainWindow):
             plugin.plugin_object.loadStarted.connect(self.loadStarted)
             plugin.plugin_object.loadFinished.connect(self.loadFinished)
             plugin.plugin_object.loadProgress.connect(self.loadProgress)
+            plugin.plugin_object.setStatusMessage.connect(self.setStatusMessage)
             
             # Add to the Store list
             item = plugin.plugin_object.treeItem()
@@ -152,10 +153,14 @@ class Main(QtGui.QMainWindow):
     @QtCore.pyqtSlot()
     def loadFinished(self):
         self.progBar.setVisible(False)
+        self.statusBar.clearMessage()
     @QtCore.pyqtSlot("int")
     def loadProgress(self, p):
         self.progBar.setVisible(True)
         self.progBar.setValue(p)
+    @QtCore.pyqtSlot("PyQt_PyObject")
+    def setStatusMessage(self, msg):
+        self.statusBar.showMessage(msg)
 
             
     @QtCore.pyqtSlot()
