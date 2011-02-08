@@ -6,6 +6,7 @@ from pprint import pprint
 from math import ceil
 from pluginmgr import BookStore
 import codecs
+import time
 from templite import Templite
 
 # This gets the main catalog from ManyBooks.net.
@@ -112,8 +113,29 @@ class Catalog(BookStore):
         self.w.crumbs.setText(ctext)
 
     def showBranch(self, url):
-        data = parse(url)
-        html = ["<h1>%s</h1>"%data.feed.title]
+        """Trigger download of the branch, then trigger
+        parseBranch when it's downloaded"""
+        print "Showing:", url
+        # Disable updates to prevent flickering
+        self.w.store_web.setUpdatesEnabled(False)
+        self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
+        self.setStatusMessage.emit(u"Loading: "+url)
+        self.w.store_web.page().loadFinished.connect(self.parseBranch)
+        return
+        
+    @QtCore.pyqtSlot()
+    def parseBranch(self):
+        """Replaces the content of the web page (which is assumed to be
+        an Atom feed from ManyBooks) with the generated HTML.        
+        """
+        self.w.store_web.page().loadFinished.disconnect(self.parseBranch)
+        url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())
+        print "Parsing the branch:", url
+        t1 = time.time()
+        data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
+        print "Parsed branch in: %s seconds"%(time.time()-t1)
+        title = data.feed.get('title','')
+        html = ["<h1>%s</h1>"%title]
         if url.split('/')[-1].isdigit(): # It's a pageNumber
             pn = int(url.split('/')[-1])+1
             crumb = [data.feed.title.split("books",1)[-1]+"[%d]"%pn, url]
@@ -209,6 +231,7 @@ class Catalog(BookStore):
             
         html='\n'.join(html)
         self.w.store_web.setHtml(html)
+        self.w.store_web.setUpdatesEnabled(True)
 
     def on_catalog_itemExpanded(self, item):
         if item.childCount()==0:
