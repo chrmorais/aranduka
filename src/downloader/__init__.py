@@ -1,20 +1,19 @@
 from PyQt4 import QtGui, QtCore, QtNetwork
 import sys
 
-class Downloads(QtGui.QProgressBar):
+class Downloads(QtGui.QWidget):
 
     setStatusMessage = QtCore.pyqtSignal("PyQt_PyObject")
     
     def __init__(self,parent=None):
         super(Downloads,self).__init__(parent)
-        self.popup = QtGui.QWidget()
-        
+        self.avgBar = QtGui.QProgressBar(self)
         self.bars={}        
         self.layout = QtGui.QVBoxLayout()
-        self.popup.setLayout(self.layout)
+        self.setLayout(self.layout)
+        self.layout.addWidget(self.avgBar)
         self.manager = QtNetwork.QNetworkAccessManager(self)
         self.setVisible(False)
-        self.setMaximumWidth(100)
         
     def fetch(self, url, destination):
         if url in self.bars:
@@ -66,8 +65,8 @@ class Downloads(QtGui.QProgressBar):
                 tot += bar.maximum()
             val += bar.value()
         print tot, val
-        self.setMaximum(tot)
-        self.setValue(val)
+        self.avgBar.setMaximum(tot)
+        self.avgBar.setValue(val)
         if tot==0 or tot==val:
             self.setVisible(False)
             self.setStatusMessage.emit(u"")
