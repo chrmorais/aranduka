@@ -148,10 +148,20 @@ class Catalog(BookStore):
             elif l.rel == 'previous':
                 prevPage = '<a href="%s">Next Page</a>'%l.href
         
-        title = data.feed.get('title',data.feed.get('subtitle',''))
+        title = data.feed.get('title',data.feed.get('subtitle','###'))
         # FIXME manupulate crumbs correctly
-        crumb = ["XXX", url]
-        self.crumbs.append(crumb)
+        if '?n=' in url: # It's paginated
+            pnum = int(url.split('=')[-1])/10+1
+            title = title+'(%s)'%pnum
+            if '?n=' in self.crumbs[-1][1]:
+                # Don't show two numbered pages in a row
+                del(self.crumbs[-1])
+            
+        crumb = [title, url]
+        if crumb in self.crumbs:
+            self.crumbs = self.crumbs[:self.crumbs.index(crumb)+1]
+        else:
+            self.crumbs.append(crumb)
         self.showCrumbs()
 
         # FIXME: this leaks memory forever (not very much, though)
