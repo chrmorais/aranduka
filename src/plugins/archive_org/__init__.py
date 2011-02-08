@@ -5,6 +5,9 @@ from models import *
 from pprint import pprint
 from math import ceil
 from pluginmgr import BookStore
+import time
+import codecs
+from templite import Templite
 try:
     from elementtree.ElementTree import XML
 except:
@@ -24,6 +27,16 @@ class Catalog(BookStore):
         self.w = None
         self.cover_cache={}
 
+    def setWidget (self, widget):
+        tplfile = os.path.join(
+            os.path.abspath(
+                os.path.dirname(__file__)),'category.tmpl')
+
+        tplfile = codecs.open(tplfile,'r','utf-8')
+        self.template = Templite(tplfile.read())
+        tplfile.close()
+        self.widget = widget
+                
     def operate(self):
         "Show the store"
         if not self.widget:
@@ -124,7 +137,7 @@ class Catalog(BookStore):
     def showBranch(self, url):
         print "Showing:", url
         data = parse(url)
-        html = ["<h1>%s</h1>"%data.feed.title]
+        # html = ["<h1>%s</h1>"%data.feed.title]
         if url.split('/')[-1].isdigit(): # It's a pageNumber
             pn = int(url.split('/')[-1])+1
             crumb = [data.feed.title.split("books",1)[-1]+"[%d]"%pn, url]
@@ -138,59 +151,40 @@ class Catalog(BookStore):
         self.showCrumbs()
 
         self.cover_cache={}
+        title = data.feed.get('title',data.feed.get('subtitle','###'))
         
+        books = []
+        links = []
         for entry in data.entries:
-            iurl = entry.links[0].href
+            # iurl = entry.links[0].href
             if entry.links[0].type == u'application/atom+xml':
                 # A category
-                item = """
-                <dd>
-                    <a href="%s">%s</a>: %s
-                </dd>
-                """%(
-                    iurl,
-                    entry.title,
-                    entry.get('subtitle',''),
-                    )
+                links.append(entry)
             else: # A book
-                cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/image'][0]
-                # Find acquisition links
-                acq_links = []
-                for l in entry.links:
-                    if l.rel==u'http://opds-spec.org/acquisition':
-                        acq_links.append(l.href)
-                        self.cover_cache[l.href]=cover_url
-                acq_fragment = []
-                for l in acq_links:
-                    acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
-                acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
+                books.append(entry)
 
-                item = """
-                <table><tr>
-                    <td style="height: 80px; width: 80px;">
-                    <img src=%s style="height: 64px;">
-                    <td>
-                        %s</br>
-                        Download: %s
-                </table>
-                """%(
-                    cover_url,
-                    entry.title,
-                    acq_fragment,
-                    )
+        nextPage = ''
+        prevPage = ''
+        for l in data.feed.get('links',[]):
+            print "LINK:", l
+            if l.rel == 'next':
+                nextPage = '<a href="%s">Next Page</a>'%l.href
+            elif l.rel == 'prev':
+                prevPage = '<a href="%s">Previous Page</a>'%l.href
 
-            html.append(item)
-
-        # Maybe it's paginated
-        # If it has previous
-        html.append('<div>')
-        for l in data.feed.links:
-            if l.rel == u'previous':
-                html.append('<a href="%s">Previous Page</a>'%l.href)
-        for l in data.feed.links:
-            if l.rel == u'next':
-                html.append('<a href="%s">Next Page</a>'%l.href)
-        html.append('</div>')
-            
-        html='\n'.join(html)
+        t1 = time.time()
+        html = self.template.render(
+            title = title,
+            books = books,
+            links = links,
+            url = url,
+            nextPage = nextPage,
+            prevPage = prevPage
+            )
+        print "Rendered in: %s seconds"%(time.time()-t1)
+        # open('x.html','w+').write(html)        
+        self.w.store_web.setHtml(html)
+        self.w.store_web.setUpdatesEnabled(True)
+        
+        # html='\n'.join(html)
         self.w.store_web.setHtml(html)
