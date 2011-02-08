@@ -27,6 +27,8 @@ class Downloads(QtGui.QWidget):
         bar = QtGui.QProgressBar()
         self.layout.addWidget(bar)
         self.bars[url]=[url, bar, reply, destination]
+        if len(self.bars) > 1:
+            for bar in self.bars: self.bars[bar][1].setVisible(True)
                 
     def finished(self):
         reply = self.sender()
@@ -35,6 +37,9 @@ class Downloads(QtGui.QWidget):
         redirURL = unicode(reply.attribute(QtNetwork.QNetworkRequest.RedirectionTargetAttribute).toString())
         del self.bars[url]
         bar.deleteLater()
+        if len(self.bars) < 2:
+            for bar in self.bars: self.bars[bar][1].setVisible(False)
+            
         if redirURL and redirURL != url:
             # Need to redirect
             print "Following redirect to:", redirURL
