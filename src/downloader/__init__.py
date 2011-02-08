@@ -3,6 +3,8 @@ import sys
 
 class Downloads(QtGui.QProgressBar):
 
+    setStatusMessage = QtCore.pyqtSignal("PyQt_PyObject")
+    
     def __init__(self,parent=None):
         super(Downloads,self).__init__(parent)
         self.popup = QtGui.QWidget()
@@ -26,6 +28,7 @@ class Downloads(QtGui.QProgressBar):
         bar = QtGui.QProgressBar()
         self.layout.addWidget(bar)
         self.bars[url]=[url, bar, reply, destination]
+        self.setStatusMessage.emit(u"Downloading: "+url)
                 
     def finished(self):
         reply = self.sender()

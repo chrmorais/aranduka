@@ -135,7 +135,7 @@ class Catalog(BookStore):
         self.w.store_web.setUpdatesEnabled(False)
         self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
         self.setStatusMessage.emit(u"Loading: "+url)
-        self.w.store_web.page().mainFrame().loadFinished.connect(self.parseBranch)
+        self.w.store_web.page().loadFinished.connect(self.parseBranch)
         return
         
     @QtCore.pyqtSlot()
@@ -143,7 +143,7 @@ class Catalog(BookStore):
         """Replaces the content of the web page (which is assumed to be
         an Atom feed from Feedbooks) with the generated HTML.        
         """
-        self.w.store_web.page().mainFrame().loadFinished.disconnect(self.parseBranch)
+        self.w.store_web.page().loadFinished.disconnect(self.parseBranch)
         url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())
         print "Parsing the branch:", url
         t1 = time.time()
