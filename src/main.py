@@ -73,9 +73,9 @@ class Main(QtGui.QMainWindow):
         if geom is not None:
             self.restoreGeometry(geom.decode('base64'))
 
-        downloader.downloader = downloader.Downloads()
+        downloader.downloader = self.downloader
         downloader.downloader.setStatusMessage.connect(self.setStatusMessage)
-        self.statusBar.addPermanentWidget(downloader.downloader)
+        # self.statusBar.addPermanentWidget(downloader.downloader)
         self.progBar = QtGui.QProgressBar()
         self.progBar.setMaximumWidth(100)
         self.statusBar.addPermanentWidget(self.progBar)
