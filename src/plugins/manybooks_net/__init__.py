@@ -149,7 +149,6 @@ class Catalog(BookStore):
                 prevPage = '<a href="%s">Next Page</a>'%l.href
         
         title = data.feed.get('title',data.feed.get('subtitle','###'))
-        # FIXME manupulate crumbs correctly
         if '?n=' in url: # It's paginated
             pnum = int(url.split('=')[-1])/10+1
             title = title+'(%s)'%pnum
