@@ -42,11 +42,11 @@ ${
     iurl = book.links[0].href
     title = book.title
     author = book.author
-    acq_links = []
     non_acq_links = []
+    acq_links = []
     for l in book.links:
         #Non-acquisition links
-        if l.rel == "alternate" and l.type == "text/html":
+        if l.rel == "alternate" and l.type in ["text/html", "application/atom+xml"]:
             non_acq_links.append('<a href="%s">%s</a>'%(l.href, l.title))
     for l in book.links:
         #acquisition links
