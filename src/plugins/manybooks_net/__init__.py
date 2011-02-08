@@ -8,6 +8,7 @@ from pluginmgr import BookStore
 import codecs
 import time
 from templite import Templite
+import urlparse
 
 # This gets the main catalog from ManyBooks.net.
 
@@ -70,9 +71,12 @@ class Catalog(BookStore):
         self.openUrl(QtCore.QUrl(url))
 
     def openUrl(self, url):
+        print "openURL:", url
         if isinstance(url, QtCore.QUrl):
             url = url.toString()
         url = unicode(url)
+        if not url.startswith('http'):
+            url=urlparse.urljoin('http://manybooks.net/opds/',url)        
         extension = url.split('.')[-1]
         if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
@@ -134,26 +138,37 @@ class Catalog(BookStore):
         t1 = time.time()
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
         print "Parsed branch in: %s seconds"%(time.time()-t1)
-        title = data.feed.get('title','')
-        html = ["<h1>%s</h1>"%title]
-        if url.split('/')[-1].isdigit(): # It's a pageNumber
-            pn = int(url.split('/')[-1])+1
-            crumb = [data.feed.title.split("books",1)[-1]+"[%d]"%pn, url]
-        else:
-            crumb = [data.feed.title.split("-")[-1].strip(), url]
-        try:
-            r=self.crumbs.index(crumb)
-            self.crumbs=self.crumbs[:r+1]
-        except ValueError:
-            self.crumbs.append(crumb)
+        title = data.feed.get('title',data.feed.get('subtitle',''))
+        # FIXME manupulate crumbs correctly
+        crumb = ["XXX", url]
+        self.crumbs.append(crumb)
         self.showCrumbs()
 
         self.cover_cache={}
         self.id_cache={}
         self.author_cache={}
         
+        books = []
+        links = []        
         for entry in data.entries:
-            pass
+            print "========================"
+            print entry
+            print
+            print
+            print
+            # Find acquisition links
+            acq_links = [l.href for l in entry.links if l.rel=='http://opds-spec.org/acquisition']
+            acq_fragment = []
+            for l in acq_links:
+                acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
+            acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
+
+            if 'title_detail' in entry.links[0].href:
+                # A book
+                books.append(entry)
+            else:
+                # A category
+                links.append(entry)
             # iurl = entry.links[0].href
             # if entry.links[0].type == u'application/atom+xml':
                 # # A category
@@ -237,8 +252,8 @@ class Catalog(BookStore):
             books = books,
             links = links,
             url = url,
-            totPages = totPages,
-            curPage = int(curPage)
+            totPages = 1,
+            curPage = 1
             )
         print "Rendered in: %s seconds"%(time.time()-t1)
         # open('x.html','w+').write(html)        
