@@ -76,7 +76,9 @@ class Catalog(BookStore):
         if url.split('/')[-1].isdigit() or url.split('/')[-2].isdigit():
             # A details page
             crumb = ["#%s"%url.split('/')[-1],url]
-            if crumb not in self.crumbs:
+            if crumb in self.crumbs:
+                self.crumbs = self.crumbs[:self.crumbs.index(crumb)+1]
+            else:
                 self.crumbs.append(crumb)
             self.showCrumbs()
             self.w.store_web.load(QtCore.QUrl(url))
