@@ -173,8 +173,8 @@ class Catalog(BookStore):
                 links.append(entry)
 
         totPages = int(ceil(float(data.feed.get('opensearch_totalresults', 1))/int(data.feed.get('opensearch_itemsperpage', 1))))
-        curPage = urlparse.parse_qs(urlparse.urlparse(url).query).get('page',[1])[-1]
-
+        curPage = int(urlparse.parse_qs(urlparse.urlparse(url).query).get('page',[1])[-1])
+        
         t1 = time.time()
         html = self.template.render(
             title = title,

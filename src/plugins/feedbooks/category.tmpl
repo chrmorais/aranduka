@@ -19,7 +19,7 @@ def pager():
     result = ''
     if curPage > 3:
         result += page_link(1, 'white', 'lightgrey')+'...'
-    for p in range(max(1,curPage-2), min(curPage+2, totPages+1)):
+    for p in range(max(1,curPage-2), min(curPage+3, totPages+1)):
         if p == curPage:
             result += page_link(p,'lightgreen', 'black')
         else:
