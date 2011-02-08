@@ -18,9 +18,9 @@ class Catalog(BookStore):
 
     title = "FeedBooks: Free and Public Domain Books"
     itemText = "FeedBooks.com"
-    
     def __init__(self):
         BookStore.__init__(self)
+        print "CATALOGINIT"
         self.w = None
         
     def setWidget (self, widget):

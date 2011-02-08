@@ -102,6 +102,7 @@ class RSSStore(BookStore):
         print "INIT:", self.title
         self.widget = None
         self.w = None
+        BookStore.__init__(self)
 
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this

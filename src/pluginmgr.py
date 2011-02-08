@@ -119,17 +119,19 @@ class ShelfView(QtCore.QObject):
 
 
 
-class BookStore(object):
+class BookStore(QtCore.QObject):
     """Plugins that inherit this class give access to some
     mechanism for book acquisition"""
 
     title = "Base Bookstore"
     itemText = "BASE"
     configurable = False
-
+    loadStarted = QtCore.pyqtSignal()
+    
     def __init__(self):
         print "INIT:", self.title
         self.widget = None
+        super(QtCore.QObject, self).__init__(None)    
 
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this

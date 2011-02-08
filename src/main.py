@@ -107,6 +107,15 @@ class Main(QtGui.QMainWindow):
             # Ways to acquire books
             if plugin.name not in enabled_plugins:
                 continue
+            def xx():
+                print "Load Started"
+            print "1"
+            print plugin.plugin_object
+            print "2"
+            print plugin.name
+            if plugin.plugin_object.loadStarted:
+                QtCore.QObject.connect(plugin.plugin_object, QtCore.SIGNAL("loadStarted()"),xx)
+            print "3"
             item = plugin.plugin_object.treeItem()
             item.handler = plugin.plugin_object
             item.title = plugin.plugin_object.title
