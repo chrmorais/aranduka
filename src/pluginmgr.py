@@ -149,8 +149,17 @@ class BookStore(QtCore.QObject):
 
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
+        """Slot that triggers search on this store"""
         self.search(unicode(self.widget.searchWidget.text.text()))
 
+    def search(self, key):
+        """Search the store contents for this key, and display the results"""
+        
+    def showGrid(self):
+        """Show contents in a grid, if applicable."""
+
+    def showList(self):
+        """Show contents in a list, if applicable."""
 
 class Converter(object):
     configurable = False
