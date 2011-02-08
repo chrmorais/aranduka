@@ -166,10 +166,6 @@ class Catalog(BookStore):
         for entry in data.entries:
             # Find acquisition links
             acq_links = [l.href for l in entry.links if l.rel=='http://opds-spec.org/acquisition']
-            # acq_fragment = []
-            # for l in acq_links:
-                # acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
-            # acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
 
             if acq_links: # Can be acquired
                 books.append(entry)
