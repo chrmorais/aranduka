@@ -188,6 +188,7 @@ class Catalog(BookStore):
                 links.append(entry)
             else: # A book
                 books.append(entry)
+                print entry
 
         nextPage = ''
         prevPage = ''

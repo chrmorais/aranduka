@@ -25,7 +25,7 @@ ${for book in books:}$
 ${
     if not book.get('links',[]):
         continue
-    iurl = [l.href for l in book.links if l.rel==u'http://opds-spec.org/image'][0]
+    iurl = [l.href for l in book.links if l.rel==u'http://opds-spec.org/image/thumbnail'][0]
     title = book.title
     non_acq_links = []
     acq_links = []
