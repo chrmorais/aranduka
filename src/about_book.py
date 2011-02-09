@@ -37,7 +37,7 @@ class AboutBook(QtGui.QWidget):
         <div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
              onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; document.getElementById('submit-'0').style.opacity=1.0;" 
              onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white'; document.getElementById('submit-0').style.opacity=1.0;" >
-            <img style="float: left; margin-right: 4px; max-height: 180px" src="file://${thumb}$">
+            <img style="float: left; margin-right: 4px; max-height: 180px" src="${thumb}$">
             <div style="text-align: right; margin-top: 12px;">
                 <b>${title}$</b><br>
                 by ${', '.join([a.name for a in authors]) or ""}$<br>
@@ -66,7 +66,7 @@ class AboutBook(QtGui.QWidget):
 #            identifiers = self.book.identifiers,
             files = [fname.file_name for fname in self.book.files],
             tags = [tag.name for tag in self.book.tags],
-            thumb = self.book.cover(),
+            thumb = QtCore.QUrl.fromLocalFile(self.book.cover()).toString(),
             )
         print "Rendered in: %s seconds"%(time.time()-t1)
         print html
