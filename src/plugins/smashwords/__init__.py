@@ -17,12 +17,12 @@ except:
 
 # This gets the main catalog from Archive.org.
 
-EBOOK_EXTENSIONS=['epub','mobi','pdf']
+EBOOK_EXTENSIONS=['epub','mobi','pdf','rtf','lrf','pdb','txt']
 
 class Catalog(BookStore):
 
     title = "Archive.org: Free and Public Domain Books"
-    itemText = "Archive.org"
+    itemText = "SmashWords.com"
     
     def __init__(self):
         BookStore.__init__(self)
