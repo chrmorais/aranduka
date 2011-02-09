@@ -40,7 +40,7 @@ class Main(QtGui.QMainWindow):
         # FIXME: this doesn't work
         wksettings.setMaximumPagesInCache(0)
         ssurl = QtCore.QUrl().fromLocalFile(os.path.join(os.path.dirname(__file__), 'master.css'))
-        wksettings.setUserStyleSheetUrl(ssurl)
+        # wksettings.setUserStyleSheetUrl(ssurl)
         
         
         # View types toggles

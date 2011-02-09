@@ -1,0 +1,9 @@
+[Core]
+Name = arxiv
+Module = arxiv
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://aranduka.googlecode.com
+Description = Download documents from arXiv
