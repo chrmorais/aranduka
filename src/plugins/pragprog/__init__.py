@@ -149,7 +149,7 @@ class Catalog(BookStore):
                 #last one was also a page
                 del self.crumbs[-1]
         if title:
-            crumb = [title.split("|")[0].split("/")[-1].strip(), url]
+            crumb = [title.split("|")[-1].strip(), url]
             try:
                 r=self.crumbs.index(crumb)
                 self.crumbs=self.crumbs[:r+1]
