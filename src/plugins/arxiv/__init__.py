@@ -78,7 +78,9 @@ class Catalog(BookStore):
         if not url.startswith('http'):
             url=urlparse.urljoin('http://arxiv-opds.heroku.com/',url)        
         extension = url.split('.')[-1]
-        if extension in EBOOK_EXTENSIONS:
+        # arXiv uses URLs without file extensions
+        if '/pdf/' in url:
+            extension = 'pdf'
             # It's a book, get metadata, file and download
             # Metadata is cached
             title = self.title_cache[url]
@@ -86,17 +88,15 @@ class Catalog(BookStore):
             book_id = self.id_cache[url]
             self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
-            book_tid = url.split('/')[-2]
             if not book:
-                ident_urn = Identifier(key="ManyBooks.net_ID", value=book_id)
-                ident_tid = Identifier(key="ManyBooks.net_TID", value=book_tid)
+                ident = Identifier(key="arXiv_ID", value=book_id)
                 author = Author.get_by (name = _author)
                 if not author:
                     author = Author(name = _author)
                 book = Book (
                     title = title,
                     authors = [author],
-                    identifiers = [ident_urn, ident_tid],
+                    identifiers = [ident],
                 )
             session.commit()
             
@@ -171,7 +171,7 @@ class Catalog(BookStore):
         for entry in data.entries:
             # Find acquisition links
             acq_links = [l.href for l in entry.get('links',[]) if l.rel in['http://opds-spec.org/acquisition',"http://opds-spec.org/acquisition/open-access"]]
-
+            
             if acq_links:
                 # A book
                 cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/cover']

@@ -33,7 +33,7 @@ ${
     for l in book.links:
         #Non-acquisition links
         if l.rel == "alternate" and l.type in ["text/html", "application/atom+xml"]:
-            non_acq_links.append('<a href="%s">%s</a>'%(l.href, l.get('title','NO_ACQ_LINK')))
+            non_acq_links.append('<a href="%s">%s</a>'%(l.href, l.get('title','See more')))
     for l in book.links:
         #acquisition links
         if l.rel.startswith("http://opds-spec.org/acquisition"):
