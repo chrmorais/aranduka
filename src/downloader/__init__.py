@@ -1,5 +1,5 @@
 from PyQt4 import QtGui, QtCore, QtNetwork
-import sys
+import os, sys
 
 class Downloads(QtGui.QWidget):
 
@@ -7,10 +7,12 @@ class Downloads(QtGui.QWidget):
     
     def __init__(self,parent=None):
         super(Downloads,self).__init__(parent)
+        self.label1 = QtGui.QLabel("Total:", self)
         self.avgBar = QtGui.QProgressBar(self)
         self.bars={}        
         self.layout = QtGui.QVBoxLayout()
         self.setLayout(self.layout)
+        self.layout.addWidget(self.label1)
         self.layout.addWidget(self.avgBar)
         self.manager = QtNetwork.QNetworkAccessManager(self)
         self.setVisible(False)
@@ -25,20 +27,31 @@ class Downloads(QtGui.QWidget):
         reply.downloadProgress.connect(self.progress)
         reply.finished.connect(self.finished)
         bar = QtGui.QProgressBar()
-        self.layout.addWidget(bar)
-        self.bars[url]=[url, bar, reply, destination]
+        desc = QtGui.QLabel()
+        name = os.path.basename(destination)
+        if len(name) > 30:
+            name = name[:27]+'...'
+        desc.setText(name)
+        self.layout.insertWidget(0,bar)
+        self.layout.insertWidget(0,desc)
+        self.bars[url]=[url, bar, reply, destination, desc]
         if len(self.bars) > 1:
-            for bar in self.bars: self.bars[bar][1].setVisible(True)
+            for bar in self.bars: 
+                self.bars[bar][1].setVisible(True)
+                self.bars[bar][4].setVisible(True)
                 
     def finished(self):
         reply = self.sender()
         url = unicode(reply.url().toString())
-        _, bar, _, fname = self.bars[url]
+        _, bar, _, fname, status = self.bars[url]
         redirURL = unicode(reply.attribute(QtNetwork.QNetworkRequest.RedirectionTargetAttribute).toString())
         del self.bars[url]
         bar.deleteLater()
+        status.deleteLater()
         if len(self.bars) < 2:
-            for bar in self.bars: self.bars[bar][1].setVisible(False)
+            for bar in self.bars: 
+                self.bars[bar][1].setVisible(False)
+                self.bars[bar][4].setVisible(False)
             
         if redirURL and redirURL != url:
             # Need to redirect
@@ -55,7 +68,7 @@ class Downloads(QtGui.QWidget):
     def progress(self, received, total):
         url = unicode(self.sender().url().toString())
         print "progress:", url
-        _, bar, reply, fname = self.bars[url]
+        _, bar, reply, fname, status = self.bars[url]
         bar.setMaximum(total)
         bar.setValue(received)
         
