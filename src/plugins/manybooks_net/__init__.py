@@ -13,6 +13,24 @@ import urlparse
 # This gets the main catalog from ManyBooks.net.
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
+_FILE_FORMATS = ['1:epub:.epub:epub', \
+                 '1:pml:.pdb:pml', \
+                 '1:fb2:.fb2:fb2', \
+                 '1:ipod:.zip:ipod', \
+                 '1:isiloX:.pdb:isiloX', \
+                 '1:kindle:.azw:kindle', \
+                 '1:mobi2:.mobi:mobi2', \
+                 '1:mobi:.prc:mobi', \
+                 '1:lit:.lit:lit', \
+                 '1:doc:.pdb:doc', \
+                 '1:pdf:.pdf:pdf', \
+                 '1:plkr:.pdb:plkr', \
+                 '1:rbk:.rb:rbk', \
+                 '1:rtf:.rtf:rtf', \
+                 '1:librie:.lrf:librie', \
+                 '1:tcr:.tcr:tcr', \
+                 '1:wr:.pdb:w', \
+                 'mnybksjar']
 
 class Catalog(BookStore):
 
@@ -127,6 +145,21 @@ class Catalog(BookStore):
         self.setStatusMessage.emit(u"Loading: "+url)
         self.w.store_web.page().loadFinished.connect(self.parseBranch)
         return
+
+    def _generate_links (self, epub_url):
+        """Takes the link for an epub file and returns the list
+           of links to download the ebook in all the formats that
+           are supported by ManyBooks.net"""
+        links = []
+        book_tid = epub_url.split('/')[-2]
+        for fmt in _FILE_FORMATS:
+            if fmt == 'mnybksjar':
+                ext = '.jar'
+            else:
+                ext = fmt.split(':')[2]
+            links.append(u'http://manybooks.net/send/%s/%s/%s%s' % \
+                         (fmt, book_tid, book_tid, ext))
+        return links
         
     @QtCore.pyqtSlot()
     def parseBranch(self):
@@ -175,6 +208,9 @@ class Catalog(BookStore):
             acq_links = [l.href for l in entry.get('links',[]) if l.rel=='http://opds-spec.org/acquisition']
 
             if acq_links:
+                print "ACQ Links: ", acq_links
+                if len(acq_links) == 1:
+                    acq_links = self._generate_links(acq_links[0])
                 # A book
                 cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/cover']
                 if cover_url:
