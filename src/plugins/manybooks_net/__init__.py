@@ -101,7 +101,6 @@ class Catalog(BookStore):
             session.commit()
             
             # Get the file
-            fname = os.path.abspath(os.path.join("ebooks", str(book.id) + '.' + extension))
             book.fetch_file(url, extension)
             cover_url = self.cover_cache.get(url,None)
             if cover_url:
@@ -163,7 +162,6 @@ class Catalog(BookStore):
             self.crumbs.append(crumb)
         self.showCrumbs()
 
-        # FIXME: this leaks memory forever (not very much, though)
         self.cover_cache={}
         self.id_cache={}
         self.author_cache={}

@@ -21,6 +21,10 @@ class Catalog(BookStore):
     def __init__(self):
         BookStore.__init__(self)
         self.w = None
+        self.cover_cache={}
+        self.author_cache={}
+        self.id_cache={}
+        self.title_cache={}
         
     def setWidget (self, widget):
         tplfile = os.path.join(
@@ -45,7 +49,7 @@ class Catalog(BookStore):
             self.w = uic.loadUi(uifile)
             self.pageNumber = self.widget.stack.addWidget(self.w)
             self.crumbs=[]
-            self.openUrl(QtCore.QUrl('http://pragprog.com/magazines.opds'))
+            self.openUrl(QtCore.QUrl('http://pragprog.com/catalog.opds'))
             self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
@@ -80,40 +84,31 @@ class Catalog(BookStore):
                 self.crumbs.append(crumb)
             self.showCrumbs()
             self.w.store_web.load(QtCore.QUrl(url))
-        elif extension in EBOOK_EXTENSIONS:
+        elif extension.lower() in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
-            book_id = url.split('/')[-1].split('.')[0]
-            bookdata = parse("http://www.feedbooks.com/book/%s.atom"%book_id)
-            if bookdata.status == 404:
-                bookdata = parse("http://www.feedbooks.com/userbook/%s.atom"%book_id)
-                
-            bookdata = bookdata.entries[0]
-            title = bookdata.title
+            title = self.title_cache[url]
+            _author = self.author_cache[url]
+            book_id = self.id_cache[url]
             self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
             if not book:
                 # Let's create a lot of data
-                tags = []
-                for tag in bookdata.get('tags',[]):
-                    t = Tag.get_by(name = tag.label)
-                    if not t:
-                        t = Tag(name = tag.label)
-                    tags.append(t)
-                ident = Identifier(key="FEEDBOOKS_ID", value=book_id)
-                author = Author.get_by (name = bookdata.author)
+                ident = Identifier(key="PRAGPROG_ID", value=book_id)
+                author = Author.get_by (name = _author)
                 if not author:
-                    author = Author(name = bookdata.author)
+                    author = Author(name = _author)
                 book = Book (
                     title = title,
                     authors = [author],
-                    tags = tags,
                     identifiers = [ident]
                 )
             session.commit()
             
             # Get the file
             book.fetch_file(url, extension)
-            book.fetch_cover("http://www.feedbooks.com/book/%s.jpg"%book_id)
+            cover_url = self.cover_cache.get(url,None)
+            if cover_url:
+                book.fetch_cover(cover_url)
             
         else:
             self.showBranch(url)
@@ -161,6 +156,9 @@ class Catalog(BookStore):
             except ValueError:
                 self.crumbs.append(crumb)
         self.showCrumbs()
+        self.cover_cache={}
+        self.id_cache={}
+        self.author_cache={}        
         books = []
         links = []        
         for entry in data.entries:
@@ -168,6 +166,14 @@ class Catalog(BookStore):
             acq_links = [l.href for l in entry.links if l.rel=='http://opds-spec.org/acquisition']
 
             if acq_links: # Can be acquired
+                cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/cover']
+                if cover_url:
+                    cover_url = cover_url[0]
+                for href in acq_links:
+                    self.cover_cache[href]=cover_url
+                    self.id_cache[href]=entry.get('id')
+                    self.author_cache[href]=entry.author
+                    self.title_cache[href]=entry.title                
                 books.append(entry)
             else:
                 links.append(entry)
