@@ -26,18 +26,18 @@ ${
     if not book.get('links',[]):
         continue
     iurl = book.links[0].href
-    title = book.title
+    title = book.get('title','No Title')
     author = book.author
     non_acq_links = []
     acq_links = []
     for l in book.links:
         #Non-acquisition links
         if l.rel == "alternate" and l.type in ["text/html", "application/atom+xml"]:
-            non_acq_links.append('<a href="%s">%s</a>'%(l.href, l.title))
+            non_acq_links.append('<a href="%s">%s</a>'%(l.href, l.get('title','NO_ACQ_LINK')))
     for l in book.links:
         #acquisition links
-        if l.rel == "http://opds-spec.org/acquisition":
-            acq_links.append('<a href="%s">%s</a>'%(l.href, l.href.split('.')[-1]))
+        if l.rel.startswith("http://opds-spec.org/acquisition"):
+            acq_links.append('<a href="%s">%s</a>'%(l.href, l.title))
 }$
 <div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
  onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; "

@@ -170,7 +170,7 @@ class Catalog(BookStore):
         links = []        
         for entry in data.entries:
             # Find acquisition links
-            acq_links = [l.href for l in entry.get('links',[]) if l.rel=='http://opds-spec.org/acquisition']
+            acq_links = [l.href for l in entry.get('links',[]) if l.rel in['http://opds-spec.org/acquisition',"http://opds-spec.org/acquisition/open-access"]]
 
             if acq_links:
                 # A book
