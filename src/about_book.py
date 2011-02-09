@@ -39,11 +39,11 @@ class AboutBook(QtGui.QWidget):
                 <b>${title}$</b><br>
                 by ${', '.join([a.name for a in authors]) or ""}$<br>
                 ${for identifier in identifiers:}$
-                    <small>${identifier.key}$: ${identifier.value}$</small><br>
+                    <small>${identifier[0]}$: ${identifier[1]}$</small><br>
                 ${:end-for}$
                 <br>Tags for this book<br>
                 ${for tag in tags:}$
-                    <small>${tag.name}$: ${tag.value}$</small><br>
+                    <small>${tag}$</small><br>
                 ${:end-for}$
                 <br>Files for this book<br>
                 ${for fname in files:}$
@@ -59,9 +59,10 @@ class AboutBook(QtGui.QWidget):
         html = self.template.render(
             title = self.book.title,
             authors = self.book.authors,
-            identifiers = self.book.identifiers,
+            identifiers = [[identifier.key, identifier.value] for identifier in self.book.identifiers],
+#            identifiers = self.book.identifiers,
             files = [fname.file_name for fname in self.book.files],
-            tags = self.book.tags,
+            tags = [tag.name for tag in self.book.tags],
             thumb = self.book.cover(),
             )
         print "Rendered in: %s seconds"%(time.time()-t1)
