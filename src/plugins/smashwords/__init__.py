@@ -52,7 +52,7 @@ class Catalog(BookStore):
             self.w = uic.loadUi(uifile)
             self.pageNumber = self.widget.stack.addWidget(self.w)
             self.crumbs=[]
-            self.openUrl(QtCore.QUrl('http://bookserver.archive.org/catalog/'))
+            self.openUrl(QtCore.QUrl('http://www.smashwords.com/category/?output=xml'))
             self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
@@ -77,7 +77,7 @@ class Catalog(BookStore):
         url = unicode(url)
         print "URL:", url
         if not url.startswith('http'):
-            url=urlparse.urljoin('http://bookserver.archive.org/catalog/',url)
+            url=urlparse.urljoin('http://www.smashwords.com/',url)
         extension = url.split('.')[-1]
         print "Opening:",url
         if extension in EBOOK_EXTENSIONS:
@@ -147,7 +147,7 @@ class Catalog(BookStore):
         self.w.store_web.setUpdatesEnabled(False)
         self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
         self.setStatusMessage.emit(u"Loading: "+url)
-        self.w.store_web.page().loadFinished.connect(self.parseBranch)
+        # self.w.store_web.page().loadFinished.connect(self.parseBranch)
         return
        
     @QtCore.pyqtSlot()        
