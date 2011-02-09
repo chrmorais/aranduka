@@ -20,6 +20,9 @@ class AboutBook(QtGui.QWidget):
         uifile = ui.path('about_book.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+        self.about_web_view.page().setLinkDelegationPolicy(self.about_web_view.page().DelegateAllLinks)
+#        self.about_web_view.linkClicked.connect(self.updateWithCandidate)
+
         if book_id is not None:
             self.load_data(book_id)
 
@@ -34,8 +37,8 @@ class AboutBook(QtGui.QWidget):
         <div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
              onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; document.getElementById('submit-'0').style.opacity=1.0;" 
              onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white'; document.getElementById('submit-0').style.opacity=1.0;" >
+            <img style="float: left; margin-right: 4px; max-height: 180px" src="file://${thumb}$">
             <div style="text-align: right; margin-top: 12px;">
-                <img src="${thumb}$" >
                 <b>${title}$</b><br>
                 by ${', '.join([a.name for a in authors]) or ""}$<br>
                 ${for identifier in identifiers:}$
