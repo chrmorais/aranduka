@@ -124,12 +124,12 @@ class Catalog(BookStore):
         """Trigger download of the branch, then trigger
         parseBranch when it's downloaded"""
         print "Showing:", url
-        # Disable updates to prevent flickering
-        self.w.store_web.setUpdatesEnabled(False)
         self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
-        self.setStatusMessage.emit(u"Loading: "+url)
-        self.w.store_web.page().loadFinished.connect(self.parseBranch)
-        return
+        if ".opds" in url: # A OPDS page, parse it
+            # Disable updates to prevent flickering
+            self.w.store_web.setUpdatesEnabled(False)
+            self.setStatusMessage.emit(u"Loading: "+url)
+            self.w.store_web.page().loadFinished.connect(self.parseBranch)
         
     @QtCore.pyqtSlot()
     def parseBranch(self):
@@ -137,7 +137,7 @@ class Catalog(BookStore):
         an Atom feed from Feedbooks) with the generated HTML.        
         """
         self.w.store_web.page().loadFinished.disconnect(self.parseBranch)
-        url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())
+        url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())        
         print "Parsing the branch:", url
         t1 = time.time()
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
