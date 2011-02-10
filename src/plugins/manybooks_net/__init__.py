@@ -12,7 +12,20 @@ import urlparse
 
 # This gets the main catalog from ManyBooks.net.
 
-EBOOK_EXTENSIONS=['epub','mobi','pdf']
+EBOOK_EXTENSIONS=['.epub', \
+                 '.pdb', \
+                 '.fb2', \
+                 '.zip', \
+                 '.azw', \
+                 '.mobi', \
+                 '.prc', \
+                 '.lit', \
+                 '.pdf', \
+                 '.rb', \
+                 '.rtf', \
+                 '.lrf', \
+                 '.tcr', \
+                 '.jar']
 _FILE_FORMATS = ['1:epub:.epub:epub', \
                  '1:pml:.pdb:pml', \
                  '1:fb2:.fb2:fb2', \
@@ -171,7 +184,10 @@ class Catalog(BookStore):
         print "Parsing the branch:", url
         t1 = time.time()
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
-        
+        if not data.entries:
+            QtGui.QMessageBox.critical(None, \
+                                      u'Failed to load ManyBooks.net', \
+                                      u'An error ocurred and the ManyBooks.net catalog could not be loaded.')
         nextPage = ''
         prevPage = ''
         for l in data.feed.get('links',[]):
@@ -208,13 +224,13 @@ class Catalog(BookStore):
             acq_links = [l.href for l in entry.get('links',[]) if l.rel=='http://opds-spec.org/acquisition']
 
             if acq_links:
-                print "ACQ Links: ", acq_links
-                if len(acq_links) == 1:
-                    acq_links = self._generate_links(acq_links[0])
-                # A book
                 cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/cover']
                 if cover_url:
-                    cover_url = cover_url[0]
+                    entry.cover_url = cover_url[0]
+                if len(acq_links) == 1:
+                    entry.links = self._generate_links(acq_links[0])
+                    #entry.links.extend(self._generate_links(acq_links[0]))
+                # A book
                 books.append(entry)
                 for href in acq_links:
                     self.cover_cache[href]=cover_url

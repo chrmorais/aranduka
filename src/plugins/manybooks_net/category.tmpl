@@ -25,19 +25,28 @@ ${for book in books:}$
 ${
     if not book.get('links',[]):
         continue
-    iurl = book.links[0].href
+    #iurl = book.links[0].href
+    iurl = book.cover_url
     title = book.title
     author = book.author
-    non_acq_links = []
     acq_links = []
     for l in book.links:
+        code = l.split('/')[4]
+        if code == 'mnybksjar':
+            ext = 'jar'
+        else:
+            ext = code.split(':')[1]
+        acq_links.append('<a href="%s">%s</a>'%(l, ext))
+    #non_acq_links = []
+    #acq_links = []
+    #for l in book.links:
         #Non-acquisition links
-        if l.rel == "alternate" and l.type in ["text/html", "application/atom+xml"]:
-            non_acq_links.append('<a href="%s">%s</a>'%(l.href, l.title))
-    for l in book.links:
+        #if l.rel == "alternate" and l.type in ["text/html", "application/atom+xml"]:
+            #non_acq_links.append('<a href="%s">%s</a>'%(l.href, l.title))
+    #for l in book.links:
         #acquisition links
-        if l.rel == "http://opds-spec.org/acquisition":
-            acq_links.append('<a href="%s">%s</a>'%(l.href, l.href.split('.')[-1]))
+        #if l.rel == "http://opds-spec.org/acquisition":
+        #acq_links.append('<a href="%s">%s</a>'%(l.href, l.href.split('.')[-1]))
 }$
 <div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
  onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; "
@@ -48,8 +57,6 @@ ${
         <b>${title}$</b> by ${author}$</br>
         ${
             emit(book.get('subtitle','').replace('Subtitle: </strong><br /><br />','')+'</br>')
-            if non_acq_links:
-                emit("&nbsp;".join(non_acq_links)+"</br>")
             if acq_links:
                 emit("Download: "+"&nbsp;".join(acq_links))
         }$
