@@ -9,4 +9,4 @@ class Plugin(models.Model):
     description = models.TextField()
     uploaded = models.DateTimeField()
     user = models.ForeignKey(User)
-    file = models.FileField()
+    file = models.FileField(upload_to='plugins')
