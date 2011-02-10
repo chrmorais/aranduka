@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
 
-urlpatterns = patterns('views',
+urlpatterns = patterns('mainsite.views',
     (r'^$', 'index'),
 )
