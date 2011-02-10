@@ -7,4 +7,5 @@ from django.conf import settings
 
 def index(request):
     '''Home page.'''
-    return HttpResponse('hello')
+    return render_to_response('mainsite/index.html', {},
+                              context_instance=RequestContext(request))
