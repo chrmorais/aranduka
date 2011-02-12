@@ -271,15 +271,18 @@ class Main(QtGui.QMainWindow):
         elif formats:
             for f in book.files:
                 action = None
-                if f.file_name.endswith('epub'):
-                    action = open_menu.addAction(os.path.basename(f.file_name),
+                filename = os.path.basename(f.file_name)
+                ext = '.%s'%filename.split('.')[-1]
+                title = u'In %s'%ext[1:].title() if formats.count(ext) == 1 else filename
+                if ext == '.epub':
+                    action = open_menu.addAction(title,
                         lambda f = f: self.openEpub(f.file_name))
-                elif f.file_name.endswith('cbz'):
+                elif ext == '.cbz':
                     action = open_menu.addAction(title,
                         lambda f = f: self.openCBZ(f.file_name))
                 else:
                     url = QtCore.QUrl.fromLocalFile(f.file_name)
-                    action = open_menu.addAction(os.path.basename(f.file_name),
+                    action = open_menu.addAction(title,
                         lambda f = f: QtGui.QDesktopServices.openUrl(url))
                 action.setEnabled(self._check_file(f.file_name))
             menu.addMenu(open_menu)
