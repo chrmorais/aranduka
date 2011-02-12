@@ -227,6 +227,17 @@ class Main(QtGui.QMainWindow):
             return
         self.viewers.append(viewer)
         viewer.show()
+
+    def _check_file (self, filename):
+        # Issue 20: don't show files that are not there
+        # FIXME: add more validation
+        try:
+            f_info = os.stat(filename)
+        except:
+            f_info = None
+        if f_info is None or f_info.st_size == 0:
+            return False
+        return True
         
     def bookContextMenuRequested(self, book, point):
         """Given a book, and a place in the screen,
@@ -238,41 +249,39 @@ class Main(QtGui.QMainWindow):
         menu.addAction(self.actionDelete_Book)
 
         # Create menu with files for this book
-        open_menu = QtGui.QMenu("Open")
+        open_menu = QtGui.QMenu(u'Open book')
         formats = book.available_formats()
         if len(formats) == 1:
             # A single file
             f = book.files[0]
-            url = QtCore.QUrl.fromLocalFile(f.file_name)
+            title = u'Open book'
             if f.file_name.endswith('epub'):
-                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                action = menu.addAction(title,
                     lambda f = f: self.openEpub(f.file_name))
             elif f.file_name.endswith('cbz'):
-                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                action = menu.addAction(title,
                     lambda f = f: self.openCBZ(f.file_name))
             else:
-                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                url = QtCore.QUrl.fromLocalFile(f.file_name)
+                action = menu.addAction(title,
                     lambda f = f: QtGui.QDesktopServices.openUrl(url))
                     
-            # Issue 20: don't show files that are not there
-            # FIXME: add more validation
-            try:
-                f_info = os.stat(f.file_name)
-            except:
-                f_info = None
-            if f_info is None or f_info.st_size == 0:
-                action.setEnabled(False)
+            action.setEnabled(self._check_file(f.file_name))
             
         elif formats:
             for f in book.files:
-                url = QtCore.QUrl.fromLocalFile(f.file_name)
+                action = None
                 if f.file_name.endswith('epub'):
-                    action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                    action = open_menu.addAction(os.path.basename(f.file_name),
                         lambda f = f: self.openEpub(f.file_name))
+                elif f.file_name.endswith('cbz'):
+                    action = open_menu.addAction(title,
+                        lambda f = f: self.openCBZ(f.file_name))
                 else:
-                    action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                    url = QtCore.QUrl.fromLocalFile(f.file_name)
+                    action = open_menu.addAction(os.path.basename(f.file_name),
                         lambda f = f: QtGui.QDesktopServices.openUrl(url))
-                open_menu.addAction(action)
+                action.setEnabled(self._check_file(f.file_name))
             menu.addMenu(open_menu)
 
         # Check what converters apply
