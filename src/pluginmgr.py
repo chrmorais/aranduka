@@ -13,13 +13,48 @@ import config
 
 # These classes define our plugin categories
 
-class Guesser(object):
+class BasePlugin(object):
+    """Base abstract class, you don't want to inherit this one
+    but one of the specific plugin classes below."""
+    
+    name = "Base Plugin"
+    title = "Base Plugin"
+    configurable = False
+    
+    # What icons should be visible on the top-right corner
+    has_grid = False
+    has_list = False
+    has_search = False
+
+    # If you implement both showGrid and showList, then
+    # set has_grid and has_table to True.
+    # If you implement one, set both to False.
+    
+    def showGrid(self, currentBook = None, search = None):
+        """Show contents in a grid, if applicable.
+        If currentBook is given, the plugin should attempt
+        to ensure that item is visible and selected.
+        
+        If search is given, it should display the results of
+        that search.
+        """
+
+    def showList(self, currentBook = None, search = None):
+        """Show contents in a list, if applicable.
+        If currentBook is given, the plugin should attempt
+        to ensure that item is visible and selected.
+
+        If search is given, it should display the results of
+        that search.        
+        """
+    
+
+class Guesser(BasePlugin):
     """These plugins take a filename and guess data from it.
     They can read the file itself, parse it and get data,
     or could look it up on the internet"""
 
     name = "Base Guesser"
-    configurable = False
     def __init__(self):
         print "INIT: ", self.name
 
@@ -40,27 +75,26 @@ class Guesser(object):
         """
         return None
 
-class Device(object):
+class Device(BasePlugin):
     """A plugin that represents a device to read books.
     These get added in the 'Devices' menu
     """
-    configurable = False
 
-class Tool(object):
+class Tool(BasePlugin):
     """A plugin that gets added to the Tools menu in the main.ui"""
-    configurable = False
 
-class Importer(object):
+class Importer(BasePlugin):
     """A plugin that gets added to the Tools menu in the main.ui"""
-    configurable = False
     
-class ShelfView(QtCore.QObject):
+class ShelfView(BasePlugin, QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
     
     title = "Base ShelfView"
     itemText = "BASE"
-    configurable = False
+    has_grid = True
+    has_list = True
+    has_search = True
     
     def __init__(self):
         print "INIT: ", self.title
@@ -72,29 +106,15 @@ class ShelfView(QtCore.QObject):
         self.widget.updateShelves.connect(self.updateShelves)
         self.widget.updateBook.connect(self.updateBook)
 
-    def updateShelves(self):
-        """Refresh the book listings"""
-        pass
-
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
         plugin"""
         return QtGui.QTreeWidgetItem([self.itemText])
 
-    def showGrid(self, search=None):
-        """Show a grid containing the (possibly filtered) books."""
-        pass
-    
-    def showList(self, search=None):
-        """Show a list containing the (possibly filtered) books."""
-        pass
-
     def updateBook(self, book):
         """Update the item of this specific book, because
         it has been edited"""
         pass
-
-    operate = showGrid
 
     def updateShelves(self):
         """Update the whole listing"""
@@ -117,9 +137,128 @@ class ShelfView(QtCore.QObject):
         point = shelf.mapToGlobal(point)
         self.widget.bookContextMenuRequested(book, point)
 
+    def group_books(self, currentBook=None, search=None):
+        """Group the books by shelf.
+        This should return a dictionary where the keys are
+        shelf names, and the values are lists of books"""
+        return {}
+        
+    def showGrid(self, currentBook=None, search=None):
+        """Get all books from the DB and show them"""
+
+        if not self.widget:
+            print "Call setWidget first"
+            return
+        self.operate = self.showGrid
+        self.items = {}
+        
+        self.widget.title.setText(self.title)
+        css = '''
+        ::item {
+                padding: 0;
+                margin: 0;
+                width: 150px;
+                height: 150px;
+            }
+        '''
+
+        # Setup widgetry
+        self.widget.stack.setCurrentIndex(0)
+        self.shelves = QtGui.QWidget()
+        self.shelvesLayout = QtGui.QVBoxLayout()
+        self.shelves.setLayout(self.shelvesLayout)
+
+        grouped_books = self.group_books(currentBook, search)
+        keys = grouped_books.keys()
+        keys.sort()
+        for k in keys:
+            # Make a shelf
+            shelf_label = QtGui.QLabel(k)
+            shelf = QtGui.QListWidget()
+            self.shelvesLayout.addWidget(shelf_label)
+            self.shelvesLayout.addWidget(shelf)
+            # Make it look right
+            shelf.setStyleSheet(css)
+            shelf.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            shelf.setFrameShape(shelf.NoFrame)
+            shelf.setIconSize(QtCore.QSize(128,128))
+            shelf.setViewMode(shelf.IconMode)
+            shelf.setMinimumHeight(153)
+            shelf.setMaximumHeight(153)
+            shelf.setMinimumWidth(153*len(grouped_books[k]))
+            shelf.setFlow(shelf.LeftToRight)
+            shelf.setWrapping(False)
+            shelf.setDragEnabled(False)
+            shelf.setSelectionMode(shelf.NoSelection)
+
+            # Hook the shelf context menu
+            shelf.customContextMenuRequested.connect(self.shelfContextMenu)
+            
+            # Hook book editor
+            shelf.itemActivated.connect(self.widget.on_books_itemActivated)
+            
+            # Fill the shelf
+            for b in grouped_books[k]:
+                pixmap = QtGui.QPixmap(b.cover())
+                if pixmap.isNull():
+                    pixmap = QtGui.QPixmap(b.default_cover())
+                icon =  QtGui.QIcon(pixmap.scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                item = QtGui.QListWidgetItem(icon, b.title, shelf)
+                item.book = b
+                self.items[b.id] = item
+                
+        
+        self.shelvesLayout.addStretch(1)
+        self.widget.shelfStack.setWidget(self.shelves)
+        
+    def showList(self, currentBook = None, search = None):
+        """Get all books from the DB and show them"""
+
+        if not self.widget:
+            print "Call setWidget first"
+            return
+        self.operate = self.showList
+        self.items = {}
+        css = '''
+        ::item {
+                padding: 0;
+                margin: 0;
+                height: 48;
+            }
+        '''
+
+        self.widget.title.setText(self.title)
+        # Setup widgetry
+        self.widget.stack.setCurrentIndex(0)
+        self.shelf = QtGui.QListWidget()
+        # Make it look right
+        self.shelf.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.shelf.setFrameShape(self.shelf.NoFrame)
+        self.shelf.setDragEnabled(False)
+        self.shelf.setSelectionMode(self.shelf.NoSelection)
+        self.shelf.setStyleSheet(css)
+        self.shelf.setIconSize(QtCore.QSize(48,48))
+        # Hook the shelf context menu
+        self.shelf.customContextMenuRequested.connect(self.shelfContextMenu)
+
+        # Hook book editor
+        self.shelf.itemActivated.connect(self.widget.on_books_itemActivated)
+        
+        grouped_books = self.group_books(currentBook, search)
+        keys = grouped_books.keys()
+        keys.sort()
+        for a in keys:
+            a_item = QtGui.QListWidgetItem(a, self.shelf)
+            for b in grouped_books[a]:
+                icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
+                item.book = b
+                self.items[b.id] = item
+
+        self.widget.shelfStack.setWidget(self.shelf)
 
 
-class BookStore(QtCore.QObject):
+class BookStore(BasePlugin, QtCore.QObject):
     """Plugins that inherit this class give access to some
     mechanism for book acquisition"""
 
@@ -151,17 +290,11 @@ class BookStore(QtCore.QObject):
     def doSearch(self, *args):
         """Slot that triggers search on this store"""
         self.search(unicode(self.widget.searchWidget.text.text()))
-
+        
     def search(self, key):
         """Search the store contents for this key, and display the results"""
         
-    def showGrid(self):
-        """Show contents in a grid, if applicable."""
-
-    def showList(self):
-        """Show contents in a list, if applicable."""
-
-class Converter(object):
+class Converter(BasePlugin):
     configurable = False
 
 def isPluginEnabled (name):

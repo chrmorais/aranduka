@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/system-search.svg</file>
     <file>icons/go-next.svg</file>
     <file>icons/view-fullscreen.svg</file>
     <file>icons/reload.svg</file>

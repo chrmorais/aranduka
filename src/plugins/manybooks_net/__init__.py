@@ -18,6 +18,7 @@ class Catalog(BookStore):
 
     title = "ManyBooks.net: Free and Public Domain Books"
     itemText = "ManyBooks.net"
+    has_search = True
     
     def __init__(self):
         print "INIT: ManyBooks.net"

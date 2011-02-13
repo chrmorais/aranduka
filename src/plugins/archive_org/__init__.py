@@ -23,6 +23,7 @@ class Catalog(BookStore):
 
     title = "Archive.org: Free and Public Domain Books"
     itemText = "Archive.org"
+    has_search = True
     
     def __init__(self):
         BookStore.__init__(self)

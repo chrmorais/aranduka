@@ -58,7 +58,9 @@ class Main(QtGui.QMainWindow):
         self.searchBar.addWidget(self.searchWidget)
         self.searchBar.hide()
         self.searchWidget.closeBar.clicked.connect(self.searchBar.hide)
-
+        self.searchButton.toggled.connect(self.searchBar.setVisible)
+        self.searchButton.toggled.connect(self.searchWidget.text.setFocus)
+        
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
         self.book_editor = BookEditor(None)
@@ -196,11 +198,16 @@ class Main(QtGui.QMainWindow):
             self.searchWidget.doSearch.clicked.disconnect()
         except TypeError: # Happens when there's no connections
             pass
+        # Show only the right action buttons
+        self.gridMode.setVisible(item.handler.has_grid)
+        self.listMode.setVisible(item.handler.has_list)
+        self.searchButton.setVisible(item.handler.has_search)
+        
         self.searchWidget.doSearch.clicked.connect(item.handler.doSearch)
         if self.gridMode.isChecked():
-            item.handler.showGrid()
+            item.handler.showGrid(currentBook = self.currentBook)
         else:
-            item.handler.showList()
+            item.handler.showList(currentBook = self.currentBook)
 
     def on_actionFind_triggered(self):
         self.searchBar.show()
@@ -330,9 +337,8 @@ class Main(QtGui.QMainWindow):
             self.viewModeChanged()
             
     def on_books_itemActivated(self, item):
-        self.book_editor.load_data(item.book.id)
-        self.title.setText(u'Editing properties of "%s"'%item.book.title)
-        self.stack.setCurrentIndex(1)
+        self.currentBook = item.book
+        self.on_actionEdit_Book_triggered()
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):
