@@ -1,11 +1,19 @@
-from templite import Templite
-
-from bottle import route, run, response
 import os
 import models
 import bottle
+import socket
+import errno
+
+from templite import Templite
+from bottle import route, run, response
+from multiprocessing import Queue
+
 bottle.debug = True
 
+_default_addr = 'localhost'
+_default_port = 8080
+
+queue = Queue()
 
 def real_publish():
     # FIXME: move to another process or something
@@ -71,8 +79,45 @@ def real_publish():
         response.content_type=mimetypes[extension]
         return (f)
 
+    def get_bind_address ():
+        """Get the configured network address and port
+           to bind the HTTP server"""
+        return (_default_addr, _default_port)
 
-    run(host='localhost', port=8080)
+    def get_address ():
+        """Returns a host:port tuple available for binding"""
+        _host, _port = get_bind_address()
+        for n in xrange(1,1024):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                sock.bind((_host, _port))
+                sock.close()
+                break
+            except socket.error, e:
+                sock.close()
+                code, string = e
+                if code == errno.EADDRINUSE:
+                    # If the port is in use, try another one        
+                    _port += 1
+                else:
+                    queue.put({'error': str(e)})
+                    raise e
+        return (_host, _port)
+
+    def start ():
+        """Starts the HTTP server
+           It attempts to bind to the configured
+           address and port, and if they're in use,
+           it tries with another port"""
+        try:
+            (_host, _port) =  get_address()
+        except Exception:
+            return
+        url = "http://%s:%d"%(_host, _port)
+        print "Appending URL to queue: %s"%url
+        queue.put({'url': url})
+        run(host=_host, port=_port, quiet=True)
+    start()
     
             
 TPL = r"""<?xml version="1.0" encoding="UTF-8"?>

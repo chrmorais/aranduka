@@ -64,7 +64,10 @@ class AlibrisGuesser(Guesser):
             and md['status'] == '0': 
             if 'book' in md:
                 bookList = []
+                _isbn = []
                 for book in md['book']:
+                    if 'isbn' in book and book['isbn'] in _isbn:
+                        continue
                     title = book.get('title', 'No Title').decode('utf-8')
                     thumbnail = book.get('imageurl','')
                     date = datetime.date(1970,1,1)
@@ -80,6 +83,7 @@ class AlibrisGuesser(Guesser):
                         authors = [book['author']] # FIXME: Check which token use to split this
                     
                     if 'isbn' in book and book['isbn'] != '':
+                        _isbn.append(book['isbn'])
                         identifiers.append(('ISBN', book['isbn']))
 
                     if 'bin' in book and book['bin'] != '':

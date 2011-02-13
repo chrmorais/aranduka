@@ -4,7 +4,7 @@ import os,sys
 import models, config, ui
 
 # Import Qt modules
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui, uic, QtWebKit
 from progress import progress
 from book_editor import BookEditor
 import rc_icons
@@ -12,6 +12,7 @@ from pluginmgr import manager, isPluginEnabled
 from pluginconf import PluginSettings
 from about import AboutDialog
 from epubviewer import Main as EpubViewer
+from cbzviewer import Main as CbzViewer
 import downloader
 
 class SearchWidget(QtGui.QWidget):
@@ -34,6 +35,14 @@ class Main(QtGui.QMainWindow):
 
         self.currentBook = None
 
+        # Set default stylesheet for all web views in the app
+        wksettings = QtWebKit.QWebSettings.globalSettings()
+        # FIXME: this doesn't work
+        wksettings.setMaximumPagesInCache(0)
+        ssurl = QtCore.QUrl().fromLocalFile(os.path.join(os.path.dirname(__file__), 'master.css'))
+        wksettings.setUserStyleSheetUrl(ssurl)
+        
+        
         # View types toggles
         self.viewGroup = QtGui.QButtonGroup(self)
         self.viewGroup.setExclusive(True)
@@ -65,7 +74,12 @@ class Main(QtGui.QMainWindow):
             self.restoreGeometry(geom.decode('base64'))
 
         downloader.downloader = downloader.Downloads()
+        downloader.downloader.setStatusMessage.connect(self.setStatusMessage)
         self.statusBar.addPermanentWidget(downloader.downloader)
+        self.progBar = QtGui.QProgressBar()
+        self.progBar.setMaximumWidth(100)
+        self.statusBar.addPermanentWidget(self.progBar)
+        self.progBar.setVisible(False)
         
     def closeEvent(self, event):
         config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
@@ -106,6 +120,14 @@ class Main(QtGui.QMainWindow):
             # Ways to acquire books
             if plugin.name not in enabled_plugins:
                 continue
+
+            # Hook progress report signals
+            plugin.plugin_object.loadStarted.connect(self.loadStarted)
+            plugin.plugin_object.loadFinished.connect(self.loadFinished)
+            plugin.plugin_object.loadProgress.connect(self.loadProgress)
+            plugin.plugin_object.setStatusMessage.connect(self.setStatusMessage)
+            
+            # Add to the Store list
             item = plugin.plugin_object.treeItem()
             item.handler = plugin.plugin_object
             item.title = plugin.plugin_object.title
@@ -126,6 +148,24 @@ class Main(QtGui.QMainWindow):
             dev_menu.addAction(plugin.plugin_object.actionNew())
             self.menuDevices.addMenu(dev_menu)
 
+    @QtCore.pyqtSlot()
+    def loadStarted(self):
+        self.progBar.setVisible(True)
+    @QtCore.pyqtSlot()
+    def loadFinished(self):
+        self.progBar.setVisible(False)
+        self.statusBar.clearMessage()
+    @QtCore.pyqtSlot("int")
+    def loadProgress(self, p):
+        self.progBar.setVisible(True)
+        self.progBar.setValue(p)
+        if p == 100:
+            self.statusBar.clearMessage()
+    @QtCore.pyqtSlot("PyQt_PyObject")
+    def setStatusMessage(self, msg):
+        self.statusBar.showMessage(msg)
+
+            
     @QtCore.pyqtSlot()
     def on_actionPlugins_triggered(self):
         dlg = PluginSettings(self)
@@ -165,15 +205,26 @@ class Main(QtGui.QMainWindow):
     def on_actionFind_triggered(self):
         self.searchBar.show()
         self.searchWidget.text.setFocus(True)
+        
+    def openCBZ(self, fname):
+        try:
+            viewer = CbzViewer(fname)
+        except ValueError, e:
+            QtGui.QMessageBox.critical(self, \
+                                      u'Failed to open CBZ file', \
+                                      u'The document you are trying to open is not a valid CBZ file.')
+            return
+        self.viewers.append(viewer)
+        viewer.show()
 
     def openEpub(self, fname):
-        # try:
-        viewer = EpubViewer(fname)
-        # except ValueError, e:
-            # QtGui.QMessageBox.critical(self, \
-                                      # u'Failed to open ePub file', \
-                                      # u'The document you are trying to open is not a valid ePub file.')
-            # return
+        try:
+            viewer = EpubViewer(fname)
+        except ValueError, e:
+            QtGui.QMessageBox.critical(self, \
+                                      u'Failed to open ePub file', \
+                                      u'The document you are trying to open is not a valid ePub file.')
+            return
         self.viewers.append(viewer)
         viewer.show()
         
@@ -196,6 +247,9 @@ class Main(QtGui.QMainWindow):
             if f.file_name.endswith('epub'):
                 action = menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: self.openEpub(f.file_name))
+            elif f.file_name.endswith('cbz'):
+                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                    lambda f = f: self.openCBZ(f.file_name))
             else:
                 action = menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: QtGui.QDesktopServices.openUrl(url))

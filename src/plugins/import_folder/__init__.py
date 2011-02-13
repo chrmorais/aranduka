@@ -75,44 +75,44 @@ def import_file(fname):
                 return 1
         return 0
 
-    print fname
-    extension = fname.split('.')[-1].lower()
-    if extension in COMPRESSED_EXTENSIONS:
-        extension = fname.split('.')[-2].lower()
-    if extension not in VALID_EXTENSIONS:
-        print "Not an ebook: ", extension
-        return 
-    f = models.File.get_by(file_name = fname)
-    if f:
-        # Already imported
-        return file_status(fname)
+    # print fname
+    # extension = fname.split('.')[-1].lower()
+    # if extension in COMPRESSED_EXTENSIONS:
+        # extension = fname.split('.')[-2].lower()
+    # if extension not in VALID_EXTENSIONS:
+        # print "Not an ebook: ", extension
+        # return 
+    # f = models.File.get_by(file_name = fname)
+    # if f:
+        # # Already imported
+        # return file_status(fname)
         
-    # First try the clean name as-is
+    # # First try the clean name as-is
     p = clean_name(fname)
-    r1 = try_import(fname, u'TITLE '+p)
-    if r1:
-        return r1
+    # r1 = try_import(fname, u'TITLE '+p)
+    # if r1:
+        # return r1
 
-    # Try removing 'tags'
-    p2 = re.sub(u'[\(\[].*[\)\]]',' ',p)
-    r1 = try_import(fname, u'TITLE '+p2)
-    if r1:
-        return r1
-    # Try separating pieces
-    p3 = p2.replace(u'-',u' - ')
-    r1 = try_import(fname, u'TITLE '+p3)
-    if r1:
-        return r1
+    # # Try removing 'tags'
+    # p2 = re.sub(u'[\(\[].*[\)\]]',' ',p)
+    # r1 = try_import(fname, u'TITLE '+p2)
+    # if r1:
+        # return r1
+    # # Try separating pieces
+    # p3 = p2.replace(u'-',u' - ')
+    # r1 = try_import(fname, u'TITLE '+p3)
+    # if r1:
+        # return r1
 
-    # Maybe it's author - title
-    l = p.split(u'-',1)
-    if len(l)==2:
-    	_, p4 = l
-        r1 = try_import(fname, u'TITLE '+p4)
-        if r1:
-            return r1
+    # # Maybe it's author - title
+    # l = p.split(u'-',1)
+    # if len(l)==2:
+    	# _, p4 = l
+        # r1 = try_import(fname, u'TITLE '+p4)
+        # if r1:
+            # return r1
         
-    #TODO Keep trying in other ways
+    # #TODO Keep trying in other ways
     
     print 'Importing as-is'
     b = models.Book.get_by(title = p)
@@ -167,7 +167,6 @@ class ImportFolder(Importer):
     def do_import_file(self):
         fname = unicode(QtGui.QFileDialog.getOpenFileName(None, "Import File"))
         if not fname: return
-        # Get a list of all files to be imported
         status = import_file(fname)
         print status
                         

@@ -42,29 +42,41 @@ class EpubDocument(object):
 
         self.spine = self.opf.find('{http://www.idpf.org/2007/opf}spine')
 
-        self.toc_id = self.spine.attrib['toc']
-        self.toc_fn = self.manifest_dict[self.toc_id]
-        print "TOC:", self.toc_fn
-        f = self.book.open(self.toc_fn)
-        data = f.read()
-        self.toc = XML(data)
-        self.navmap = self.toc.find('{http://www.daisy.org/z3986/2005/ncx/}navMap')
-        # FIXME: support nested navpoints
-        self.navpoints = self.navmap.findall('.//{http://www.daisy.org/z3986/2005/ncx/}navPoint')
         self.tocentries = []
-        for np in self.navpoints:
-            label = np.find('{http://www.daisy.org/z3986/2005/ncx/}navLabel').find('{http://www.daisy.org/z3986/2005/ncx/}text').text
-            content = np.find('{http://www.daisy.org/z3986/2005/ncx/}content').attrib['src']
-            if label and content:
-                self.tocentries.append([label, content])
+        self.toc_id = self.spine.attrib.get('toc', None)
+        if self.toc_id:
+            self.toc_fn = self.manifest_dict[self.toc_id]
+            print "TOC:", self.toc_fn
+            f = self.book.open(self.toc_fn)
+            data = f.read()
+            self.toc = XML(data)
+            self.navmap = self.toc.find('{http://www.daisy.org/z3986/2005/ncx/}navMap')
+            # FIXME: support nested navpoints
+            self.navpoints = self.navmap.findall('.//{http://www.daisy.org/z3986/2005/ncx/}navPoint')
+            for np in self.navpoints:
+                label = np.find('{http://www.daisy.org/z3986/2005/ncx/}navLabel').find('{http://www.daisy.org/z3986/2005/ncx/}text').text
+                content = np.find('{http://www.daisy.org/z3986/2005/ncx/}content').attrib['src']
+                if label and content:
+                    self.tocentries.append([label, content])
 
         self.itemrefs = self.spine.findall('{http://www.idpf.org/2007/opf}itemref')
         print "IR:", self.itemrefs
         self.spinerefs = [ self.manifest_dict[item.attrib['idref']][len(self.basepath):] for item in self.itemrefs ]
         # I found one book that has a spine but no navmap: "Der schwarze Baal" from manybooks.net
-        if not self.tocentries:
-            # Alternative toc
-            self.tocentries = [[item.attrib['idref'],self.manifest_dict[item.attrib['idref']][len(self.basepath):]] for item in self.itemrefs]
+        # Also another has more entries on the spine than on the navmap (Dinosauria, from feedbooks).
+        # So, we need to merge these suckers. I will assume it's not completely insane and the spine
+        # is always more complete.
+        
+        spinerefs2 = [[x,x] for x in self.spinerefs]
+        
+        for te in self.tocentries:
+            idx = self.spinerefs.index(te[1])
+            spinerefs2[idx]=te
+            
+        self.tocentries = spinerefs2
+        # if not self.tocentries:
+            # # Alternative toc
+            # self.tocentries = [[item.attrib['idref'],self.manifest_dict[item.attrib['idref']][len(self.basepath):]] for item in self.itemrefs]
             
         print self.tocentries
         print self.spinerefs

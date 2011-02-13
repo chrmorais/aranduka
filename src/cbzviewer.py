@@ -4,6 +4,10 @@ from cbzparser import CBZDocument
 import ui
 
 class Main(QtGui.QMainWindow):
+
+    adjWidthTpl = u"<img src=\"book:///%s\" width='100%%'>"
+    normalWidthTpl = u"<img src=\"book:///%s\">"
+
     def __init__(self, fname):
         QtGui.QMainWindow.__init__(self)
 
@@ -28,6 +32,15 @@ class Main(QtGui.QMainWindow):
         self.openPath(self.doc.tocentries[0])
         self.actionClose.triggered.connect(self.close)
         self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
+        
+    @QtCore.pyqtSlot("bool")
+    def on_actionFull_Screen_toggled(self, b):
+        if b:
+            self.showFullScreen()
+            # self.actionShow_Contents.setChecked(False)
+        else:
+            self.showNormal()
+            # self.actionShow_Contents.setChecked(True)
         
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):
@@ -73,7 +86,7 @@ class Main(QtGui.QMainWindow):
         path = QtCore.QUrl.fromPercentEncoding(path)
         if self.cur_path <> path:
             self.cur_path = path
-            self.view.page().mainFrame().setHtml(u"<img src=\"book:///%s\">"%path, QtCore.QUrl("epub://book/"+path))
+            self.view.page().mainFrame().setHtml(self.adjWidthTpl%path, QtCore.QUrl("epub://book/"+path))
                 
     def javascript(self, string, typ=None):
         ans = self.view.page().mainFrame().evaluateJavaScript(string)

@@ -40,12 +40,9 @@ class Plugin(Tool):
                 # Create empty book
                 b = Book(identifiers = [i])
                 # We are supposed to have a ISBN, so assume we are getting it right.
-                dlg = GuessDialog(guesser.plugin_object, b)
+                dlg = GuessDialog(b)
                 dlg.isbn.setChecked(True)
                 dlg.on_guessButton_clicked()
-                # hack the dialog
-                dlg.guessButton.hide()
-                dlg.updateButton.setText('Create')
 
                 r = dlg.exec_()
                 

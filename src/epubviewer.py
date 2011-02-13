@@ -47,8 +47,6 @@ class Main(QtGui.QMainWindow):
         self.actionClose.triggered.connect(self.close)
         self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
         
-        
-        
     def closeEvent(self, ev):
         # Save position keyed by filename
         frame = self.view.page().mainFrame()
@@ -57,6 +55,15 @@ class Main(QtGui.QMainWindow):
         curSpineRef= unicode(frame.url().toString())[12:]
         setValue("epubviewer", "position-"+hashlib.sha224(self.fname).hexdigest(),[sv, curSpineRef])
         QtGui.QMainWindow.closeEvent(self, ev)
+
+    @QtCore.pyqtSlot("bool")
+    def on_actionFull_Screen_toggled(self, b):
+        if b:
+            self.showFullScreen()
+            # self.actionShow_Contents.setChecked(False)
+        else:
+            self.showNormal()
+            # self.actionShow_Contents.setChecked(True)
         
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):
@@ -76,7 +83,7 @@ class Main(QtGui.QMainWindow):
             curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
         except ValueError:
             curIdx = -1
-        if curIdx < len(self.epub.spinerefs):
+        if curIdx+1 < len(self.epub.tocentries):
             self.chapters.setCurrentRow(curIdx+1)
             self.openPath(self.epub.tocentries[curIdx+1][1])
             
