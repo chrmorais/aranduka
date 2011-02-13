@@ -82,7 +82,7 @@
   <action name="actionNext_Chapter">
    <property name="icon">
     <iconset resource="../icons.qrc">
-     <normaloff>:/icons/next.svg</normaloff>:/icons/next.svg</iconset>
+     <normaloff>:/icons/go-next.svg</normaloff>:/icons/go-next.svg</iconset>
    </property>
    <property name="text">
     <string>Next Chapter</string>
@@ -94,7 +94,7 @@
   <action name="actionPrevious_Chapter">
    <property name="icon">
     <iconset resource="../icons.qrc">
-     <normaloff>:/icons/previous.svg</normaloff>:/icons/previous.svg</iconset>
+     <normaloff>:/icons/go-previous.svg</normaloff>:/icons/go-previous.svg</iconset>
    </property>
    <property name="text">
     <string>Previous Chapter</string>
@@ -139,6 +139,10 @@
   <action name="actionFull_Screen">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icons/view-fullscreen.svg</normaloff>:/icons/view-fullscreen.svg</iconset>
    </property>
    <property name="text">
     <string>Full Screen</string>
