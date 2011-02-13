@@ -40,7 +40,7 @@ class Catalog(BookStore):
         tplfile.close()
         self.widget = widget
                 
-    def operate(self):
+    def operate(self, *args, **kwargs):
         "Show the store"
         if not self.widget:
             print "Call setWidget first"
