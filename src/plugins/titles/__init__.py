@@ -6,15 +6,13 @@ from functools import partial
 
 # This plugin lists the books by title
 
-EBOOK_EXTENSIONS=['epub','mobi','pdf']
-
 class Catalog(ShelfView):
 
     title = "Books By Title"
     itemText = "Titles"
     items = {}
     
-    def showList(self, search = None):
+    def showList(self, currentBook = None, search = None):
         """Get all books from the DB and show them"""
 
         if not self.widget:

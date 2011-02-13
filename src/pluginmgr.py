@@ -30,11 +30,23 @@ class BasePlugin(object):
     # set has_grid and has_table to True.
     # If you implement one, set both to False.
     
-    def showGrid(self):
-        """Show contents in a grid, if applicable."""
+    def showGrid(self, currentBook = None, search = None):
+        """Show contents in a grid, if applicable.
+        If currentBook is given, the plugin should attempt
+        to ensure that item is visible and selected.
+        
+        If search is given, it should display the results of
+        that search.
+        """
 
-    def showList(self):
-        """Show contents in a list, if applicable."""
+    def showList(self, currentBook = None, search = None):
+        """Show contents in a list, if applicable.
+        If currentBook is given, the plugin should attempt
+        to ensure that item is visible and selected.
+
+        If search is given, it should display the results of
+        that search.        
+        """
     
 
 class Guesser(BasePlugin):
