@@ -58,7 +58,8 @@ class Main(QtGui.QMainWindow):
         self.searchBar.addWidget(self.searchWidget)
         self.searchBar.hide()
         self.searchWidget.closeBar.clicked.connect(self.searchBar.hide)
-
+        self.searchButton.toggled.connect(self.searchBar.setVisible)
+        
         self._layout = QtGui.QVBoxLayout()
         self.details.setLayout(self._layout)
         self.book_editor = BookEditor(None)

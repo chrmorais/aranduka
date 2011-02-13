@@ -104,7 +104,7 @@
          <number>0</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <property name="spacing">
            <number>0</number>
           </property>
@@ -189,6 +189,35 @@ padding: .5em;
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="searchButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+     background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
+     color: rgb(255, 255, 255);
+     padding: .5em;
+     border:none;
+}
+</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../icons.qrc">
+              <normaloff>:/icons/system-search.svg</normaloff>:/icons/system-search.svg</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -220,8 +249,8 @@ padding: .5em;
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>288</width>
-                 <height>433</height>
+                 <width>250</width>
+                 <height>445</height>
                 </rect>
                </property>
               </widget>
@@ -252,7 +281,7 @@ padding: .5em;
      <x>0</x>
      <y>0</y>
      <width>750</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLibrary">

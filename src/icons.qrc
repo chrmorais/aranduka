@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/system-search.svg</file>
     <file>icons/reload.svg</file>
     <file>icons/plus.svg</file>
     <file>aranduka-icon.png</file>

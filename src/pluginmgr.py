@@ -62,6 +62,11 @@ class ShelfView(QtCore.QObject):
     itemText = "BASE"
     configurable = False
     
+    # What icons should be visible on the top-right corner
+    has_grid = False
+    has_list = False
+    has_search = False
+    
     def __init__(self):
         print "INIT: ", self.title
         self.widget = None

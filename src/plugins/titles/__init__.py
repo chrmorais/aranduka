@@ -12,6 +12,9 @@ class Catalog(ShelfView):
 
     title = "Books By Title"
     itemText = "Titles"
+    has_grid = True
+    has_list = True
+    has_search = True
     items = {}
     
     def showList(self, search = None):
@@ -160,4 +163,3 @@ class Catalog(ShelfView):
             item.setText(book.title)
             item.setIcon(icon)
             item.book = book
-        
