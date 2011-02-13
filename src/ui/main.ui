@@ -137,12 +137,19 @@ padding: .5em;
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="cursor">
+             <cursorShape>ArrowCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
      background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
      color: rgb(255, 255, 255);
      padding: .5em;
      border:none;
+}
+
+QPushButton:hover {
+     background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(90, 152, 152, 255));
 }
 </string>
             </property>
@@ -167,12 +174,19 @@ padding: .5em;
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="cursor">
+             <cursorShape>ArrowCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
      background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
      color: rgb(255, 255, 255);
      padding: .5em;
      border:none;
+}
+
+QPushButton:hover {
+     background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(90, 152, 152, 255));
 }
 </string>
             </property>
@@ -197,12 +211,19 @@ padding: .5em;
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="cursor">
+             <cursorShape>ArrowCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
      background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(0, 122, 122, 255));
      color: rgb(255, 255, 255);
      padding: .5em;
      border:none;
+}
+
+QPushButton:hover {
+     background-color: qlineargradient(spread:repeat, x1:0.011, y1:1, x2:0, y2:0, stop:0 rgba(123, 210, 227, 255), stop:0.817204 rgba(90, 152, 152, 255));
 }
 </string>
             </property>
@@ -249,7 +270,7 @@ padding: .5em;
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>250</width>
+                 <width>287</width>
                  <height>445</height>
                 </rect>
                </property>
