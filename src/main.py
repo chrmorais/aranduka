@@ -197,6 +197,11 @@ class Main(QtGui.QMainWindow):
             self.searchWidget.doSearch.clicked.disconnect()
         except TypeError: # Happens when there's no connections
             pass
+        # Show only the right action buttons
+        self.gridMode.setVisible(item.handler.has_grid)
+        self.listMode.setVisible(item.handler.has_list)
+        self.searchButton.setVisible(item.handler.has_search)
+        
         self.searchWidget.doSearch.clicked.connect(item.handler.doSearch)
         if self.gridMode.isChecked():
             item.handler.showGrid()

@@ -12,9 +12,6 @@ class Catalog(ShelfView):
 
     title = "Books By Title"
     itemText = "Titles"
-    has_grid = True
-    has_list = True
-    has_search = True
     items = {}
     
     def showList(self, search = None):

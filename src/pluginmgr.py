@@ -13,13 +13,36 @@ import config
 
 # These classes define our plugin categories
 
-class Guesser(object):
+class BasePlugin(object):
+    """Base abstract class, you don't want to inherit this one
+    but one of the specific plugin classes below."""
+    
+    name = "Base Plugin"
+    title = "Base Plugin"
+    configurable = False
+    
+    # What icons should be visible on the top-right corner
+    has_grid = False
+    has_list = False
+    has_search = False
+
+    # If you implement both showGrid and showList, then
+    # set has_grid and has_table to True.
+    # If you implement one, set both to False.
+    
+    def showGrid(self):
+        """Show contents in a grid, if applicable."""
+
+    def showList(self):
+        """Show contents in a list, if applicable."""
+    
+
+class Guesser(BasePlugin):
     """These plugins take a filename and guess data from it.
     They can read the file itself, parse it and get data,
     or could look it up on the internet"""
 
     name = "Base Guesser"
-    configurable = False
     def __init__(self):
         print "INIT: ", self.name
 
@@ -40,32 +63,26 @@ class Guesser(object):
         """
         return None
 
-class Device(object):
+class Device(BasePlugin):
     """A plugin that represents a device to read books.
     These get added in the 'Devices' menu
     """
-    configurable = False
 
-class Tool(object):
+class Tool(BasePlugin):
     """A plugin that gets added to the Tools menu in the main.ui"""
-    configurable = False
 
-class Importer(object):
+class Importer(BasePlugin):
     """A plugin that gets added to the Tools menu in the main.ui"""
-    configurable = False
     
-class ShelfView(QtCore.QObject):
+class ShelfView(BasePlugin, QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
     
     title = "Base ShelfView"
     itemText = "BASE"
-    configurable = False
-    
-    # What icons should be visible on the top-right corner
-    has_grid = False
-    has_list = False
-    has_search = False
+    has_grid = True
+    has_list = True
+    has_search = True
     
     def __init__(self):
         print "INIT: ", self.title
@@ -86,20 +103,10 @@ class ShelfView(QtCore.QObject):
         plugin"""
         return QtGui.QTreeWidgetItem([self.itemText])
 
-    def showGrid(self, search=None):
-        """Show a grid containing the (possibly filtered) books."""
-        pass
-    
-    def showList(self, search=None):
-        """Show a list containing the (possibly filtered) books."""
-        pass
-
     def updateBook(self, book):
         """Update the item of this specific book, because
         it has been edited"""
         pass
-
-    operate = showGrid
 
     def updateShelves(self):
         """Update the whole listing"""
@@ -124,7 +131,7 @@ class ShelfView(QtCore.QObject):
 
 
 
-class BookStore(QtCore.QObject):
+class BookStore(BasePlugin, QtCore.QObject):
     """Plugins that inherit this class give access to some
     mechanism for book acquisition"""
 
@@ -156,17 +163,11 @@ class BookStore(QtCore.QObject):
     def doSearch(self, *args):
         """Slot that triggers search on this store"""
         self.search(unicode(self.widget.searchWidget.text.text()))
-
+        
     def search(self, key):
         """Search the store contents for this key, and display the results"""
         
-    def showGrid(self):
-        """Show contents in a grid, if applicable."""
-
-    def showList(self):
-        """Show contents in a list, if applicable."""
-
-class Converter(object):
+class Converter(BasePlugin):
     configurable = False
 
 def isPluginEnabled (name):
