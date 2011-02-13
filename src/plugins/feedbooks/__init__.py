@@ -18,6 +18,8 @@ class Catalog(BookStore):
 
     title = "FeedBooks: Free and Public Domain Books"
     itemText = "FeedBooks.com"
+    has_search = True
+    
     def __init__(self):
         BookStore.__init__(self)
         self.w = None
