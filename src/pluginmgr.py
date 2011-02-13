@@ -96,6 +96,15 @@ class ShelfView(BasePlugin, QtCore.QObject):
     has_list = True
     has_search = True
     
+    class BookListItemDelegate(QtGui.QStyledItemDelegate):
+        def paint (self, painter, option, index):
+            """Draws nice list items for books"""
+            QtGui.QStyledItemDelegate.paint(self,painter,option,index)
+            
+        def sizeHint(self, option, index):
+            return QtGui.QStyledItemDelegate.sizeHint(self,option,index)
+    
+    
     def __init__(self):
         print "INIT: ", self.title
         self.widget = None
@@ -231,6 +240,7 @@ class ShelfView(BasePlugin, QtCore.QObject):
         # Setup widgetry
         self.widget.stack.setCurrentIndex(0)
         self.shelf = QtGui.QListWidget()
+        self.shelf.setItemDelegate(self.BookListItemDelegate(self.shelf))
         # Make it look right
         self.shelf.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.shelf.setFrameShape(self.shelf.NoFrame)
