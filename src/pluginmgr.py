@@ -99,9 +99,26 @@ class ShelfView(BasePlugin, QtCore.QObject):
     class BookListItemDelegate(QtGui.QStyledItemDelegate):
         def paint (self, painter, option, index):
             """Draws nice list items for books"""
+            book = index.data(900)
+            if book.isValid():
+                book = book.toPyObject()
+                r = option.rect;
+                v = QtGui.QIcon(index.data(QtCore.Qt.DecorationRole))
+                v.paint(painter, QtCore.QRect(r.x()+2, r.y()+2, 124, 124))
+                
+                text = "%s\nby %s"%(book.title, ', '.join(a.name for a in book.authors) or 'Unknown Author')
+                
+                painter.drawText(
+                    QtCore.QRect(r.x()+128, r.y()+2, 
+                        r.width()-128, r.height()-4),
+                    QtCore.Qt.AlignLeft,
+                    text)
+                return
             QtGui.QStyledItemDelegate.paint(self,painter,option,index)
             
         def sizeHint(self, option, index):
+            if index.data(900).isValid():
+                return QtCore.QSize(128,128)
             return QtGui.QStyledItemDelegate.sizeHint(self,option,index)
     
     
@@ -262,6 +279,7 @@ class ShelfView(BasePlugin, QtCore.QObject):
             for b in grouped_books[a]:
                 icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
+                item.setData(900, b)
                 item.book = b
                 self.items[b.id] = item
 
