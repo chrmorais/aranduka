@@ -205,9 +205,9 @@ class Main(QtGui.QMainWindow):
         
         self.searchWidget.doSearch.clicked.connect(item.handler.doSearch)
         if self.gridMode.isChecked():
-            item.handler.showGrid()
+            item.handler.showGrid(currentBook = self.currentBook)
         else:
-            item.handler.showList()
+            item.handler.showList(currentBook = self.currentBook)
 
     def on_actionFind_triggered(self):
         self.searchBar.show()

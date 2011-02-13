@@ -141,6 +141,80 @@ class ShelfView(BasePlugin, QtCore.QObject):
         point = shelf.mapToGlobal(point)
         self.widget.bookContextMenuRequested(book, point)
 
+    def group_books(self, currentBook=None, search=None):
+        """Group the books by shelf.
+        This should return a dictionary where the keys are
+        shelf names, and the values are lists of books"""
+        return {}
+        
+    def showGrid(self, currentBook=None, search=None):
+        """Get all books from the DB and show them"""
+
+        if not self.widget:
+            print "Call setWidget first"
+            return
+        self.operate = self.showGrid
+        self.items = {}
+        
+        self.widget.title.setText(self.title)
+        css = '''
+        ::item {
+                padding: 0;
+                margin: 0;
+                width: 150px;
+                height: 150px;
+            }
+        '''
+
+        # Setup widgetry
+        self.widget.stack.setCurrentIndex(0)
+        self.shelves = QtGui.QWidget()
+        self.shelvesLayout = QtGui.QVBoxLayout()
+        self.shelves.setLayout(self.shelvesLayout)
+
+        grouped_books = self.group_books(currentBook, search)
+        keys = grouped_books.keys()
+        keys.sort()
+        for k in keys:
+            # Make a shelf
+            shelf_label = QtGui.QLabel(k)
+            shelf = QtGui.QListWidget()
+            self.shelvesLayout.addWidget(shelf_label)
+            self.shelvesLayout.addWidget(shelf)
+            # Make it look right
+            shelf.setStyleSheet(css)
+            shelf.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            shelf.setFrameShape(shelf.NoFrame)
+            shelf.setIconSize(QtCore.QSize(128,128))
+            shelf.setViewMode(shelf.IconMode)
+            shelf.setMinimumHeight(153)
+            shelf.setMaximumHeight(153)
+            shelf.setMinimumWidth(153*len(grouped_books[k]))
+            shelf.setFlow(shelf.LeftToRight)
+            shelf.setWrapping(False)
+            shelf.setDragEnabled(False)
+            shelf.setSelectionMode(shelf.NoSelection)
+
+            # Hook the shelf context menu
+            shelf.customContextMenuRequested.connect(self.shelfContextMenu)
+            
+            # Hook book editor
+            shelf.itemActivated.connect(self.widget.on_books_itemActivated)
+            
+            # Fill the shelf
+            for b in grouped_books[k]:
+                pixmap = QtGui.QPixmap(b.cover())
+                if pixmap.isNull():
+                    pixmap = QtGui.QPixmap(b.default_cover())
+                icon =  QtGui.QIcon(pixmap.scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                item = QtGui.QListWidgetItem(icon, b.title, shelf)
+                item.book = b
+                self.items[b.id] = item
+                
+        
+        self.shelvesLayout.addStretch(1)
+        self.widget.shelfStack.setWidget(self.shelves)
+        
 
 
 class BookStore(BasePlugin, QtCore.QObject):
