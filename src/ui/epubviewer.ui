@@ -130,7 +130,7 @@
   <action name="actionClose">
    <property name="icon">
     <iconset resource="../icons.qrc">
-     <normaloff>:/icons/close.svg</normaloff>:/icons/close.svg</iconset>
+     <normaloff>:/icons/gtk-close.svg</normaloff>:/icons/gtk-close.svg</iconset>
    </property>
    <property name="text">
     <string>Close</string>

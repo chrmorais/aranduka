@@ -23,8 +23,8 @@
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="icons.qrc">
-       <normaloff>:/icons/close.svg</normaloff>:/icons/close.svg</iconset>
+      <iconset resource="../icons.qrc">
+       <normaloff>:/icons/gtk-close.svg</normaloff>:/icons/gtk-close.svg</iconset>
      </property>
      <property name="shortcut">
       <string>Esc</string>
@@ -60,8 +60,8 @@
       <string>&amp;Next</string>
      </property>
      <property name="icon">
-      <iconset resource="icons.qrc">
-       <normaloff>:/icons/next.svg</normaloff>:/icons/next.svg</iconset>
+      <iconset resource="../icons.qrc">
+       <normaloff>:/icons/go-next.svg</normaloff>:/icons/go-next.svg</iconset>
      </property>
      <property name="toolButtonStyle">
       <enum>Qt::ToolButtonIconOnly</enum>
@@ -74,7 +74,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="icons.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections>
   <connection>
