@@ -12,53 +12,6 @@ class Catalog(ShelfView):
     itemText = "Titles"
     items = {}
     
-    def showList(self, currentBook = None, search = None):
-        """Get all books from the DB and show them"""
-
-        if not self.widget:
-            print "Call setWidget first"
-            return
-        self.operate = self.showList
-        self.items = {}
-        css = '''
-        ::item {
-                padding: 0;
-                margin: 0;
-                height: 48;
-            }
-        '''
-
-        self.widget.title.setText(self.title)
-        # Setup widgetry
-        self.widget.stack.setCurrentIndex(0)
-        self.shelf = QtGui.QListWidget()
-        # Make it look right
-        self.shelf.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.shelf.setFrameShape(self.shelf.NoFrame)
-        self.shelf.setDragEnabled(False)
-        self.shelf.setSelectionMode(self.shelf.NoSelection)
-        self.shelf.setStyleSheet(css)
-        self.shelf.setIconSize(QtCore.QSize(48,48))
-        # Hook the shelf context menu
-        self.shelf.customContextMenuRequested.connect(self.shelfContextMenu)
-
-        # Hook book editor
-        self.shelf.itemActivated.connect(self.widget.on_books_itemActivated)
-
-        # Fill the shelf
-        if search:
-            books = models.Book.query.filter(models.Book.title.like("%%%s%%"%search))
-        else:
-            books = models.Book.query.order_by("title").all()
-        
-        for b in books:
-            icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
-            print icon
-            item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
-            item.book = b
-            self.items[b.id] = item
-        self.shelvesLayout.addStretch(1)
-        self.widget.shelfStack.setWidget(self.shelf)
 
     def group_books(self, currentBook=None, search=None):
         # Group books by initial (FIXME: make the DB do it)
@@ -69,7 +22,6 @@ class Catalog(ShelfView):
             else:
                 grouped_books[k]=[b]
         
-        # Fill the shelf
         if search:
             books = models.Book.query.filter(models.Book.title.like("%%%s%%"%search))
         else:

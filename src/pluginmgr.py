@@ -106,10 +106,6 @@ class ShelfView(BasePlugin, QtCore.QObject):
         self.widget.updateShelves.connect(self.updateShelves)
         self.widget.updateBook.connect(self.updateBook)
 
-    def updateShelves(self):
-        """Refresh the book listings"""
-        pass
-
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
         plugin"""
@@ -215,6 +211,51 @@ class ShelfView(BasePlugin, QtCore.QObject):
         self.shelvesLayout.addStretch(1)
         self.widget.shelfStack.setWidget(self.shelves)
         
+    def showList(self, currentBook = None, search = None):
+        """Get all books from the DB and show them"""
+
+        if not self.widget:
+            print "Call setWidget first"
+            return
+        self.operate = self.showList
+        self.items = {}
+        css = '''
+        ::item {
+                padding: 0;
+                margin: 0;
+                height: 48;
+            }
+        '''
+
+        self.widget.title.setText(self.title)
+        # Setup widgetry
+        self.widget.stack.setCurrentIndex(0)
+        self.shelf = QtGui.QListWidget()
+        # Make it look right
+        self.shelf.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.shelf.setFrameShape(self.shelf.NoFrame)
+        self.shelf.setDragEnabled(False)
+        self.shelf.setSelectionMode(self.shelf.NoSelection)
+        self.shelf.setStyleSheet(css)
+        self.shelf.setIconSize(QtCore.QSize(48,48))
+        # Hook the shelf context menu
+        self.shelf.customContextMenuRequested.connect(self.shelfContextMenu)
+
+        # Hook book editor
+        self.shelf.itemActivated.connect(self.widget.on_books_itemActivated)
+        
+        grouped_books = self.group_books(currentBook, search)
+        keys = grouped_books.keys()
+        keys.sort()
+        for a in keys:
+            a_item = QtGui.QListWidgetItem(a, self.shelf)
+            for b in grouped_books[a]:
+                icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
+                item.book = b
+                self.items[b.id] = item
+
+        self.widget.shelfStack.setWidget(self.shelf)
 
 
 class BookStore(BasePlugin, QtCore.QObject):
