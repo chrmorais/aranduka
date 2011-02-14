@@ -104,15 +104,31 @@ class ShelfView(BasePlugin, QtCore.QObject):
                 book = book.toPyObject()
                 r = option.rect;
                 v = QtGui.QIcon(index.data(QtCore.Qt.DecorationRole))
-                v.paint(painter, QtCore.QRect(r.x()+2, r.y()+2, 124, 124))
+                v.paint(painter, 
+                        QtCore.QRect(r.x()+2, r.y()+2, 124, 124),
+                        )
                 
-                text = "%s\nby %s"%(book.title, ', '.join(a.name for a in book.authors) or 'Unknown Author')
+                f1 = painter.font()
+                f2=QtGui.QFont(f1)
+                f2.setWeight(QtGui.QFont.Bold)
+                fm = QtGui.QFontMetrics(f2)
+                h2 = fm.height()
+                text1 = "%s"%(book.title.title())
+                text2 = (u'by '+(u', '.join(a.name for a in book.authors) or u'Unknown Author'))
                 
+                painter.setFont(f2)
                 painter.drawText(
                     QtCore.QRect(r.x()+128, r.y()+2, 
-                        r.width()-128, r.height()-4),
+                        r.width()-128, h2),
                     QtCore.Qt.AlignLeft,
-                    text)
+                    text1)
+                    
+                painter.setFont(f1)
+                painter.drawText(
+                    QtCore.QRect(r.x()+128, r.y()+2+h2, 
+                        r.width()-128, r.height()-4-h2),
+                    QtCore.Qt.AlignLeft,
+                    text2)
                 return
             QtGui.QStyledItemDelegate.paint(self,painter,option,index)
             
