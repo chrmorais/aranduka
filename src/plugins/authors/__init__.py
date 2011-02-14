@@ -27,7 +27,13 @@ class Catalog(ShelfView):
             authors = models.Author.query.order_by("name").all()
 
         for a in authors:
-            grouped_books[a.name] = [b for b in a.books]            
+            if not a.name:
+                initial = '@@'
+                name = 'Unknown Author'
+            else:
+                initial = a.name[0]
+                name = a.name
+            grouped_books[u'%s: Books by: %s'%(initial,name)] = [b for b in a.books]
         return grouped_books
                 
     def updateBook(self, book):

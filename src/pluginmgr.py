@@ -183,7 +183,12 @@ class ShelfView(BasePlugin, QtCore.QObject):
     def group_books(self, currentBook=None, search=None):
         """Group the books by shelf.
         This should return a dictionary where the keys are
-        shelf names, and the values are lists of books"""
+        shelf names, and the values are lists of books
+        
+        The name of the shelf should be XX: YYYYY
+        "XX: " will be removed after sorting, and you can use it
+        to specify the order of the shelves.
+        """
         return {}
         
     def showGrid(self, currentBook=None, search=None):
@@ -216,7 +221,7 @@ class ShelfView(BasePlugin, QtCore.QObject):
         keys.sort()
         for k in keys:
             # Make a shelf
-            shelf_label = QtGui.QLabel(k)
+            shelf_label = QtGui.QLabel(k.split(': ',1)[1])
             shelf = QtGui.QListWidget()
             self.shelvesLayout.addWidget(shelf_label)
             self.shelvesLayout.addWidget(shelf)
@@ -292,7 +297,7 @@ class ShelfView(BasePlugin, QtCore.QObject):
         keys = grouped_books.keys()
         keys.sort()
         for a in keys:
-            a_item = QtGui.QListWidgetItem(a, self.shelf)
+            a_item = QtGui.QListWidgetItem(a.split(': ',1)[1], self.shelf)
             for b in grouped_books[a]:
                 icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, self.shelf)

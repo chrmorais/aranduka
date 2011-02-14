@@ -27,7 +27,7 @@ class Catalog(ShelfView):
             tags = models.Tag.query.order_by("name").all()
 
         for a in tags:
-            grouped_books[a.name] = [b for b in a.books]            
+            grouped_books[': '+a.name] = [b for b in a.books]            
         return grouped_books
             
     def updateBook(self, book):

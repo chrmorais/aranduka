@@ -16,6 +16,7 @@ class Catalog(ShelfView):
     def group_books(self, currentBook=None, search=None):
         # Group books by initial (FIXME: make the DB do it)
         grouped_books={}
+        # FIXME: use a defaultdict
         def add_book(b, k):
             if k in grouped_books:
                 grouped_books[k].append(b)
@@ -30,11 +31,11 @@ class Catalog(ShelfView):
         for b in books:
             initial = b.title[0].upper()
             if initial.isdigit():
-                add_book(b,'#')
+                add_book(b,'#: Titles Starting with Numbers')
             elif initial.isalpha():
-                add_book(b,initial)
+                add_book(b,'%s: Titles Starting with %s'%(initial,initial))
             else:
-                add_book(b,'@')
+                add_book(b,'@: Titles Starting with Symbols')
         return grouped_books
         
 
