@@ -100,7 +100,7 @@ class ShelfView(BasePlugin, QtCore.QObject):
         def paint (self, painter, option, index):
             """Draws nice list items for books"""
             book = index.data(900)
-            if book.isValid():
+            if book.isValid(): # Item is a book
                 book = book.toPyObject()
                 r = option.rect;
                 v = QtGui.QIcon(index.data(QtCore.Qt.DecorationRole))
@@ -130,6 +130,7 @@ class ShelfView(BasePlugin, QtCore.QObject):
                     QtCore.Qt.AlignLeft,
                     text2)
                 return
+            # Item is a separator
             QtGui.QStyledItemDelegate.paint(self,painter,option,index)
             
         def sizeHint(self, option, index):
