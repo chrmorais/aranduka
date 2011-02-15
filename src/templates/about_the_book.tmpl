@@ -7,7 +7,7 @@
             <div class="BookInfo">
                 <h1>&quot;${title}$&quot;</h1>
                 <h2>by ${', '.join([a.name for a in authors]) or ""}$</h2>
-                <ul class="Identifiers">
+                <ul>
                 ${for identifier in identifiers:}$
                     <li>${identifier[0]}$: ${identifier[1]}$</li>
                 ${:end-for}$
