@@ -5,9 +5,9 @@ import os, sys, ui
 
 from PyQt4 import QtCore, QtGui, uic
 
+import codecs
 import models
 from metadata import BookMetadata
-
 from templite import Templite
 import time
 
@@ -22,6 +22,8 @@ class AboutBook(QtGui.QWidget):
         self.ui = self
         self.about_web_view.page().setLinkDelegationPolicy(self.about_web_view.page().DelegateAllLinks)
 #        self.about_web_view.linkClicked.connect(self.updateWithCandidate)
+        #StyleSheet
+        self.about_web_view.settings().setUserStyleSheetUrl(QtCore.QUrl.fromLocalFile(os.path.join(os.path.dirname(__file__),'master.css')))
 
         if book_id is not None:
             self.load_data(book_id)
@@ -31,32 +33,8 @@ class AboutBook(QtGui.QWidget):
         if not self.book:
             # Called with invalid book ID
             print "Wrong book ID"
-        tpl = u"""
-        <html>
-        <body>
-        <div style="min-height: 128px; border: solid 3px lightgrey; padding: 15px; border-radius: 15px; margin: 6px; -webkit-transition: all 500ms linear;" 
-             onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; document.getElementById('submit-'0').style.opacity=1.0;" 
-             onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white'; document.getElementById('submit-0').style.opacity=1.0;" >
-            <img style="float: left; margin-right: 4px; max-height: 180px" src="${thumb}$">
-            <div style="text-align: right; margin-top: 12px;">
-                <b>${title}$</b><br>
-                by ${', '.join([a.name for a in authors]) or ""}$<br>
-                ${for identifier in identifiers:}$
-                    <small>${identifier[0]}$: ${identifier[1]}$</small><br>
-                ${:end-for}$
-                <br>Tags for this book<br>
-                ${for tag in tags:}$
-                    <small>${tag}$</small><br>
-                ${:end-for}$
-                <br>Files for this book<br>
-                ${for fname in files:}$
-                    <small><a href="${fname}$">${fname}$</a></small><br>
-                ${:end-for}$
-            </div>
-        </div>
-        </body>
-        </html>
-        """
+
+        tpl = codecs.open(os.path.join(os.path.dirname(__file__),'templates','about_the_book.tmpl'),'r','utf-8').read()
         self.template = Templite(tpl)
         t1 = time.time()
         html = self.template.render(
