@@ -1,6 +1,6 @@
 
 /*
-## Styles for About The Book view
+Styles for About The Book view
 */
 
 #container {
@@ -26,8 +26,8 @@
 
 .BookInfo {
     text-align: right;
-    margin-top: 12px;
-    float: left;
+    /*margin-top: 12px;
+    float: left;*/
 }
 
 .BookInfo h1 {
