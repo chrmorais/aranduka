@@ -348,9 +348,12 @@ class Main(QtGui.QMainWindow):
             self.viewModeChanged()
             
     def on_books_itemActivated(self, item):
-        self.book_editor.load_data(item.book.id)
-        self.title.setText(u'Editing properties of "%s"'%item.book.title)
-        self.stack.setCurrentIndex(1)
+#        self.book_editor.load_data(item.book.id)
+#        self.title.setText(u'Editing properties of "%s"'%item.book.title)
+#        self.stack.setCurrentIndex(1)
+        self.about_book.load_data(item.book.id)
+        self.title.setText(u'Properties of "%s"'%item.book.title)
+        self.stack.setCurrentIndex(4)
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):

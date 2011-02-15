@@ -4,6 +4,7 @@
 */
 
 #container {
+    float: left;
     min-height: 128px; 
     border: solid 3px lightgrey; 
     padding: 15px;
@@ -17,13 +18,13 @@
 #container img {
     float: left;
     margin-right: 4px;
-    max-height: 180px;
     border: 1px solid black;
 }
 
 .BookInfo {
     text-align: right;
     margin-top: 12px;
+    float: left;
 }
 
 .BookInfo h1 {

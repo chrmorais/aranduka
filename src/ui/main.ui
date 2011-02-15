@@ -220,8 +220,8 @@ padding: .5em;
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>276</width>
-                 <height>437</height>
+                 <width>100</width>
+                 <height>30</height>
                 </rect>
                </property>
               </widget>
@@ -272,6 +272,7 @@ padding: .5em;
     <property name="title">
      <string>Book</string>
     </property>
+    <addaction name="actionAbout_Book"/>
     <addaction name="actionEdit_Book"/>
     <addaction name="actionDelete_Book"/>
     <addaction name="actionOpen_Book"/>
