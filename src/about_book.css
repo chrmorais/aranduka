@@ -10,8 +10,8 @@
     border-radius: 15px;
     margin: 6px;
     -webkit-transition: all 500ms linear;
-    onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen';"; 
-    onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';";
+    onmouseover: "this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen';"; 
+    onmouseout: "this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';";
 }
 
 #container img {
