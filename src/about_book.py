@@ -23,7 +23,7 @@ class AboutBook(QtGui.QWidget):
         self.about_web_view.page().setLinkDelegationPolicy(self.about_web_view.page().DelegateAllLinks)
 #        self.about_web_view.linkClicked.connect(self.updateWithCandidate)
         #StyleSheet
-        self.about_web_view.settings().setUserStyleSheetUrl(QtCore.QUrl.fromLocalFile(os.path.join(os.path.dirname(__file__),'master.css')))
+        self.about_web_view.settings().setUserStyleSheetUrl(QtCore.QUrl.fromLocalFile(os.path.join(os.path.dirname(__file__),'about_book.css')))
 
         if book_id is not None:
             self.load_data(book_id)
