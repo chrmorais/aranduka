@@ -1,0 +1,62 @@
+
+/*
+## Styles for About The Book view
+*/
+
+#container {
+    min-height: 128px; 
+    border: solid 3px lightgrey; 
+    padding: 15px;
+    border-radius: 15px;
+    margin: 6px;
+    -webkit-transition: all 500ms linear;
+    onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen';"; 
+    onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white';";
+}
+
+#container img {
+    float: left;
+    margin-right: 4px;
+    max-height: 180px;
+    border: 1px solid black;
+}
+
+.BookInfo {
+    text-align: right;
+    margin-top: 12px;
+}
+
+.BookInfo h1 {
+	text-shadow: 1px 1px 1px lightgray;
+    font-family: Ubuntu, Sans;
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom:0px;    
+}
+
+.BookInfo h2 {
+    font-family: Ubuntu, Sans;
+    font-weight: bold;
+    font-size: 18px;  
+    margin-top:0px;  
+}
+
+.BookInfo h3 {
+    font-family: Ubuntu, Sans;
+    font-weight: bold;
+    font-size: 16px;    
+    margin: 0px;
+}
+
+.BookInfo ul {
+    margin-top: 0px;
+}
+
+.BookInfo li {
+    font-family: Ubuntu, Sans;
+    font-weight: normal;
+    font-size: 14px;    
+    list-style:none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
