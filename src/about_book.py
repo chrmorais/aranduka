@@ -41,7 +41,6 @@ class AboutBook(QtGui.QWidget):
             title = self.book.title,
             authors = self.book.authors,
             identifiers = [[identifier.key, identifier.value] for identifier in self.book.identifiers],
-#            identifiers = self.book.identifiers,
             files = [fname.file_name for fname in self.book.files],
             tags = [tag.name for tag in self.book.tags],
             thumb = QtCore.QUrl.fromLocalFile(self.book.cover()).toString(),

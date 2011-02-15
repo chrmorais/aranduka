@@ -21,7 +21,6 @@ h1 {
 	padding-right: 8px;
 	font-size: 4.6em;
 	line-height: .95em;
-	text-shadow: 0px 2px 1px #294172;
 }
 
 h2 {
@@ -149,27 +148,5 @@ img.full-width {
 	margin-bottom: 2em;
 }
 
-#Container {
-    min-height: 128px; 
-    border: solid 3px lightgrey; 
-    padding: 15px;
-    border-radius: 15px;
-    margin: 6px;
-    -webkit-transition: all 500ms linear;
-    onmouseover="this.style.border='solid 3px lightgreen'; this.style.backgroundColor='lightgreen'; document.getElementById('submit-'0').style.opacity=1.0;" 
-    onmouseout="this.style.border='solid 3px lightgrey'; this.style.backgroundColor='white'; document.getElementById('submit-0').style.opacity=1.0;"
 
-}
-
-#BookInfo {
-    text-align: right;
-    margin-top: 12px;
-}
-
-#BookInfo h1 {
-    font-family: Ubuntu, Sans;
-    font-weight: bold;
-    color: red;
-    font-size: 8px;    
-}
 
