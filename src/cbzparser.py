@@ -1,5 +1,7 @@
 import os
+import utils
 import zipfile
+from PyQt4 import QtGui
 
 class CBZDocument(object):
     """A class that parses and provides
@@ -28,3 +30,25 @@ class CBZDocument(object):
         f.close()
         return data
         
+    def fetchCover(self, basename=""):
+        # find first image. there are folders inside some files
+        for entry in self.tocentries:
+            if(self.isImage(entry)):
+                #self.book.extract(entry)
+                image = self.book.read(entry)
+                break
+
+        # this is taken from the fetch_cover method on models
+        oname = os.path.join(utils.COVERPATH, str(basename) +".jpg")
+        imageqt = QtGui.QImage.fromData(image)
+        coverqt = imageqt.scaled(128,128, 1, 1)
+        coverqt.save(oname)
+        
+    def isImage(self, name):
+        list = name.split(".")
+        extension = list[-1].lower()
+        if extension == "jpg" or extension == "png":
+            return True
+        else:
+            return False 
+

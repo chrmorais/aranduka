@@ -6,6 +6,7 @@ from pprint import pprint
 from utils import VALID_EXTENSIONS
 from pluginmgr import Importer
 from progress import progress
+import cbzparser
 
 COMPRESSED_EXTENSIONS = ['gz','bz2','lzma']
 
@@ -121,9 +122,17 @@ def import_file(fname):
         b = models.Book(
             title = p,
         )
-        
     f = models.File(file_name=fname, book=b)
     models.session.commit()
+    
+    #if a cbz, get cover
+    splitted = fname.split('.')
+    extension = splitted[-1]
+    print extension
+    if extension == u"cbz":
+        parser = cbzparser.CBZDocument(fname)
+        parser.fetchCover(b.id)
+    
     return 2
 
 def file_status(fname):
