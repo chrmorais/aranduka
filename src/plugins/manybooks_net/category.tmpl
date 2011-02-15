@@ -36,7 +36,7 @@ ${
             ext = 'jar'
         else:
             ext = code.split(':')[1]
-        acq_links.append('<a href="%s">%s</a>'%(l, ext))
+        acq_links.append('<option value="%s">%s</option>'%(l, ext))
     #non_acq_links = []
     #acq_links = []
     #for l in book.links:
@@ -60,6 +60,12 @@ ${
             if acq_links:
                 emit("Download: "+"&nbsp;".join(acq_links))
         }$
+        ${ if acq_links: }$
+            <p><select onchange="javascript:window.location.href=this.options[this.selectedIndex].value">
+                <option value="">Download</option>
+                ${ emit("\n".join(acq_links)) }$
+            </select></p>
+        ${:endif}$
 	</div>
 </div>
 ${:end-for}$
