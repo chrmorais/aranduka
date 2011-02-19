@@ -85,15 +85,17 @@ class Book (Entity):
                 files.append(f.file_name)
         return files
 
-    def available_formats(self):
+    def available_formats(self, repeat=False):
         """Returns what formats are available for this book, as a list
         of strings, for example: ['.epub','.pdf']"""
 
-        extensions = set()
+        extensions = []
         for f in self.files:
             _, ext = os.path.splitext(f.file_name)
-            extensions.add(ext)
-        return list(extensions)
+            extensions.append(ext)
+        if not repeat:
+            extensions = list(set(extensions))
+        return extensions
 
     def default_cover (self):
         return os.path.join(utils.SCRIPTPATH,"nocover.png")        
