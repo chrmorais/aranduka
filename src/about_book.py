@@ -11,6 +11,15 @@ from metadata import BookMetadata
 from templite import Templite
 import time
 
+class WebView(QtWebKit.QWebView):
+    """We have to reimplement a QWebView to be able to create a new window (popups)"""
+    
+    def createWindow(self, webwindowtype):
+        print "New WebWindow created."
+        self.pop = WebView()
+        self.pop.show()
+        return self.pop
+
 class AboutBook(QtGui.QWidget):
     
     updateBook = QtCore.pyqtSignal(models.Book)
@@ -21,6 +30,11 @@ class AboutBook(QtGui.QWidget):
         uic.loadUi(uifile, self)
         self.ui = self
 
+        self.about_web_view = WebView()
+        self.verticalLayout.addWidget(self.about_web_view)
+        self.about_web_view.show()
+        #self.about_web_view.setHtml('<html><a href="google.com" target="_blank">click me</a></html>')
+
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptEnabled, True)
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptCanOpenWindows, True)
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptCanAccessClipboard, True)
@@ -30,7 +44,7 @@ class AboutBook(QtGui.QWidget):
         self.about_web_view.settings().setUserStyleSheetUrl(QtCore.QUrl.fromLocalFile(os.path.join(os.path.dirname(__file__),'about_book.css')))
         if book_id is not None:
             self.load_data(book_id)
-
+            
     def load_data(self, book_id):
         self.book = models.Book.get_by(id=book_id)
         if not self.book:
