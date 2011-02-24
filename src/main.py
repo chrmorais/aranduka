@@ -72,6 +72,8 @@ class Main(QtGui.QMainWindow):
         self._layout2 = QtGui.QVBoxLayout()
         self.about.setLayout(self._layout2)
         self.about_book = AboutBook(None)
+        self.about_book.closeButton.clicked.connect(self.viewModeChanged)
+        self.about_book.editButton.clicked.connect(self.on_actionEdit_Book_triggered)
         self._layout2.addWidget(self.about_book)
         
         print "Finished initializing main window"
@@ -351,6 +353,7 @@ class Main(QtGui.QMainWindow):
 #        self.book_editor.load_data(item.book.id)
 #        self.title.setText(u'Editing properties of "%s"'%item.book.title)
 #        self.stack.setCurrentIndex(1)
+        self.currentBook = item.book
         self.about_book.load_data(item.book.id)
         self.title.setText(u'Properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(4)

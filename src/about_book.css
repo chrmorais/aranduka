@@ -3,8 +3,12 @@
 Styles for About The Book view
 */
 
+body {
+	font-family: Ubuntu, Serif, Sans;
+}
+
 #container {
-    font-family: Ubuntu, Sans;
+    /*font-family: Ubuntu, Sans;*/
     float: left;
     min-height: 128px; 
     border: solid 3px lightgrey; 

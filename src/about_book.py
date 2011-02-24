@@ -22,8 +22,6 @@ class WebView(QtWebKit.QWebView):
 
 class AboutBook(QtGui.QWidget):
     
-    updateBook = QtCore.pyqtSignal(models.Book)
-    
     def __init__(self, book_id = None, *args):
         QtGui.QWidget.__init__(self,*args)
         uifile = ui.path('about_book.ui')
@@ -31,16 +29,16 @@ class AboutBook(QtGui.QWidget):
         self.ui = self
 
         self.about_web_view = WebView()
-        self.verticalLayout.addWidget(self.about_web_view)
+        self.verticalLayout.insertWidget(0,self.about_web_view)
         self.about_web_view.show()
         
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptEnabled, True)
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptCanOpenWindows, True)
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptCanAccessClipboard, True)
         self.about_web_view.page().setLinkDelegationPolicy(self.about_web_view.page().DelegateAllLinks)
-        self.about_web_view.linkClicked.connect(self.linkClicked)
         #StyleSheet
-        self.about_web_view.settings().setUserStyleSheetUrl(QtCore.QUrl.fromLocalFile(os.path.join(os.path.dirname(__file__),'about_book.css')))
+#        self.about_web_view.settings().setUserStyleSheetUrl(QtCore.QUrl.fromLocalFile(os.path.join(os.path.dirname(__file__),'about_book.css')))
+        
         if book_id is not None:
             self.load_data(book_id)
             
@@ -64,15 +62,7 @@ class AboutBook(QtGui.QWidget):
             quotes = [u'La anarquía económica de la sociedad capitalista tal como existe hoy es, en mi opinión, la verdadera fuente del mal.','Sample Quote #1','Sample Quote #2'],
             )
         print "Rendered in: %s seconds"%(time.time()-t1)
-        print html
         self.about_web_view.page().mainFrame().setHtml(html)
-#        self.about_web_view.setUpdatesEnabled(True)
-
-    def linkClicked(self, link):
-        print link
-        if link.toString() == 'Edit':
-            pass
-        return
         
         
 if __name__ == '__main__':
