@@ -33,8 +33,7 @@ class AboutBook(QtGui.QWidget):
         self.about_web_view = WebView()
         self.verticalLayout.addWidget(self.about_web_view)
         self.about_web_view.show()
-        #self.about_web_view.setHtml('<html><a href="google.com" target="_blank">click me</a></html>')
-
+        
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptEnabled, True)
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptCanOpenWindows, True)
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptCanAccessClipboard, True)
