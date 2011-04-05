@@ -39,11 +39,12 @@ class Book (Entity):
     def __repr__(self):
         return '<book>%s - %s</book>' % (self.title, self.authors)
 
-    def delete (self):
-        """Deletes a book attempting to delete all related
-           files, and performs a sanitization of Author table"""
+    def delete (self, deleteFiles=True):
+        """Deletes a book and performs a sanitization of Author table.
+           If deleteFiles == True it attempts to remove the files from
+           the filesystem"""
         for f in self.files:
-            f.delete()
+            f.delete(deleteFiles)
         super(Entity, self).delete()
         Author.sanitize()
 
@@ -183,13 +184,17 @@ class File (Entity):
     file_size = Field(Unicode(30))
     book = ManyToOne('Book')
 
-    def delete (self):
-        """Deletes a file from the database and the filesystem"""
-        print "Deleting file: %s"%self.file_name
-        try:
-            os.unlink(self.file_name)
-        except OSError:
-            pass
+    def delete (self, deleteFile=True):
+        """Deletes a file from the database and 
+           optionally from the filesystem"""
+        if deleteFile:
+            print "Deleting file: %s"%self.file_name
+            try:
+                os.unlink(self.file_name)
+            except OSError:
+                pass
+        else:
+             print "Deleting only from database"
         super(Entity, self).delete()
 
     def __repr__(self):

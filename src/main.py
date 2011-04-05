@@ -21,6 +21,20 @@ class SearchWidget(QtGui.QWidget):
         uic.loadUi(uifile, self)
         self.ui = self
 
+class DeleteBook (QtGui.QDialog):
+    """Dialog to confirm the removal of a book and its files"""
+    def __init__(self, parent, title, *args):
+        QtGui.QDialog.__init__(self, parent, *args)
+        uifile = ui.path('delete_book.ui')
+        uic.loadUi(uifile, self)
+        self.ui = self
+        self.setWindowTitle(u'Confirm book delete')
+        self.label.setText(u'Are you sure you want to delete the book "%s"?' % title)
+        self.label.setWordWrap(True)
+        self.checkBox.setText(u'Delete book files')
+        self.checkBox.setChecked(True)
+        self.setModal(True)
+
 class Main(QtGui.QMainWindow):
     updateShelves = QtCore.pyqtSignal()
     updateBook = QtCore.pyqtSignal(models.Book)
@@ -254,15 +268,12 @@ class Main(QtGui.QMainWindow):
     def on_actionDelete_Book_triggered(self):
         if not self.currentBook:
             return
-        rsp = QtGui.QMessageBox.question(self, \
-                                   'Confirm delete', \
-                                   'Are you sure you want to delete the book "%s"?'%\
-                                   self.currentBook.title, \
-                                   QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
-        if rsp == QtGui.QMessageBox.Ok:
+        dlg = DeleteBook(self, self.currentBook.title)
+        rsp = dlg.exec_()
+        if rsp == dlg.Accepted:
             # Delete the book files
             print "Deleting book: %s"%self.currentBook.title
-            self.currentBook.delete()
+            self.currentBook.delete(dlg.checkBox.isChecked())
             models.session.commit()
             self.currentBook = None
             self.viewModeChanged()
