@@ -36,6 +36,7 @@ class AboutBook(QtGui.QWidget):
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptCanOpenWindows, True)
         self.about_web_view.settings().setAttribute(QtWebKit.QWebSettings.JavascriptCanAccessClipboard, True)
         self.about_web_view.page().setLinkDelegationPolicy(self.about_web_view.page().DelegateAllLinks)
+        self.about_web_view.linkClicked.connect(self.openBook)
         #StyleSheet
 #        self.about_web_view.settings().setUserStyleSheetUrl(QtCore.QUrl.fromLocalFile(os.path.join(os.path.dirname(__file__),'about_book.css')))
         
@@ -64,7 +65,12 @@ class AboutBook(QtGui.QWidget):
         print "Rendered in: %s seconds"%(time.time()-t1)
         self.about_web_view.page().mainFrame().setHtml(html)
         
-        
+    def openBook(self, url):
+        print url
+        if url.toString().endsWith("epub"):
+            print "EPUB"
+
+                
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     models.initDB()
