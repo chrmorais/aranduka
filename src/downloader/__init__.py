@@ -3,6 +3,8 @@ import sys
 
 class Downloads(QtGui.QProgressBar):
 
+    setStatusMessage = QtCore.pyqtSignal("PyQt_PyObject")
+    
     def __init__(self,parent=None):
         super(Downloads,self).__init__(parent)
         self.popup = QtGui.QWidget()
@@ -68,6 +70,7 @@ class Downloads(QtGui.QProgressBar):
         self.setValue(val)
         if tot==0 or tot==val:
             self.setVisible(False)
+            self.setStatusMessage.emit(u"")
         else:
             self.setVisible(True)
 

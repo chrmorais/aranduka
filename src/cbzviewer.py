@@ -1,61 +1,38 @@
 from PyQt4 import QtNetwork, QtCore, QtGui, uic
 import os, sys
-from epubparser import EpubDocument
-import feedparser
+from cbzparser import CBZDocument
 import ui
-from config import *
-import hashlib
 
 class Main(QtGui.QMainWindow):
+
+    adjWidthTpl = u"<img src=\"book:///%s\" width='100%%'>"
+    normalWidthTpl = u"<img src=\"book:///%s\">"
+
     def __init__(self, fname):
         QtGui.QMainWindow.__init__(self)
 
-        self.fname = fname
-        self.epub = EpubDocument(fname)
+        self.doc = CBZDocument(fname)
         uifile = ui.path('epubviewer.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.addAction(self.actionPageDown)
 
 
-        for l,c in self.epub.tocentries:
-            item = QtGui.QListWidgetItem(l)
-            item.contents = c
+        for n in self.doc.tocentries:
+            item = QtGui.QListWidgetItem(n)
+            item.contents = n
             self.chapters.addItem(item)
+        
+        self.cur_path = ''
 
         self.old_manager = self.view.page().networkAccessManager()
         self.new_manager = NetworkAccessManager(self.old_manager, self)
         self.view.page().setNetworkAccessManager(self.new_manager)
-            
-        self.cur_path = ''
-        sv, curSpineRef = getValue("epubviewer", "position-"+hashlib.sha224(self.fname).hexdigest(),[0, None])
-        row = -1
-        if curSpineRef:
-            try:
-                row = [j for i,j in self.epub.tocentries].index(curSpineRef)
-            except ValueError:
-                pass
-        if row == -1:
-            if self.epub.spinerefs[0] == self.epub.tocentries[0][1]:
-                row = 0
-        if row != -1:
-            self.chapters.setCurrentRow(row)
-            self.openPath(self.epub.tocentries[row][1])
-        else: # The first spineref is not in the toc. Usually means the cover.
-            self.openPath(self.epub.spinerefs[0])
-            
+        self.chapters.setCurrentRow(0)
+        self.openPath(self.doc.tocentries[0])
         self.actionClose.triggered.connect(self.close)
         self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
         
-    def closeEvent(self, ev):
-        # Save position keyed by filename
-        frame = self.view.page().mainFrame()
-        sv = frame.scrollPosition().y()
-        frame = self.view.page().mainFrame()
-        curSpineRef= unicode(frame.url().toString())[12:]
-        setValue("epubviewer", "position-"+hashlib.sha224(self.fname).hexdigest(),[sv, curSpineRef])
-        QtGui.QMainWindow.closeEvent(self, ev)
-
     @QtCore.pyqtSlot("bool")
     def on_actionFull_Screen_toggled(self, b):
         if b:
@@ -78,47 +55,39 @@ class Main(QtGui.QMainWindow):
     def on_actionNext_Chapter_triggered(self):
         # Find where on the spine we are
         frame = self.view.page().mainFrame()
-        curSpineRef= unicode(frame.url().toString())[12:]
+        curTocEntry= unicode(frame.url().toString())[12:]
         try:
-            curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
+            curIdx = self.doc.tocentries.index(curTocEntry)
         except ValueError:
             curIdx = -1
-        if curIdx+1 < len(self.epub.tocentries):
+        if curIdx < len(self.doc.tocentries):
             self.chapters.setCurrentRow(curIdx+1)
-            self.openPath(self.epub.tocentries[curIdx+1][1])
+            self.openPath(self.doc.tocentries[curIdx+1])
             
     @QtCore.pyqtSlot()
     def on_actionPrevious_Chapter_triggered(self):
         # Find where on the spine we are
         frame = self.view.page().mainFrame()
-        curSpineRef= unicode(frame.url().toString())[12:]
+        curTocEntry= unicode(frame.url().toString())[12:]
         try:
-            curIdx = [j for i,j in self.epub.tocentries].index(curSpineRef)
+            curIdx = self.doc.tocentries.index(curTocEntry)
         except ValueError:
             curIdx = -1
         if curIdx > 0:
             self.chapters.setCurrentRow(curIdx-1)
-            self.openPath(self.epub.tocentries[curIdx-1][1])
+            self.openPath(self.doc.tocentries[curIdx-1])
 
             
     def on_chapters_itemClicked(self, item):
         self.openPath(item.contents)
 
     def openPath(self, path, fragment=None):
-        if "#" in path:
-            path, fragment = path.split('#',1)
+        print "Opening:", path
         path = QtCore.QUrl.fromPercentEncoding(path)
-        
         if self.cur_path <> path:
             self.cur_path = path
-            xml = self.epub.getData(path)
-            encoding=feedparser._getCharacterEncoding({},xml)[0]
-            xml=xml.decode(encoding)
-            self.view.page().mainFrame().setHtml(xml,QtCore.QUrl("epub://book/"+path))
-            
-        if fragment:
-            self.javascript('document.location.hash = "%s"'%fragment)
-        
+            self.view.page().mainFrame().setHtml(self.adjWidthTpl%path, QtCore.QUrl("epub://book/"+path))
+                
     def javascript(self, string, typ=None):
         ans = self.view.page().mainFrame().evaluateJavaScript(string)
         if typ == 'int':
@@ -141,7 +110,7 @@ class DownloadReply(QtNetwork.QNetworkReply):
     def __init__(self, parent, url, operation, w):
         self._w = w
         QtNetwork.QNetworkReply.__init__(self, parent)
-        self.content = self._w.epub.getData(unicode(url.path())[1:])
+        self.content = self._w.doc.getData(unicode(url.path())[1:])
         self.offset = 0
 
         self.setHeader(QtNetwork.QNetworkRequest.ContentTypeHeader, QtCore.QVariant("application/binary"))
@@ -179,13 +148,7 @@ class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
         self.setProxyFactory(old_manager.proxyFactory())
 
     def createRequest(self, operation, request, data):
-
-        if request.url().scheme() != "epub":
-            return QtNetwork.QNetworkAccessManager.createRequest(self, operation, request, data)
-
         if operation == self.GetOperation:
-            # Handle download:// URLs separately by creating custom
-            # QNetworkReply objects.
             reply = DownloadReply(self, request.url(), self.GetOperation, self._w)
             return reply
         else:

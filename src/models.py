@@ -45,6 +45,11 @@ class Book (Entity):
            the filesystem"""
         for f in self.files:
             f.delete(deleteFiles)
+        if self.cover() != self.default_cover():
+            try:
+                os.unlink(self.cover())        
+            except OSError:
+                pass
         super(Entity, self).delete()
         Author.sanitize()
 
@@ -81,16 +86,21 @@ class Book (Entity):
                 files.append(f.file_name)
         return files
 
-    def available_formats(self):
+    def available_formats(self, repeat=False):
         """Returns what formats are available for this book, as a list
         of strings, for example: ['.epub','.pdf']"""
 
-        extensions = set()
+        extensions = []
         for f in self.files:
             _, ext = os.path.splitext(f.file_name)
-            extensions.add(ext)
-        return list(extensions)
+            extensions.append(ext)
+        if not repeat:
+            extensions = list(set(extensions))
+        return extensions
 
+    def default_cover (self):
+        return os.path.join(utils.SCRIPTPATH,"nocover.png")        
+        
     def cover(self):
         """Returns the path for the cover image if available, or the
         default nocover picture"""

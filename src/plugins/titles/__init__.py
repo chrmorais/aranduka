@@ -55,6 +55,7 @@ class Catalog(ShelfView):
         
         for b in books:
             icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+            print icon
             item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
             item.book = b
             self.items[b.id] = item
@@ -140,7 +141,10 @@ class Catalog(ShelfView):
             
             # Fill the shelf
             for b in grouped_books[k]:
-                icon =  QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                pixmap = QtGui.QPixmap(b.cover())
+                if pixmap.isNull():
+                    pixmap = QtGui.QPixmap(b.default_cover())
+                icon =  QtGui.QIcon(pixmap.scaledToHeight(128, QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, shelf)
                 item.book = b
                 self.items[b.id] = item

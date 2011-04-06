@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>422</width>
+    <height>526</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,25 +22,38 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="title">
-     <property name="text">
-      <string>CheckBox</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="author">
-     <property name="text">
-      <string>CheckBox</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="isbn">
-     <property name="text">
-      <string>CheckBox</string>
-     </property>
-    </widget>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="title">
+       <property name="text">
+        <string>Title:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="titleText"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="author">
+       <property name="text">
+        <string>Author:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="authorText"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="isbn">
+       <property name="text">
+        <string>ISBN:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="isbnText"/>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QLabel" name="label_2">
@@ -50,7 +63,13 @@
     </widget>
    </item>
    <item>
-    <widget class="QListWidget" name="bookList"/>
+    <widget class="QWebView" name="candidates">
+     <property name="url">
+      <url>
+       <string>about:blank</string>
+      </url>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -68,11 +87,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="guessers"/>
      </item>
      <item>
       <widget class="QPushButton" name="guessButton">
@@ -82,9 +97,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="updateButton">
+      <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>Update</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
@@ -92,6 +107,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKit/QWebView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -107,22 +129,6 @@
     <hint type="destinationlabel">
      <x>219</x>
      <y>282</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>updateButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>360</x>
-     <y>273</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>397</x>
-     <y>228</y>
     </hint>
    </hints>
   </connection>

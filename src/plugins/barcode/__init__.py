@@ -14,11 +14,18 @@ class Plugin(Tool):
         return self._action
 
     def scan(self): 
-        if sys.platform == 'win32':
-            ZBARPATH = r"C:\Program Files (x86)\ZBar\bin\zbarcam.exe"
-        else:
-            ZBARPATH = which('zbarcam')
-        print "ZBAR is:", ZBARPATH
+        try:
+            if sys.platform == 'win32':
+                ZBARPATH = list(which('zbarcam'))
+                if not ZBARPATH:
+                    ZBARPATH = list(which('zbarcam', path=[r"C:\Program Files\ZBar\bin", r"C:\Program Files (x86)\ZBar\bin"]))[0]
+            else:
+                ZBARPATH = list(which('zbarcam'))[0]
+        except:
+            ZBARPATH = None
+        if not ZBARPATH:
+            QtGui.QMessageBox.information(None, "Aranduka - Error", "Can't find zbarcam. Get it at http://zbarcam.sf.net")
+            return
         p=os.popen(ZBARPATH,'r')
         p = subprocess.Popen([ZBARPATH], stdout=subprocess.PIPE).communicate()[0]
         # p = "DEMO:0345400445"
@@ -33,12 +40,9 @@ class Plugin(Tool):
                 # Create empty book
                 b = Book(identifiers = [i])
                 # We are supposed to have a ISBN, so assume we are getting it right.
-                dlg = GuessDialog(guesser.plugin_object, b)
+                dlg = GuessDialog(b)
                 dlg.isbn.setChecked(True)
-                dlg.on_guess_clicked()
-                # hack the dialog
-                dlg.guessButton.hide()
-                dlg.updateButton.setText('Create')
+                dlg.on_guessButton_clicked()
 
                 r = dlg.exec_()
                 

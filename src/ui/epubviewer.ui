@@ -66,6 +66,7 @@
    <addaction name="actionClose"/>
    <addaction name="separator"/>
    <addaction name="actionShow_Contents"/>
+   <addaction name="actionFull_Screen"/>
    <addaction name="separator"/>
    <addaction name="actionPrevious_Chapter"/>
    <addaction name="actionNext_Chapter"/>
@@ -81,7 +82,7 @@
   <action name="actionNext_Chapter">
    <property name="icon">
     <iconset resource="../icons.qrc">
-     <normaloff>:/icons/next.svg</normaloff>:/icons/next.svg</iconset>
+     <normaloff>:/icons/go-next.svg</normaloff>:/icons/go-next.svg</iconset>
    </property>
    <property name="text">
     <string>Next Chapter</string>
@@ -93,7 +94,7 @@
   <action name="actionPrevious_Chapter">
    <property name="icon">
     <iconset resource="../icons.qrc">
-     <normaloff>:/icons/previous.svg</normaloff>:/icons/previous.svg</iconset>
+     <normaloff>:/icons/go-previous.svg</normaloff>:/icons/go-previous.svg</iconset>
    </property>
    <property name="text">
     <string>Previous Chapter</string>
@@ -119,14 +120,35 @@
    <property name="shortcut">
     <string>F4</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
+   <property name="priority">
+    <enum>QAction::NormalPriority</enum>
+   </property>
   </action>
   <action name="actionClose">
    <property name="icon">
     <iconset resource="../icons.qrc">
-     <normaloff>:/icons/close.svg</normaloff>:/icons/close.svg</iconset>
+     <normaloff>:/icons/gtk-close.svg</normaloff>:/icons/gtk-close.svg</iconset>
    </property>
    <property name="text">
     <string>Close</string>
+   </property>
+  </action>
+  <action name="actionFull_Screen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icons/view-fullscreen.svg</normaloff>:/icons/view-fullscreen.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Full Screen</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
    </property>
   </action>
  </widget>

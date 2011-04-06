@@ -18,7 +18,6 @@ class Catalog(BookStore):
 
     title = "FeedBooks: Free and Public Domain Books"
     itemText = "FeedBooks.com"
-    
     def __init__(self):
         BookStore.__init__(self)
         self.w = None
@@ -32,7 +31,6 @@ class Catalog(BookStore):
         self.template = Templite(tplfile.read())
         tplfile.close()
         self.widget = widget
-
 
     def operate(self):
         "Show the store"
@@ -51,6 +49,9 @@ class Catalog(BookStore):
             self.w.store_web.page().setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateExternalLinks)
             self.w.store_web.page().linkClicked.connect(self.openUrl)
             self.w.crumbs.linkActivated.connect(self.openUrl)
+            self.w.store_web.loadStarted.connect(self.loadStarted)
+            self.w.store_web.loadProgress.connect(self.loadProgress)
+            self.w.store_web.loadFinished.connect(self.loadFinished)
         self.widget.stack.setCurrentIndex(self.pageNumber)
 
     showGrid = operate
@@ -62,15 +63,21 @@ class Catalog(BookStore):
         self.openUrl(QtCore.QUrl(url))
 
     def openUrl(self, url):
-        print "CRUMBS:", self.crumbs
         if isinstance(url, QtCore.QUrl):
             url = url.toString()
         url = unicode(url)
+        # This happens for catalogs by language
+        if url.startswith('/'):
+            url=urlparse.urljoin('http://feedbooks.com',url)
         extension = url.split('.')[-1]
         print "Opening:",url
-        if url.split('/')[-1].isdigit():
+        if url.split('/')[-1].isdigit() or url.split('/')[-2].isdigit():
             # A details page
-            self.crumbs.append(["#%s"%url.split('/')[-1],url])
+            crumb = ["#%s"%url.split('/')[-1],url]
+            if crumb in self.crumbs:
+                self.crumbs = self.crumbs[:self.crumbs.index(crumb)+1]
+            else:
+                self.crumbs.append(crumb)
             self.showCrumbs()
             self.w.store_web.load(QtCore.QUrl(url))
         elif extension in EBOOK_EXTENSIONS:
@@ -82,11 +89,12 @@ class Catalog(BookStore):
                 
             bookdata = bookdata.entries[0]
             title = bookdata.title
+            self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
             if not book:
                 # Let's create a lot of data
                 tags = []
-                for tag in bookdata.tags:
+                for tag in bookdata.get('tags',[]):
                     t = Tag.get_by(name = tag.label)
                     if not t:
                         t = Tag(name = tag.label)
@@ -121,39 +129,43 @@ class Catalog(BookStore):
         """Trigger download of the branch, then trigger
         parseBranch when it's downloaded"""
         print "Showing:", url
+        # Disable updates to prevent flickering
+        self.w.store_web.setUpdatesEnabled(False)
         self.w.store_web.page().mainFrame().load(QtCore.QUrl(url))
-        self.w.store_web.page().mainFrame().loadFinished.connect(self.parseBranch)
+        self.setStatusMessage.emit(u"Loading: "+url)
+        self.w.store_web.page().loadFinished.connect(self.parseBranch)
         return
         
     @QtCore.pyqtSlot()
     def parseBranch(self):
         """Replaces the content of the web page (which is assumed to be
-        an Atom feed from Feedbooks) with the generated HTML"""
-        self.w.store_web.page().mainFrame().loadFinished.disconnect(self.parseBranch)
+        an Atom feed from Feedbooks) with the generated HTML.        
+        """
+        self.w.store_web.page().loadFinished.disconnect(self.parseBranch)
         url = unicode(self.w.store_web.page().mainFrame().requestedUrl().toString())
         print "Parsing the branch:", url
         t1 = time.time()
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
         print "Parsed branch in: %s seconds"%(time.time()-t1)
-        
-        crumb = [data.feed.title.split("|")[0].split("/")[-1].strip(), url]
-        try:
-            r=self.crumbs.index(crumb)
-            self.crumbs=self.crumbs[:r+1]
-        except ValueError:
-            self.crumbs.append(crumb)
+        title = data.feed.get('title','')
+        if 'page=' in url: # A page
+            print "DELETING LAST CRUMB" 
+            if 'page=' in self.crumbs[-1][1]: 
+                #last one was also a page
+                del self.crumbs[-1]
+        if title:
+            crumb = [title.split("|")[0].split("/")[-1].strip(), url]
+            try:
+                r=self.crumbs.index(crumb)
+                self.crumbs=self.crumbs[:r+1]
+            except ValueError:
+                self.crumbs.append(crumb)
         self.showCrumbs()
         books = []
         links = []        
         for entry in data.entries:
-            iurl = entry.links[0].href
-
             # Find acquisition links
             acq_links = [l.href for l in entry.links if l.rel=='http://opds-spec.org/acquisition']
-            acq_fragment = []
-            for l in acq_links:
-                acq_fragment.append('<a href="%s">%s</a>'%(l, l.split('.')[-1]))
-            acq_fragment='&nbsp;|&nbsp;'.join(acq_fragment)
 
             if acq_links: # Can be acquired
                 books.append(entry)
@@ -161,18 +173,18 @@ class Catalog(BookStore):
                 links.append(entry)
 
         totPages = int(ceil(float(data.feed.get('opensearch_totalresults', 1))/int(data.feed.get('opensearch_itemsperpage', 1))))
-        curPage = urlparse.parse_qs(urlparse.urlparse(url).query).get('page',[1])[-1]
-
+        curPage = int(urlparse.parse_qs(urlparse.urlparse(url).query).get('page',[1])[-1])
+        
         t1 = time.time()
         html = self.template.render(
-            title = data.feed.title,
+            title = title,
             books = books,
             links = links,
             url = url,
-            base_url = url.split('?')[0],
             totPages = totPages,
             curPage = int(curPage)
             )
         print "Rendered in: %s seconds"%(time.time()-t1)
-            
+        # open('x.html','w+').write(html)
         self.w.store_web.page().mainFrame().setHtml(html)
+        self.w.store_web.setUpdatesEnabled(True)

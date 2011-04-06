@@ -221,7 +221,7 @@ padding: .5em;
                  <x>0</x>
                  <y>0</y>
                  <width>250</width>
-                 <height>465</height>
+                 <height>445</height>
                 </rect>
                </property>
               </widget>
@@ -259,8 +259,14 @@ padding: .5em;
     <property name="title">
      <string>Library</string>
     </property>
-    <addaction name="actionImport_Files"/>
-    <addaction name="actionImport_File"/>
+    <widget class="QMenu" name="menuImport">
+     <property name="title">
+      <string>Import</string>
+     </property>
+     <addaction name="actionDummy"/>
+    </widget>
+    <addaction name="menuImport"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuBook">
     <property name="title">
@@ -322,11 +328,6 @@ padding: .5em;
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionImport_Files">
-   <property name="text">
-    <string>Import Folder</string>
-   </property>
-  </action>
   <action name="actionEdit_Book">
    <property name="text">
     <string>Edit</string>
@@ -340,11 +341,6 @@ padding: .5em;
   <action name="actionOpen_Book">
    <property name="text">
     <string>Open</string>
-   </property>
-  </action>
-  <action name="actionImport_File">
-   <property name="text">
-    <string>Import File</string>
    </property>
   </action>
   <action name="actionFind">
@@ -370,9 +366,43 @@ padding: .5em;
     <string>About...</string>
    </property>
   </action>
+  <action name="actionDummy">
+   <property name="text">
+    <string>Dummy</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icons/gtk-close.svg</normaloff>:/icons/gtk-close.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../icons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>374</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

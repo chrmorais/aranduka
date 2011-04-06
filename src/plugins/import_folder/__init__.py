@@ -2,9 +2,10 @@ import os, sys, time, re
 from PyQt4 import QtCore, QtGui, uic
 
 import models
-#from metadata import get_metadata
 from pprint import pprint
 from utils import VALID_EXTENSIONS
+from pluginmgr import Importer
+from progress import progress
 
 COMPRESSED_EXTENSIONS = ['gz','bz2','lzma']
 
@@ -33,7 +34,9 @@ def import_file(fname):
         metadata=[]
         try:
             print "Fetching: ",p
-            metadata = get_metadata(p) or []
+            # The guessers go here
+            # metadata = get_metadata(p) or []
+            metadata = []
             print "Candidates:", [d.title for d in metadata]
             time.sleep(2)
         except Exception, e:
@@ -72,44 +75,44 @@ def import_file(fname):
                 return 1
         return 0
 
-    print fname
-    extension = fname.split('.')[-1].lower()
-    if extension in COMPRESSED_EXTENSIONS:
-        extension = fname.split('.')[-2].lower()
-    if extension not in VALID_EXTENSIONS:
-        print "Not an ebook: ", extension
-        return 
-    f = models.File.get_by(file_name = fname)
-    if f:
-        # Already imported
-        return file_status(fname)
+    # print fname
+    # extension = fname.split('.')[-1].lower()
+    # if extension in COMPRESSED_EXTENSIONS:
+        # extension = fname.split('.')[-2].lower()
+    # if extension not in VALID_EXTENSIONS:
+        # print "Not an ebook: ", extension
+        # return 
+    # f = models.File.get_by(file_name = fname)
+    # if f:
+        # # Already imported
+        # return file_status(fname)
         
-    # First try the clean name as-is
+    # # First try the clean name as-is
     p = clean_name(fname)
-    r1 = try_import(fname, u'TITLE '+p)
-    if r1:
-        return r1
+    # r1 = try_import(fname, u'TITLE '+p)
+    # if r1:
+        # return r1
 
-    # Try removing 'tags'
-    p2 = re.sub(u'[\(\[].*[\)\]]',' ',p)
-    r1 = try_import(fname, u'TITLE '+p2)
-    if r1:
-        return r1
-    # Try separating pieces
-    p3 = p2.replace(u'-',u' - ')
-    r1 = try_import(fname, u'TITLE '+p3)
-    if r1:
-        return r1
+    # # Try removing 'tags'
+    # p2 = re.sub(u'[\(\[].*[\)\]]',' ',p)
+    # r1 = try_import(fname, u'TITLE '+p2)
+    # if r1:
+        # return r1
+    # # Try separating pieces
+    # p3 = p2.replace(u'-',u' - ')
+    # r1 = try_import(fname, u'TITLE '+p3)
+    # if r1:
+        # return r1
 
-    # Maybe it's author - title
-    l = p.split(u'-',1)
-    if len(l)==2:
-    	_, p4 = l
-        r1 = try_import(fname, u'TITLE '+p4)
-        if r1:
-            return r1
+    # # Maybe it's author - title
+    # l = p.split(u'-',1)
+    # if len(l)==2:
+    	# _, p4 = l
+        # r1 = try_import(fname, u'TITLE '+p4)
+        # if r1:
+            # return r1
         
-    #TODO Keep trying in other ways
+    # #TODO Keep trying in other ways
     
     print 'Importing as-is'
     b = models.Book.get_by(title = p)
@@ -141,3 +144,29 @@ def file_status(fname):
         return 2
     return 1
 
+class ImportFolder(Importer):
+    def actions(self):
+        self._action1 = QtGui.QAction("Folder", None)
+        self._action1.triggered.connect(self.do_import_folder)
+        self._action2 = QtGui.QAction("File", None)
+        self._action2.triggered.connect(self.do_import_file)
+        return [self._action1, self._action2]
+    
+    def do_import_folder(self):
+        fname = unicode(QtGui.QFileDialog.getExistingDirectory(None, "Import Folder"))
+        if not fname: return
+        # Get a list of all files to be imported
+        flist = []
+        for data in os.walk(fname, followlinks = True):
+            for f in data[2]:
+                flist.append(os.path.join(data[0],f))
+        for f in progress(flist, "Importing Files","Stop"):
+            status = import_file(f)
+            print status
+            
+    def do_import_file(self):
+        fname = unicode(QtGui.QFileDialog.getOpenFileName(None, "Import File"))
+        if not fname: return
+        status = import_file(fname)
+        print status
+                        

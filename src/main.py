@@ -1,10 +1,10 @@
 """The user interface for our app"""
 
 import os,sys
-import models, importer, config, ui
+import models, config, ui
 
 # Import Qt modules
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui, uic, QtWebKit
 from progress import progress
 from book_editor import BookEditor
 import rc_icons
@@ -12,6 +12,7 @@ from pluginmgr import manager, isPluginEnabled
 from pluginconf import PluginSettings
 from about import AboutDialog
 from epubviewer import Main as EpubViewer
+from cbzviewer import Main as CbzViewer
 import downloader
 
 class SearchWidget(QtGui.QWidget):
@@ -48,6 +49,14 @@ class Main(QtGui.QMainWindow):
 
         self.currentBook = None
 
+        # Set default stylesheet for all web views in the app
+        wksettings = QtWebKit.QWebSettings.globalSettings()
+        # FIXME: this doesn't work
+        wksettings.setMaximumPagesInCache(0)
+        ssurl = QtCore.QUrl().fromLocalFile(os.path.join(os.path.dirname(__file__), 'master.css'))
+        wksettings.setUserStyleSheetUrl(ssurl)
+        
+        
         # View types toggles
         self.viewGroup = QtGui.QButtonGroup(self)
         self.viewGroup.setExclusive(True)
@@ -79,7 +88,12 @@ class Main(QtGui.QMainWindow):
             self.restoreGeometry(geom.decode('base64'))
 
         downloader.downloader = downloader.Downloads()
+        downloader.downloader.setStatusMessage.connect(self.setStatusMessage)
         self.statusBar.addPermanentWidget(downloader.downloader)
+        self.progBar = QtGui.QProgressBar()
+        self.progBar.setMaximumWidth(100)
+        self.statusBar.addPermanentWidget(self.progBar)
+        self.progBar.setVisible(False)
         
     def closeEvent(self, event):
         config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
@@ -120,6 +134,14 @@ class Main(QtGui.QMainWindow):
             # Ways to acquire books
             if plugin.name not in enabled_plugins:
                 continue
+
+            # Hook progress report signals
+            plugin.plugin_object.loadStarted.connect(self.loadStarted)
+            plugin.plugin_object.loadFinished.connect(self.loadFinished)
+            plugin.plugin_object.loadProgress.connect(self.loadProgress)
+            plugin.plugin_object.setStatusMessage.connect(self.setStatusMessage)
+            
+            # Add to the Store list
             item = plugin.plugin_object.treeItem()
             item.handler = plugin.plugin_object
             item.title = plugin.plugin_object.title
@@ -141,6 +163,24 @@ class Main(QtGui.QMainWindow):
             self.menuDevices.addMenu(dev_menu)
 
     @QtCore.pyqtSlot()
+    def loadStarted(self):
+        self.progBar.setVisible(True)
+    @QtCore.pyqtSlot()
+    def loadFinished(self):
+        self.progBar.setVisible(False)
+        self.statusBar.clearMessage()
+    @QtCore.pyqtSlot("int")
+    def loadProgress(self, p):
+        self.progBar.setVisible(True)
+        self.progBar.setValue(p)
+        if p == 100:
+            self.statusBar.clearMessage()
+    @QtCore.pyqtSlot("PyQt_PyObject")
+    def setStatusMessage(self, msg):
+        self.statusBar.showMessage(msg)
+
+            
+    @QtCore.pyqtSlot()
     def on_actionPlugins_triggered(self):
         dlg = PluginSettings(self)
         dlg.exec_()
@@ -152,6 +192,13 @@ class Main(QtGui.QMainWindow):
             if isPluginEnabled(plugin.name):
                 self.menuTools.addAction(plugin.plugin_object.action())
 
+    @QtCore.pyqtSlot()
+    def on_menuImport_aboutToShow(self):
+        self.menuImport.clear()
+        for plugin in manager.getPluginsOfCategory("Importer"):
+            if isPluginEnabled(plugin.name):
+                for a in plugin.plugin_object.actions():
+                    self.menuImport.addAction(a)
         
     def viewModeChanged(self):
         item = self.treeWidget.currentItem()
@@ -172,6 +219,17 @@ class Main(QtGui.QMainWindow):
     def on_actionFind_triggered(self):
         self.searchBar.show()
         self.searchWidget.text.setFocus(True)
+        
+    def openCBZ(self, fname):
+        try:
+            viewer = CbzViewer(fname)
+        except ValueError, e:
+            QtGui.QMessageBox.critical(self, \
+                                      u'Failed to open CBZ file', \
+                                      u'The document you are trying to open is not a valid CBZ file.')
+            return
+        self.viewers.append(viewer)
+        viewer.show()
 
     def openEpub(self, fname):
         try:
@@ -183,6 +241,26 @@ class Main(QtGui.QMainWindow):
             return
         self.viewers.append(viewer)
         viewer.show()
+
+    def _check_file (self, filename):
+        """Checks that a file exists"""
+        # Issue 20: don't show files that are not there
+        # FIXME: add more validation
+        if not os.path.isfile(filename):
+            return False
+        try:
+            f_info = os.stat(filename)
+        except:
+            f_info = None
+        if f_info is None or f_info.st_size == 0:
+            return False
+        return True
+
+    def _shorten_filename (self, filename, ext):
+        """Returns an abbreviated version of a filename"""
+        if len(filename) > 20:
+            return '%s....%s' % (filename[:20], ext)
+        return filename
         
     def bookContextMenuRequested(self, book, point):
         """Given a book, and a place in the screen,
@@ -194,46 +272,52 @@ class Main(QtGui.QMainWindow):
         menu.addAction(self.actionDelete_Book)
 
         # Create menu with files for this book
-        open_menu = QtGui.QMenu("Open")
-        formats = book.available_formats()
+        open_menu = QtGui.QMenu(u'Open book')
+        formats = book.available_formats(True)
         if len(formats) == 1:
             # A single file
             f = book.files[0]
-            url = QtCore.QUrl.fromLocalFile(f.file_name)
+            title = u'Open book'
             if f.file_name.endswith('epub'):
-                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                action = menu.addAction(title,
                     lambda f = f: self.openEpub(f.file_name))
+            elif f.file_name.endswith('cbz'):
+                action = menu.addAction(title,
+                    lambda f = f: self.openCBZ(f.file_name))
             else:
-                action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                url = QtCore.QUrl.fromLocalFile(f.file_name)
+                action = menu.addAction(title,
                     lambda f = f: QtGui.QDesktopServices.openUrl(url))
                     
-            # Issue 20: don't show files that are not there
-            # FIXME: add more validation
-            try:
-                f_info = os.stat(f.file_name)
-            except:
-                f_info = None
-            if f_info is None or f_info.st_size == 0:
-                action.setEnabled(False)
+            action.setEnabled(self._check_file(f.file_name))
             
         elif formats:
             for f in book.files:
-                url = QtCore.QUrl.fromLocalFile(f.file_name)
-                if f.file_name.endswith('epub'):
-                    action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                action = None
+                filename = os.path.basename(f.file_name)
+                _, ext = os.path.splitext(filename)
+                title = u'In %s'%ext[1:].title() if formats.count(ext) == 1 else self._shorten_filename(filename, ext)
+                if ext == '.epub':
+                    action = open_menu.addAction(title,
                         lambda f = f: self.openEpub(f.file_name))
+                elif ext == '.cbz':
+                    action = open_menu.addAction(title,
+                        lambda f = f: self.openCBZ(f.file_name))
                 else:
-                    action = menu.addAction("Open %s"%os.path.basename(f.file_name),
+                    url = QtCore.QUrl.fromLocalFile(f.file_name)
+                    action = open_menu.addAction(title,
                         lambda f = f: QtGui.QDesktopServices.openUrl(url))
-                open_menu.addAction(action)
+                action.setToolTip(filename)
+                action.setEnabled(self._check_file(f.file_name))
             menu.addMenu(open_menu)
 
         # Check what converters apply
         converters = []
         for plugin in manager.getPluginsOfCategory("Converter"):
-            r = plugin.plugin_object.can_convert(book)
-            if r:
-                converters.append([plugin.plugin_object, r])
+            if isPluginEnabled(plugin.name):
+                r = plugin.plugin_object.can_convert(book)
+                if r:
+                    converters.append([plugin.plugin_object, r])
 
         if converters:
             # So, we can convert
@@ -282,28 +366,6 @@ class Main(QtGui.QMainWindow):
         self.book_editor.load_data(item.book.id)
         self.title.setText(u'Editing properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(1)
-
-    @QtCore.pyqtSlot()
-    def on_actionImport_Files_triggered(self):
-        fname = unicode(QtGui.QFileDialog.getExistingDirectory(self, "Import Folder"))
-        if not fname: return
-        # Get a list of all files to be imported
-        flist = []
-        for data in os.walk(fname, followlinks = True):
-            for f in data[2]:
-                flist.append(os.path.join(data[0],f))
-        for f in progress(flist, "Importing Files","Stop"):
-            status = importer.import_file(f)
-            print status
-        # Reload books
-        self.updateShelves.emit()
-
-    @QtCore.pyqtSlot()
-    def on_actionImport_File_triggered(self):
-        fname = unicode(QtGui.QFileDialog.getOpenFileName(self, "Import File"))
-        if not fname: return
-        status = importer.import_file(fname)
-        self.updateShelves.emit()
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):

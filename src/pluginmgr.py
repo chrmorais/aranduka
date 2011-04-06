@@ -50,6 +50,10 @@ class Tool(object):
     """A plugin that gets added to the Tools menu in the main.ui"""
     configurable = False
 
+class Importer(object):
+    """A plugin that gets added to the Tools menu in the main.ui"""
+    configurable = False
+    
 class ShelfView(QtCore.QObject):
     """Plugins that inherit this class display the contents
     of your book database."""
@@ -115,17 +119,25 @@ class ShelfView(QtCore.QObject):
 
 
 
-class BookStore(object):
+class BookStore(QtCore.QObject):
     """Plugins that inherit this class give access to some
     mechanism for book acquisition"""
 
     title = "Base Bookstore"
     itemText = "BASE"
     configurable = False
-
+    
+    # These are signals the plugin uses to provide feedback
+    # to the main UI
+    loadStarted = QtCore.pyqtSignal()
+    loadFinished = QtCore.pyqtSignal()
+    loadProgress = QtCore.pyqtSignal("int")
+    setStatusMessage = QtCore.pyqtSignal("PyQt_PyObject")
+    
     def __init__(self):
         print "INIT:", self.title
         self.widget = None
+        super(QtCore.QObject, self).__init__(None)    
 
     def treeItem(self):
         """Returns a QTreeWidgetItem representing this
@@ -137,8 +149,17 @@ class BookStore(object):
 
     @QtCore.pyqtSlot()
     def doSearch(self, *args):
+        """Slot that triggers search on this store"""
         self.search(unicode(self.widget.searchWidget.text.text()))
 
+    def search(self, key):
+        """Search the store contents for this key, and display the results"""
+        
+    def showGrid(self):
+        """Show contents in a grid, if applicable."""
+
+    def showList(self):
+        """Show contents in a list, if applicable."""
 
 class Converter(object):
     configurable = False
@@ -161,6 +182,7 @@ manager = PluginManager(
         "BookStore": BookStore,
         "Converter": Converter,
         "Tool": Tool,
+        "Importer": Importer,
         "Device": Device,
         "Guesser": Guesser,
     })
