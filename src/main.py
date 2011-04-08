@@ -351,9 +351,6 @@ class Main(QtGui.QMainWindow):
             self.viewModeChanged()
             
     def on_books_itemActivated(self, item):
-#        self.book_editor.load_data(item.book.id)
-#        self.title.setText(u'Editing properties of "%s"'%item.book.title)
-#        self.stack.setCurrentIndex(1)
         self.currentBook = item.book
         self.about_book.load_data(item.book.id)
         self.title.setText(u'Properties of "%s"'%item.book.title)
@@ -361,10 +358,16 @@ class Main(QtGui.QMainWindow):
         
     def about_book_openLink(self, url):
         filename = unicode(url.toString().remove(u"open:").remove(u"del:"))
-        if url.toString().startsWith(u"del:"):
+        if url.toString() == u"del:book":
             print "Delete book"
             # We need to merge with integrate branch to make this work!
             # self.on_actionDelete_Book_triggered()
+        elif url.toString().startsWith(u"del:"):
+            answer = QtGui.QMessageBox.question(self, u"Delete File", u"Are you sure you want to delete the file <b>%s</b>?" % filename,QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
+            if answer == QtGui.QMessageBox.Ok:
+                f = models.File.get_by(file_name=filename)
+                if f:
+                    f.delete()
         if url.toString().startsWith(u"open:"):
             if url.toString().toLower().endsWith(u".epub"): 
                 self.openEpub(filename)
