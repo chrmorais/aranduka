@@ -24,16 +24,18 @@
                 <h3>Files for this book</h3>
                 <ul>
                 ${for fname in files:}$
-                    <li><a href="${fname}$">${fname}$</a></li>
+                    <li>${fname}$ | <a href="open:${fname}$">open</a> | <a href="del:${fname}$">delete</a> </li>
                 ${:end-for}$
                 </ul>
                 
+                <!--
                 <h3>Quotes in this Book</h3>
                 <ul>
                 ${for quote in quotes:}$
                     <li>&quot;${quote}$&quot;</li>
                 ${:end-for}$
                 </ul>
+                -->
             </div>
             
             <div class="social">

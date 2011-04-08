@@ -74,6 +74,7 @@ class Main(QtGui.QMainWindow):
         self.about_book = AboutBook(None)
         self.about_book.closeButton.clicked.connect(self.viewModeChanged)
         self.about_book.editButton.clicked.connect(self.on_actionEdit_Book_triggered)
+        self.about_book.about_web_view.linkClicked.connect(self.about_book_openLink)
         self._layout2.addWidget(self.about_book)
         
         print "Finished initializing main window"
@@ -357,6 +358,20 @@ class Main(QtGui.QMainWindow):
         self.about_book.load_data(item.book.id)
         self.title.setText(u'Properties of "%s"'%item.book.title)
         self.stack.setCurrentIndex(4)
+        
+    def about_book_openLink(self, url):
+        filename = unicode(url.toString().remove(u"open:").remove(u"del:"))
+        if url.toString().startsWith(u"del:"):
+            print "Delete book"
+            # We need to merge with integrate branch to make this work!
+            # self.on_actionDelete_Book_triggered()
+        if url.toString().startsWith(u"open:"):
+            if url.toString().toLower().endsWith(u".epub"): 
+                self.openEpub(filename)
+            elif url.toString().toLower().endsWith(u".cbz"):
+                self.openEpub(filename)
+            else:
+                QtGui.QDesktopServices.openUrl(QtCore.QUrl(filename))
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):
