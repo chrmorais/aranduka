@@ -363,11 +363,13 @@ class Main(QtGui.QMainWindow):
             # We need to merge with integrate branch to make this work!
             # self.on_actionDelete_Book_triggered()
         elif url.toString().startsWith(u"del:"):
-            answer = QtGui.QMessageBox.question(self, u"Delete File", u"Are you sure you want to delete the file <b>%s</b>?" % filename,QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
-            if answer == QtGui.QMessageBox.Ok:
+            answer = QtGui.QMessageBox.question(self, u"Delete File", u"Are you sure you want to delete the file <b>%s</b>?" % filename,QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
+            if answer == QtGui.QMessageBox.Yes:
                 f = models.File.get_by(file_name=filename)
                 if f:
                     f.delete()
+                    models.session.commit()
+                    self.actionAbout_Book.trigger()
         if url.toString().startsWith(u"open:"):
             if url.toString().toLower().endsWith(u".epub"): 
                 self.openEpub(filename)
