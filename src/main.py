@@ -242,6 +242,12 @@ class Main(QtGui.QMainWindow):
         self.viewers.append(viewer)
         viewer.show()
 
+    def show_invalid_file (self, filename):
+        QtGui.QMessageBox.critical(self, \
+                                  u'Invalid file', \
+                                  u'The file "%s" is empty or has an invalid format.' % filename)
+
+
     def _check_file (self, filename):
         """Checks that a file exists"""
         # Issue 20: don't show files that are not there
@@ -278,18 +284,20 @@ class Main(QtGui.QMainWindow):
             # A single file
             f = book.files[0]
             title = u'Open book'
-            if f.file_name.endswith('epub'):
-                action = menu.addAction(title,
-                    lambda f = f: self.openEpub(f.file_name))
-            elif f.file_name.endswith('cbz'):
-                action = menu.addAction(title,
-                    lambda f = f: self.openCBZ(f.file_name))
+            if not self._check_file(f.file_name):
+                filename = os.path.basename(f.file_name)
+                action = menu.addAction(title, lambda f = filename: self.show_invalid_file(f))
             else:
-                url = QtCore.QUrl.fromLocalFile(f.file_name)
-                action = menu.addAction(title,
-                    lambda f = f: QtGui.QDesktopServices.openUrl(url))
-                    
-            action.setEnabled(self._check_file(f.file_name))
+                if f.file_name.endswith('epub'):
+                    action = menu.addAction(title,
+                        lambda f = f: self.openEpub(f.file_name))
+                elif f.file_name.endswith('cbz'):
+                    action = menu.addAction(title,
+                        lambda f = f: self.openCBZ(f.file_name))
+                else:
+                    url = QtCore.QUrl.fromLocalFile(f.file_name)
+                    action = menu.addAction(title,
+                        lambda f = f: QtGui.QDesktopServices.openUrl(url))
             
         elif formats:
             for f in book.files:
@@ -297,18 +305,20 @@ class Main(QtGui.QMainWindow):
                 filename = os.path.basename(f.file_name)
                 _, ext = os.path.splitext(filename)
                 title = u'In %s'%ext[1:].title() if formats.count(ext) == 1 else self._shorten_filename(filename, ext)
-                if ext == '.epub':
-                    action = open_menu.addAction(title,
-                        lambda f = f: self.openEpub(f.file_name))
-                elif ext == '.cbz':
-                    action = open_menu.addAction(title,
-                        lambda f = f: self.openCBZ(f.file_name))
+                if not self._check_file(f.file_name):
+                    action = open_menu.addAction(title, lambda f = filename: self.show_invalid_file(f))
                 else:
-                    url = QtCore.QUrl.fromLocalFile(f.file_name)
-                    action = open_menu.addAction(title,
-                        lambda f = f: QtGui.QDesktopServices.openUrl(url))
+                    if ext == '.epub':
+                        action = open_menu.addAction(title,
+                            lambda f = f: self.openEpub(f.file_name))
+                    elif ext == '.cbz':
+                        action = open_menu.addAction(title,
+                            lambda f = f: self.openCBZ(f.file_name))
+                    else:
+                        url = QtCore.QUrl.fromLocalFile(f.file_name)
+                        action = open_menu.addAction(title,
+                            lambda f = f: QtGui.QDesktopServices.openUrl(url))
                 action.setToolTip(filename)
-                action.setEnabled(self._check_file(f.file_name))
             menu.addMenu(open_menu)
 
         # Check what converters apply
