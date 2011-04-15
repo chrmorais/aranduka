@@ -12,20 +12,20 @@ import urlparse
 
 # This gets the main catalog from ManyBooks.net.
 
-EBOOK_EXTENSIONS=['.epub', \
-                 '.pdb', \
-                 '.fb2', \
-                 '.zip', \
-                 '.azw', \
-                 '.mobi', \
-                 '.prc', \
-                 '.lit', \
-                 '.pdf', \
-                 '.rb', \
-                 '.rtf', \
-                 '.lrf', \
-                 '.tcr', \
-                 '.jar']
+EBOOK_EXTENSIONS=['epub', \
+                 'pdb', \
+                 'fb2', \
+                 'zip', \
+                 'azw', \
+                 'mobi', \
+                 'prc', \
+                 'lit', \
+                 'pdf', \
+                 'rb', \
+                 'rtf', \
+                 'lrf', \
+                 'tcr', \
+                 'jar']
 _FILE_FORMATS = ['1:epub:.epub:epub', \
                  '1:pml:.pdb:pml', \
                  '1:fb2:.fb2:fb2', \
@@ -115,7 +115,7 @@ class Catalog(BookStore):
         url = unicode(url)
         if not url.startswith('http'):
             url=urlparse.urljoin('http://manybooks.net/opds/',url)        
-        extension = '.' + url.split('.')[-1]
+        extension = url.split('.')[-1]
         if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
             # Metadata is cached
