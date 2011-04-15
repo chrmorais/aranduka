@@ -90,17 +90,24 @@ class Catalog(BookStore):
             self.w.store_web.loadStarted.connect(self.loadStarted)
             self.w.store_web.loadProgress.connect(self.loadProgress)
             self.w.store_web.loadFinished.connect(self.loadFinished)
+            self.w.store_web.page().mainFrame().javaScriptWindowObjectCleared.connect(self.addJSObject)
            
         self.widget.stack.setCurrentIndex(self.pageNumber)
         
     showGrid = operate
     showList = operate
+
+    def addJSObject(self):
+        print "DEBUG: JS Window Object Cleared"
+        self.w.store_web.page().mainFrame().addToJavaScriptWindowObject(QtCore.QString('catalog'), self)
         
     def search (self, terms):
         url = "http://manybooks.net/opds/search.php?"+urllib.urlencode(dict(q=terms))
         self.crumbs=[self.crumbs[0],["Search: %s"%terms, url]]
         self.openUrl(QtCore.QUrl(url))
 
+    @QtCore.pyqtSlot(QtCore.QString)
+    @QtCore.pyqtSlot(QtCore.QUrl)    
     def openUrl(self, url):
         print "openURL:", url
         if isinstance(url, QtCore.QUrl):
@@ -108,7 +115,7 @@ class Catalog(BookStore):
         url = unicode(url)
         if not url.startswith('http'):
             url=urlparse.urljoin('http://manybooks.net/opds/',url)        
-        extension = url.split('.')[-1]
+        extension = '.' + url.split('.')[-1]
         if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
             # Metadata is cached
