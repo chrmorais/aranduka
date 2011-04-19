@@ -7,6 +7,7 @@ import models, config, ui
 from PyQt4 import QtCore, QtGui, uic, QtWebKit
 from progress import progress
 from book_editor import BookEditor
+from about_book import AboutBook
 import rc_icons
 from pluginmgr import manager, isPluginEnabled
 from pluginconf import PluginSettings
@@ -80,6 +81,16 @@ class Main(QtGui.QMainWindow):
         self.book_editor.save.clicked.connect(self.viewModeChanged)
         self.book_editor.updateBook.connect(self.updateBook)
         self._layout.addWidget(self.book_editor)
+
+        #About this Book
+        self._layout2 = QtGui.QVBoxLayout()
+        self.about.setLayout(self._layout2)
+        self.about_book = AboutBook(None)
+        self.about_book.closeButton.clicked.connect(self.viewModeChanged)
+        self.about_book.editButton.clicked.connect(self.on_actionEdit_Book_triggered)
+        self.about_book.about_web_view.linkClicked.connect(self.about_book_openLink)
+        self._layout2.addWidget(self.about_book)
+        
         print "Finished initializing main window"
 
         self.loadPlugins()
@@ -241,7 +252,7 @@ class Main(QtGui.QMainWindow):
             return
         self.viewers.append(viewer)
         viewer.show()
-
+        
     def show_invalid_file (self, filename):
         QtGui.QMessageBox.critical(self, \
                                   u'Invalid file', \
@@ -274,6 +285,7 @@ class Main(QtGui.QMainWindow):
 
         self.currentBook = book
         menu = QtGui.QMenu()
+        menu.addAction(self.actionAbout_Book)
         menu.addAction(self.actionEdit_Book)
         menu.addAction(self.actionDelete_Book)
 
@@ -359,6 +371,15 @@ class Main(QtGui.QMainWindow):
         self.stack.setCurrentIndex(1)
 
     @QtCore.pyqtSlot()
+    def on_actionAbout_Book_triggered(self):
+        if not self.currentBook:
+            return
+        self.about_book.load_data(self.currentBook.id)
+        self.title.setText(u'Properties of "%s"'%self.currentBook.title)
+        self.stack.setCurrentIndex(4)
+
+
+    @QtCore.pyqtSlot()
     def on_actionDelete_Book_triggered(self):
         if not self.currentBook:
             return
@@ -373,9 +394,32 @@ class Main(QtGui.QMainWindow):
             self.viewModeChanged()
             
     def on_books_itemActivated(self, item):
-        self.book_editor.load_data(item.book.id)
-        self.title.setText(u'Editing properties of "%s"'%item.book.title)
-        self.stack.setCurrentIndex(1)
+        self.currentBook = item.book
+        self.about_book.load_data(item.book.id)
+        self.title.setText(u'Properties of "%s"'%item.book.title)
+        self.stack.setCurrentIndex(4)
+        
+    def about_book_openLink(self, url):
+        filename = unicode(url.toString().remove(u"open:").remove(u"del:"))
+        if url.toString() == u"del:book":
+            print "Delete book"
+            # We need to merge with integrate branch to make this work!
+            # self.on_actionDelete_Book_triggered()
+        elif url.toString().startsWith(u"del:"):
+            answer = QtGui.QMessageBox.question(self, u"Delete File", u"Are you sure you want to delete the file <b>%s</b>?" % filename,QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
+            if answer == QtGui.QMessageBox.Yes:
+                f = models.File.get_by(file_name=filename)
+                if f:
+                    f.delete()
+                    models.session.commit()
+                    self.actionAbout_Book.trigger()
+        if url.toString().startsWith(u"open:"):
+            if url.toString().toLower().endsWith(u".epub"): 
+                self.openEpub(filename)
+            elif url.toString().toLower().endsWith(u".cbz"):
+                self.openEpub(filename)
+            else:
+                QtGui.QDesktopServices.openUrl(QtCore.QUrl(filename))
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):
