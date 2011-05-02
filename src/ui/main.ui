@@ -220,8 +220,8 @@ padding: .5em;
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>250</width>
-                 <height>445</height>
+                 <width>154</width>
+                 <height>457</height>
                 </rect>
                </property>
               </widget>
@@ -243,6 +243,7 @@ padding: .5em;
         </item>
        </layout>
       </widget>
+      <widget class="QDeclarativeView" name="declarativeView"/>
      </widget>
     </item>
    </layout>
@@ -391,6 +392,13 @@ padding: .5em;
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QDeclarativeView</class>
+   <extends>QGraphicsView</extends>
+   <header>QtDeclarative/QDeclarativeView</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../icons.qrc"/>
  </resources>
