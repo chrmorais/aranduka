@@ -17,49 +17,49 @@ Rectangle {
         contents.model = mod
     }
 
-        BookList {
-            id: booklist
-            model: bookList
-            contr: controller
-            x: 0
-            height: parent.height
-            width: parent.width
-        }
-        ListView {
-            objectName: "contents"
-            id: contents
-            width: parent.width
-            property variant contr
-            contr: controller
-            anchors.left: booklist.right
-            height: parent.height
-            delegate: Component {
-                Rectangle {
-                    width: contents.width
-                    height: 20
-                    Text {
-                        id: title
-                        elide: Text.ElideRight
-                        text: model.title
-                        anchors.leftMargin: 10
-                        verticalAlignment: Text.AlignBottom
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: { contents.contr.gotoChapter(model.fname) }
-                    }
+    BookList {
+        id: booklist
+        model: bookList
+        contr: controller
+        x: 0
+        height: parent.height
+        width: parent.width
+    }
+
+    
+    ListView {
+        objectName: "contents"
+        id: contents
+        width: parent.width
+        property variant contr
+        contr: controller
+        anchors.left: booklist.right
+        height: parent.height
+        delegate: Component {
+            Rectangle {
+                width: contents.width
+                height: 20
+                Text {
+                    id: title
+                    elide: Text.ElideRight
+                    text: model.title
+                    anchors.leftMargin: 10
+                    verticalAlignment: Text.AlignBottom
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: { contents.contr.gotoChapter(model.fname) }
                 }
             }
-        WebView {
-            objectName: "webview"
-            id: webview
-            settings.javascriptEnabled: true
-            width: parent.width
-            height: parent.height
-            anchors.left: contents.right
         }
     }
-    
+
+    FlickableWebView {
+        id: webview
+        anchors.left: contents.right
+        height: parent.height        
+    }
+   
     states: [
     State {
         name: "Books"
