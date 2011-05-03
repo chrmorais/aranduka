@@ -75,9 +75,6 @@ class DownloadReply(QtNetwork.QNetworkReply):
         QtCore.QTimer.singleShot(0, self.readyRead.emit)
         QtCore.QTimer.singleShot(1, self.finished.emit)
         
-    def __getattribute__(self,name):
-        return QtNetwork.QNetworkReply.__getattribute__(self,name)
-
     def abort(self):
         pass
 
