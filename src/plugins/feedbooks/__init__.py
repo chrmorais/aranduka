@@ -203,12 +203,15 @@ class Catalog(BookStore):
                 #Non-acquisition links
                 if l.rel == "alternate" and l.type == "text/html":
                     url = l.href
-                if l.rel == "'http://opds-spec.org/image/thumbnail":
+                if l.rel == "http://opds-spec.org/image/thumbnail":
                     icon_url = l.href
             #for l in book.links:
                 ##acquisition links
                 #if l.rel == "http://opds-spec.org/acquisition":
                     #acq_links.append('<a href="%s">%s</a>'%(l.href, l.href.split('.')[-1]))
+
+            print icon_url
+            print title
             
             items.append(ItemWrapper(icon=icon_url, title=title, subtitle=subtitle, url=self.fixURL(url)))
         print "Rendered in: %s seconds"%(time.time()-t1)

@@ -90,6 +90,7 @@ class Controller(QtCore.QObject):
         QtCore.QObject.__init__(self)
         self.view = QtDeclarative.QDeclarativeView()
         self.view.show()
+        self.view.showMaximized()
 
         #glw = QtOpenGL.QGLWidget()
         #self.view.setViewport(glw)
