@@ -68,7 +68,7 @@
      WebView {
          id: webView
          transformOrigin: Item.TopLeft
-
+         settings.localContentCanAccessRemoteUrls: true
          function fixUrl(url)
          {
              if (url == "") return url
