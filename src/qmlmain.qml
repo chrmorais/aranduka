@@ -111,8 +111,9 @@ Rectangle {
                     id: title
                     elide: Text.ElideRight
                     text: model.title
-                    anchors.leftMargin: 10
-                    anchors.topMargin: 10
+                    height: 20
+                    y: 10
+                    verticalAlignment: Text.AlignBottom
                 }
                 MouseArea {
                     anchors.fill: parent
