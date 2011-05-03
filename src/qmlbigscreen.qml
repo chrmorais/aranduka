@@ -112,26 +112,95 @@ Rectangle {
         y:5
     }
 
-    BookStoreView {
+    ListView {
         id: bookstores
         width: parent.width
         height: parent.height
         anchors.top: booklist.bottom
         anchors.left: booklist.left
         model: bookStoreList
+        property variant contr
         contr: controller
+        delegate: Component {
+            Rectangle {
+                width: contents.width
+                height: 40
+                color: ((index % 2 == 0)?"#222":"#111")
+                Text {
+                    color: "white"
+                    id: title
+                    elide: Text.ElideRight
+                    text: model.store.name
+                    height: 20
+                    y: 10
+                    verticalAlignment: Text.AlignBottom
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: { bookstores.contr.openStore(model.store)}
+                }
+            }
+        }
     }
-
-    BookStoreContents {
+    
+    ListView {
         id: bookstorecontents
         anchors.left: bookstores.right
         anchors.top: contents.bottom
         height: parent.height-5
         width: parent.width
+        property variant contr
         contr: controller
+        delegate: Component {
+            Rectangle {
+                width: contents.width
+                height: 60
+                color: ((index % 2 == 0)?"#222":"#111")
+            Image {
+                id: cover
+                source: model.item.icon
+                sourceSize {
+                    width: height
+                    height: height
+                }
+                width: 50
+                height: 50
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.leftMargin: (parent.height - width)/2
+                anchors.topMargin: (parent.height - height)/2
+            }
+            Text {
+                id: title
+                elide: Text.ElideRight
+                text: model.item.title
+                color: "white"
+                font.bold: true
+                anchors.top: parent.top
+                anchors.left: cover.right
+                anchors.bottom: parent.verticalCenter
+                anchors.leftMargin: 10
+                verticalAlignment: Text.AlignBottom
+            }
+            Text {
+                id: subtitle
+                elide: Text.ElideRight
+                color: "#aaa"
+                text: model.item.subtitle || ""
+                font.pointSize: 10
+                anchors.top: title.bottom
+                anchors.left: cover.right
+                anchors.right: count.left
+                anchors.leftMargin: 10
+                verticalAlignment: Text.AlignTop
+            }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {bookstorecontents.contr.openStoreURL(model.item.url)}
+                }
+            }
+        }
     }
-
-
     FlickableWebView {
         id: storewebpage
         anchors.left: bookstorecontents.right
@@ -140,20 +209,41 @@ Rectangle {
         y:5
     }
     
+    ListView {
+        objectName: "contents"
+        id: contents
+        width: parent.width
+        property variant contr
+        contr: controller
+        anchors.left: booklist.right
+        anchors.top: booklist.top
+        height: parent.height-5
+        y:5
+        delegate: Component {
+            Rectangle {
+                width: contents.width
+                height: 40
+                color: ((index % 2 == 0)?"#222":"#111")
+                Text {
+                    color: "white"
+                    id: title
+                    elide: Text.ElideRight
+                    text: model.title
+                    height: 20
+                    y: 10
+                    verticalAlignment: Text.AlignBottom
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: { contents.contr.gotoChapter(model.fname) }
+                }
+            }
+        }
+    }
 
     FlickableWebView {
         id: webview
         anchors.left: contents.right
-        height: parent.height-5
-        y:5
-    }
-
-    BookContents {
-        id: contents
-        width: parent.width
-        contr: controller
-        anchors.left: booklist.right
-        anchors.top: booklist.top
         height: parent.height-5
         y:5
     }
