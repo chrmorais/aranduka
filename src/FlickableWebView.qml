@@ -84,12 +84,16 @@
              return url
          }
 
-         url: fixUrl(webBrowser.urlString)
+//          url: fixUrl(webBrowser.urlString)
          smooth: false // We don't want smooth scaling, since we only scale during (fast) transitions
          focus: true
 
          onAlert: console.log(message)
 
+        onLoadFailed: {console.log("FAILED "+url)}
+        onLoadFinished: {console.log("FINISHED "+url)}
+        onLoadStarted: {console.log("STARTED "+url)}
+         
          function doZoom(zoom,centerX,centerY)
          {
              if (centerX) {
@@ -119,7 +123,7 @@
              // got to topleft
              flickable.contentX = 0
              flickable.contentY = 0
-             if (url != null) { header.editUrl = url.toString(); }
+//              if (url != null) { header.editUrl = url.toString(); }
          }
          onDoubleClick: {
                          if (!heuristicZoom(clickX,clickY,2.5)) {

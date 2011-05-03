@@ -33,7 +33,6 @@ ListView {
                 font.bold: true
                 anchors.top: parent.top
                 anchors.left: cover.right
-                anchors.right: count.left
                 anchors.bottom: parent.verticalCenter
                 anchors.leftMargin: 10
                 verticalAlignment: Text.AlignBottom
