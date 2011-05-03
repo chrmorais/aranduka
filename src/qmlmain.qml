@@ -112,35 +112,14 @@ Rectangle {
         y:5
     }
 
-    ListView {
+    BookStoreView {
         id: bookstores
         width: parent.width
         height: parent.height
         anchors.top: booklist.bottom
         anchors.left: booklist.left
         model: bookStoreList
-        property variant contr
         contr: controller
-        delegate: Component {
-            Rectangle {
-                width: contents.width
-                height: 40
-                color: ((index % 2 == 0)?"#222":"#111")
-                Text {
-                    color: "white"
-                    id: title
-                    elide: Text.ElideRight
-                    text: model.store.name
-                    height: 20
-                    y: 10
-                    verticalAlignment: Text.AlignBottom
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: { bookstores.contr.openStore(model.store)}
-                }
-            }
-        }
     }
     
     ListView {
