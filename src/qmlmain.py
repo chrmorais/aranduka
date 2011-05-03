@@ -5,11 +5,11 @@ from PySide import QtCore
 from PySide import QtGui
 from PySide import QtDeclarative
 from PySide import QtOpenGL
+from PySide import QtUiTools
 
-import models
+import models, config, ui
+import rc_icons
 from pluginmgr import manager, isPluginEnabled
-
-models.initDB()
 
 import epubparser
 import epubviewer
@@ -82,59 +82,75 @@ class BookStoreListModel(QtCore.QAbstractListModel):
         return None
         
 
+
+
 class Controller(QtCore.QObject):
+
+    def __init__(self):
+        QtCore.QObject.__init__(self)
+        self.view = QtDeclarative.QDeclarativeView()
+        self.view.show()
+
+        #glw = QtOpenGL.QGLWidget()
+        #self.view.setViewport(glw)
+        self.view.engine().setNetworkAccessManagerFactory(epubviewer.NMFactory())
+        self.view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
+
+        # initialize plugins
+        manager.locatePlugins()
+        manager.loadPlugins()
+
+        self.controller = self
+        self.bookList = BookListModel()
+        self.bookStoreList = BookStoreListModel()
+
+        rc = self.view.rootContext()
+        rc.setContextProperty('controller', self.controller)
+        rc.setContextProperty('bookList', self.bookList)
+        rc.setContextProperty('bookStoreList', self.bookStoreList)
+
+        self.view.setSource(__file__.replace('.py', '.qml'))
+
     @QtCore.Slot(QtCore.QObject)
     def bookSelected(self, wrapper):
-        global view, episodeList
-        view.rootObject().setProperty("state", "Contents")
+        self.view.rootObject().setProperty("state", "Contents")
         # TODO: display the book & contents
         self._doc = epubviewer.EPubWrapper(wrapper._book.files_for_format('.epub')[0])
         self._contentModel = self._doc.model()
-        view.rootObject().setContents(self._contentModel)
-        view.engine().networkAccessManager()._w = self._doc
+        self.view.rootObject().setContents(self._contentModel)
+        self.view.engine().networkAccessManager()._w = self._doc
 
     @QtCore.Slot(unicode)
     def gotoChapter(self, fname):
-        view.rootObject().setProperty("state", "Text")
-        view.rootObject().setURL('http://epub.epub/'+fname)
+        self.view.rootObject().setProperty("state", "Text")
+        self.view.rootObject().setURL('http://epub.epub/'+fname)
 
     @QtCore.Slot(BookStoreWrapper)
     def openStore(self, store):
         self._store = store
-        view.rootObject().setBookStoreModel(store._bookstore.modelForURL(store._bookstore.url))
-        view.rootObject().setProperty("state", "Bookstore2")
+        self.view.rootObject().setBookStoreModel(store._bookstore.modelForURL(store._bookstore.url))
+        self.view.rootObject().setProperty("state", "Bookstore2")
 
     @QtCore.Slot(unicode)
     def openStoreURL(self, url):
         model = self._store._bookstore.modelForURL(url)
         if model:
-            view.rootObject().setBookStoreModel(model)
+            self.view.rootObject().setBookStoreModel(model)
         else:
-            view.rootObject().setBookStorePage(url)
-            view.rootObject().setProperty("state", "Bookstore3")
+            self.view.rootObject().setBookStorePage(url)
+            self.view.rootObject().setProperty("state", "Bookstore3")
 
 
-app = QtGui.QApplication(sys.argv)
-view = QtDeclarative.QDeclarativeView()
-#glw = QtOpenGL.QGLWidget()
-#view.setViewport(glw)
-view.engine().setNetworkAccessManagerFactory(epubviewer.NMFactory())
-view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
+def main():
+    # Init the database before doing anything else
+    models.initDB()
 
-# initialize plugins
-manager.locatePlugins()
-manager.loadPlugins()
+    # Again, this is boilerplate, it's going to be the same on
+    # almost every app you write
+    app = QtGui.QApplication(sys.argv)
+    window=Controller()
+    # It's exec_ because exec is a reserved word in Python
+    sys.exit(app.exec_())
 
-controller = Controller()
-bookList = BookListModel()
-bookStoreList = BookStoreListModel()
-
-rc = view.rootContext()
-rc.setContextProperty('controller', controller)
-rc.setContextProperty('bookList', bookList)
-rc.setContextProperty('bookStoreList', bookStoreList)
-
-view.setSource(__file__.replace('.py', '.qml'))
-view.show()
-app.exec_()
-
+if __name__ == "__main__":
+    main()

@@ -192,16 +192,19 @@ class Catalog(BookStore):
             items.append(ItemWrapper(icon=icon_url, title=title, subtitle=subtitle, url=self.fixURL(url)))
             
         for book in books:
-            icon_url = book.links[0].href
+            icon_url = ""
             title = book.title
             author = book.author
             acq_links = []
             non_acq_links = []
-            subtitle = 'by '+ author
+            subtitle = u'by '+ author
+            print book.links
             for l in book.links:
                 #Non-acquisition links
                 if l.rel == "alternate" and l.type == "text/html":
                     url = l.href
+                if l.rel == "'http://opds-spec.org/image/thumbnail":
+                    icon_url = l.href
             #for l in book.links:
                 ##acquisition links
                 #if l.rel == "http://opds-spec.org/acquisition":
