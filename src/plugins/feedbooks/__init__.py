@@ -58,7 +58,7 @@ class ItemWrapper(QtCore.QObject):
 
 class Catalog(BookStore):
 
-    title = "FeedBooks: Free and Public Domain Books"
+    title = "FeedBooks.com"
     url = 'http://www.feedbooks.com/catalog.atom'
     
     def __init__(self):

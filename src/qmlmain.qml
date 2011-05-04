@@ -79,9 +79,11 @@ Rectangle {
                     opacity: .4 }
                 PropertyChanges {
                     target: booklist
+                    z: 10
                     opacity: 1 }
                 PropertyChanges {
                     target: bookstores
+                    z: 0
                     opacity: 0 }
             },
             State {
@@ -97,9 +99,11 @@ Rectangle {
                     opacity: .4 }
                 PropertyChanges {
                     target: booklist
+                    z: 0
                     opacity: 0 }
                 PropertyChanges {
                     target: bookstores
+                    z: 10
                     opacity: 1 }
             },
             State {
@@ -134,14 +138,6 @@ Rectangle {
         id: booklist
         model: bookList
         contr: controller
-        state: "Shown"
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: { parent.state="Shown" }
-            onExited: { parent.state="Hidden" }
-            acceptedButtons: Qt.NoButton
-        }
     }
 
     BookStoreView {
@@ -153,14 +149,15 @@ Rectangle {
         id: bookstores
         model: bookStoreList
         contr: controller
-        state: "Shown"
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: { parent.state="Shown" }
-            onExited: { parent.state="Hidden" }
-            acceptedButtons: Qt.NoButton
-        }
+    }
+    BookStoreContents {
+        height: parent.height
+        anchors.right: webview.left
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: leftmodes.top
+        id: bookstorecontents
+        contr: controller
     }
     
     BookContents {
@@ -181,32 +178,65 @@ Rectangle {
     }
 
 
-    BookStoreContents {
-        id: bookstorecontents
-        contr: controller
-        width: 800
-        height: parent.height-40
-        x: (main.width-800) / 2
-        y:20
-    }
-
-
-    FlickableWebView {
-        id: storewebpage
-        width: 860
-        height: parent.height
-        x: (main.width-860) / 2
-        y:0
-    }
-    
-
     FlickableWebView {
         id: webview
         width: 860
         height: parent.height
         x: (main.width-860) / 2
         y:0
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: main.state="Focused"
+            onExited: main.state="Busy"
+            acceptedButtons: Qt.NoButton
+        }
     }
-
+    states: [
+        State {
+            name: "Focused"
+            PropertyChanges {
+                target: leftmodes
+                opacity: .1 }
+            PropertyChanges {
+                target: booklist
+                opacity: .1 }
+            PropertyChanges {
+                target: bookcontents
+                opacity: .1 }
+            PropertyChanges {
+                target: bookstores
+                opacity: .1 }
+            PropertyChanges {
+                target: webview
+                opacity: 1 }
+        },
+        State {
+            name: "Busy"
+            PropertyChanges {
+                target: leftmodes
+                opacity: 1 }
+            PropertyChanges {
+                target: booklist
+                opacity: 1 }
+            PropertyChanges {
+                target: bookcontents
+                opacity: 1 }
+            PropertyChanges {
+                target: bookstores
+                opacity: 1 }
+            PropertyChanges {
+                target: webview
+                opacity: .1 }
+        }
+    ]
+    transitions: [
+        Transition {
+            PropertyAnimation {
+                properties: "x,y,opacity"
+                duration: 500
+            }
+        }
+    ]
 }
 
