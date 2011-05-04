@@ -13,7 +13,7 @@ from pluginmgr import manager, isPluginEnabled
 
 import epubparser
 import epubviewer
-
+import network
 
 class BookWrapper(QtCore.QObject):
     def __init__(self, book):
@@ -94,7 +94,8 @@ class Controller(QtCore.QObject):
 
         #glw = QtOpenGL.QGLWidget()
         #self.view.setViewport(glw)
-        self.view.engine().setNetworkAccessManagerFactory(epubviewer.NMFactory())
+        self.fac = network.NMFactory()
+        self.view.engine().setNetworkAccessManagerFactory(self.fac)
         self.view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
 
         # initialize plugins
@@ -116,9 +117,10 @@ class Controller(QtCore.QObject):
             b.style.margin = "40px";
         """
         
-        rc.setContextProperty('fixColors', js)
+        rc.setContextProperty('fixColors', "")
 
         self.view.setSource(__file__.replace('.py', '.qml'))
+
 
     @QtCore.Slot(QtCore.QObject)
     def bookSelected(self, wrapper):
@@ -139,17 +141,15 @@ class Controller(QtCore.QObject):
     @QtCore.Slot(BookStoreWrapper)
     def openStore(self, store):
         self._store = store
+        self.fac._store = store
         self.view.rootObject().setBookStoreModel(store._bookstore.modelForURL(store._bookstore.url))
-        self.view.rootObject().setProperty("state", "Bookstore2")
-
+        
     @QtCore.Slot(unicode)
     def openStoreURL(self, url):
-        model = self._store._bookstore.modelForURL(url)
-        if model:
-            self.view.rootObject().setBookStoreModel(model)
+        if self._store._bookstore.isDetailsURL(url):
+            self.view.rootObject().setBookDetailsModel(self._store._bookstore.modelForURL(url))
         else:
-            self.view.rootObject().setBookStorePage(url)
-            self.view.rootObject().setProperty("state", "Bookstore3")
+            self.view.rootObject().setBookStoreModel(self._store._bookstore.modelForURL(url))
 
 
 def main():

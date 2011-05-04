@@ -2,8 +2,27 @@ import QtQuick 1.0
 
 Rectangle {
     property alias model: bookstores.model
-    property alias contentsmodel: bookstorecontents.model
     property alias contr: bookstores.contr
+    property variant currentPage
+    property variant pages
+    currentPage: 0
+    pages : [bsc1, bsc2, bsc3, bsc4, bsc5, bsc6, bsc7, bookdetails]
+    
+    function newModel (model) {
+        pages[currentPage].model = model
+        pages[currentPage].width = width
+        currentPage = currentPage +1
+        bookstores.x = -1 * currentPage * width
+    }
+
+    function setDetailsModel (model) {
+        console.log(model)
+        bookdetails.width= width
+        bookdetails.text= model
+        currentPage = pages.length()
+        bookstores.x = -1 * currentPage * width
+    }
+
     clip: true
     color: "#00000000"
     ListView {
@@ -37,78 +56,72 @@ Rectangle {
                     }
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: { bookstores.contr.openStore(model.store)
-                        bookstores.currentIndex=index
+                        onClicked: {
+                            bookstores.contr.openStore(model.store)
+                            bookstores.currentIndex=index
                         }
                     }
                 }
             }
         }
-   }
-    ListView {
-        id: bookstorecontents
-        property variant contr
-        width: parent.width
-        anchors.left: bookstores.right
+    }
+    BookStoreContents {
+        id: bsc1
+        leftside: bookstores
+        anchors.left: leftside.right
+        width: 0
+        next: bsc2
+    }
+    BookStoreContents {
+        id: bsc2
+        leftside: bsc1
+        anchors.left: leftside.right
+        width: 0
+        next: bsc3
+    }
+    BookStoreContents {
+        id: bsc3
+        leftside: bsc2
+        anchors.left: leftside.right
+        width: 0
+        next: bsc4
+    }
+    BookStoreContents {
+        id: bsc4
+        leftside: bsc3
+        anchors.left: leftside.right
+        width: 0
+        next: bsc5
+    }
+    BookStoreContents {
+        id: bsc5
+        leftside: bsc4
+        anchors.left: leftside.right
+        width: 0
+        next: bsc6
+}
+    BookStoreContents {
+        id: bsc6
+        leftside: bsc5
+        anchors.left: leftside.right
+        width: 0
+        next: bsc7
+    }
+    BookStoreContents {
+        id: bsc7
+        leftside: bsc6
+        width: 0
+        anchors.left: leftside.right
+        next: bookdetails
+    }
+    Text {
+        anchors.left: bcs7
+        id: bookdetails
+        width: 0
+        clip: true
         anchors.top: bookstores.top
         anchors.bottom: bookstores.bottom
-        delegate: Component {
-            Rectangle {
-                height: 60
-                width: bookstores.width                
-                color: "#00000000"
-                Rectangle {
-                    width: contents.width -10
-                    height: 50
-                    radius: 5
-                    y: 5
-                    x: 5
-                    color: ListView.isCurrentItem ? "steelblue" : ((index % 2 == 0)?"#222":"#111")
-                    clip: true
-                    Image {
-                        id: cover
-                        source: model.item.icon
-                        sourceSize {
-                            width: height
-                            height: height
-                        }
-                        width: 50
-                        height: 50
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.leftMargin: (parent.height - width)/2
-                        anchors.topMargin: (parent.height - height)/2
-                    }
-                    Text {
-                        id: title
-                        elide: Text.ElideRight
-                        text: model.item.title
-                        color: "white"
-                        font.bold: true
-                        anchors.top: parent.top
-                        anchors.left: cover.right
-                        anchors.bottom: parent.verticalCenter
-                        anchors.leftMargin: 10
-                        verticalAlignment: Text.AlignBottom
-                    }
-                    Text {
-                        id: subtitle
-                        elide: Text.ElideRight
-                        color: "#aaa"
-                        text: model.item.subtitle || ""
-                        font.pointSize: 10
-                        anchors.top: title.bottom
-                        anchors.left: cover.right
-                        anchors.leftMargin: 10
-                        verticalAlignment: Text.AlignTop
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {bookstores.contr.openStoreURL(model.item.url)}
-                    }
-                }
-            }
-        }
+        text: "No text"
     }
     states: [
         State {

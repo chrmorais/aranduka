@@ -74,6 +74,9 @@ class Catalog(BookStore):
             url=urlparse.urljoin('http://feedbooks.com',url)
         return url
 
+    @QtCore.Slot(unicode)
+    def isDetailsURL(self, url):
+        return url.split('/')[-1].split('.')[0].isdigit()
 
     @QtCore.Slot(unicode)
     def modelForURL(self, url):
@@ -85,17 +88,11 @@ class Catalog(BookStore):
             url=urlparse.urljoin('http://feedbooks.com',url)
         extension = url.split('.')[-1]
         print "Opening:",url
-        if url.split('/')[-1].isdigit() or url.split('/')[-2].isdigit():
-            # A details page
-            #crumb = ["#%s"%url.split('/')[-1],url]
-            #if crumb in self.crumbs:
-                #self.crumbs = self.crumbs[:self.crumbs.index(crumb)+1]
-            #else:
-                #self.crumbs.append(crumb)
-            #self.showCrumbs()
-            return None
 
-        elif extension in EBOOK_EXTENSIONS:
+        if self.isDetailsURL(url):
+            return "details: "+url
+
+        if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
             book_id = url.split('/')[-1].split('.')[0]
             bookdata = parse("http://www.feedbooks.com/book/%s.atom"%book_id)
@@ -130,10 +127,7 @@ class Catalog(BookStore):
             book.fetch_file(url, extension)
             book.fetch_cover("http://www.feedbooks.com/book/%s.jpg"%book_id)
 
-
-        
         data = urllib2.urlopen(url).read()
-        
         print "Parsing the branch:", url
         t1 = time.time()
         data = parse(data)
@@ -198,7 +192,6 @@ class Catalog(BookStore):
             acq_links = []
             non_acq_links = []
             subtitle = u'by '+ author
-            print book.links
             for l in book.links:
                 #Non-acquisition links
                 if l.rel == "alternate" and l.type == "text/html":

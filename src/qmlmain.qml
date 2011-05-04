@@ -18,8 +18,11 @@ Rectangle {
     }
     
     function setBookStoreModel(model) {
-        bookstores.contentsmodel = model
-        bookstores.state = "StoreContents"
+        bookstores.newModel (model)
+    }
+    
+    function setBookDetailsModel(model) {
+        bookstores.setDetailsModel (model)
     }
 
     function setContents(mod) {
