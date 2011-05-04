@@ -55,9 +55,10 @@
 
      id: flickable
      width: parent.width
-     contentWidth: Math.max(parent.width,webView.width)
+     contentWidth: Math.min(parent.width,webView.width)
      contentHeight: Math.max(parent.height,webView.height)
      pressDelay: 200
+     clip: true
 
      onWidthChanged : {
          // Expand (but not above 1:1) if otherwise would be smaller that available width.
@@ -68,32 +69,14 @@
      WebView {
          id: webView
          transformOrigin: Item.TopLeft
-         settings.localContentCanAccessRemoteUrls: true
-         function fixUrl(url)
-         {
-             if (url == "") return url
-             if (url[0] == "/") return "file://"+url
-             if (url.indexOf(":")<0) {
-                 if (url.indexOf(".")<0 || url.indexOf(" ")>=0) {
-                     // Fall back to a search engine; hard-code Wikipedia
-                     return "http://en.wikipedia.org/w/index.php?search="+url
-                 } else {
-                     return "http://"+url
-                 }
-             }
-             return url
-         }
-
-//          url: fixUrl(webBrowser.urlString)
          smooth: false // We don't want smooth scaling, since we only scale during (fast) transitions
          focus: true
-
          onAlert: console.log(message)
-
-        onLoadFailed: {console.log("FAILED "+url)}
-        onLoadFinished: {console.log("FINISHED "+url)}
-        onLoadStarted: {console.log("STARTED "+url)}
-         
+         onLoadFailed: {console.log("FAILED "+url)}
+         onLoadFinished: {
+            webView.evaluateJavaScript(fixColors)
+        }
+        
          function doZoom(zoom,centerX,centerY)
          {
              if (centerX) {

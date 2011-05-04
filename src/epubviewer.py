@@ -57,7 +57,7 @@ class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
         if request.url().host() != "epub.epub":
             return QtNetwork.QNetworkAccessManager.createRequest(self, operation, request, data)
 
-        if operation == self.GetOperation:
+        if operation == self.GetOperation and not unicode(request.url().toString()).lower().endswith('css'):
             reply = DownloadReply(self, request.url(), self.GetOperation, self._w)
             return reply
         else:

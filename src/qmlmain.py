@@ -90,7 +90,7 @@ class Controller(QtCore.QObject):
         QtCore.QObject.__init__(self)
         self.view = QtDeclarative.QDeclarativeView()
         self.view.show()
-        self.view.showMaximized()
+        self.view.showFullScreen()
 
         #glw = QtOpenGL.QGLWidget()
         #self.view.setViewport(glw)
@@ -109,6 +109,14 @@ class Controller(QtCore.QObject):
         rc.setContextProperty('controller', self.controller)
         rc.setContextProperty('bookList', self.bookList)
         rc.setContextProperty('bookStoreList', self.bookStoreList)
+        js = """
+            var b = document.getElementsByTagName("body")[0];
+            b.style.backgroundColor = "#000";
+            b.style.color = "#ccc";
+            b.style.margin = "40px";
+        """
+        
+        rc.setContextProperty('fixColors', js)
 
         self.view.setSource(__file__.replace('.py', '.qml'))
 
@@ -120,10 +128,12 @@ class Controller(QtCore.QObject):
         self._contentModel = self._doc.model()
         self.view.rootObject().setContents(self._contentModel)
         self.view.engine().networkAccessManager()._w = self._doc
+        self.gotoChapter(self._contentModel._contents[0][1])
 
     @QtCore.Slot(unicode)
     def gotoChapter(self, fname):
         self.view.rootObject().setProperty("state", "Text")
+        self.view.rootObject().setHTML('<body style="background-color: #000;">HHHHH')
         self.view.rootObject().setURL('http://epub.epub/'+fname)
 
     @QtCore.Slot(BookStoreWrapper)
