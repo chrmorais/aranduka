@@ -3,6 +3,7 @@ import QtWebKit 1.0
 import "components" 
 
 Rectangle {
+    property variant currentpanel
     id: main
     width: 400
     height: 400
@@ -17,7 +18,8 @@ Rectangle {
     }
     
     function setBookStoreModel(model) {
-        bookstorecontents.model = model
+        bookstores.contentsmodel = model
+        bookstores.state = "StoreContents"
     }
 
     function setContents(mod) {
@@ -46,24 +48,17 @@ Rectangle {
         
         Button {
             height: 60
-            width: parent.width / 3
+            width: parent.width / 2
             id: booksbutton
             text: "Books"
             onClicked: parent.state = "Books"
         }
         Button {
             height: 60
-            width: parent.width / 3
+            width: parent.width / 2
             id: storesbutton
             text: "Stores"
             onClicked: parent.state = "Stores"
-        }
-        Button {
-            height: 60
-            width: parent.width / 3
-            id: infobutton
-            text: "Info"
-            onClicked: parent.state = "Info"
         }
         states: [
             State {
@@ -75,16 +70,17 @@ Rectangle {
                     target: storesbutton
                     opacity: .4 }
                 PropertyChanges {
-                    target: infobutton
-                    opacity: .4 }
-                PropertyChanges {
                     target: booklist
                     z: 10
-                    opacity: 1 }
+                    visible: true }
                 PropertyChanges {
                     target: bookstores
                     z: 0
-                    opacity: 0 }
+                    visible: false }
+                PropertyChanges {
+                    target: main
+                    currentpanel: booklist
+                }
             },
             State {
                 name: "Stores"
@@ -95,28 +91,17 @@ Rectangle {
                     target: storesbutton 
                     opacity: .8 }
                 PropertyChanges {
-                    target: infobutton
-                    opacity: .4 }
-                PropertyChanges {
                     target: booklist
                     z: 0
-                    opacity: 0 }
+                    visible: false }
                 PropertyChanges {
                     target: bookstores
                     z: 10
-                    opacity: 1 }
-            },
-            State {
-                name: "Info"
+                    visible: true }
                 PropertyChanges {
-                    target: booksbutton
-                    opacity: .4 }
-                PropertyChanges {
-                    target: storesbutton
-                    opacity: .4 }
-                PropertyChanges {
-                    target: infobutton
-                    opacity: .8 }
+                    target: main
+                    currentpanel: bookstores
+                }
             }
         ]
         transitions: [
@@ -171,7 +156,7 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
-            onEntered: { parent.state="Shown" }
+            onEntered: { parent.state="Shown"; main.state="Focused" }
             onExited: { parent.state="Hidden" }
             acceptedButtons: Qt.NoButton
         }
@@ -199,13 +184,7 @@ Rectangle {
                 target: leftmodes
                 opacity: .1 }
             PropertyChanges {
-                target: booklist
-                opacity: .1 }
-            PropertyChanges {
-                target: bookcontents
-                opacity: .1 }
-            PropertyChanges {
-                target: bookstores
+                target: main.currentpanel
                 opacity: .1 }
             PropertyChanges {
                 target: webview
@@ -217,17 +196,11 @@ Rectangle {
                 target: leftmodes
                 opacity: 1 }
             PropertyChanges {
-                target: booklist
-                opacity: 1 }
-            PropertyChanges {
-                target: bookcontents
-                opacity: 1 }
-            PropertyChanges {
-                target: bookstores
+                target: main.currentpanel
                 opacity: 1 }
             PropertyChanges {
                 target: webview
-                opacity: .1 }
+                opacity: 1 }
         }
     ]
     transitions: [
