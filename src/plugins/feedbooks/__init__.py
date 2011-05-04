@@ -15,6 +15,21 @@ import time
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
 
+# FIXME: these classes should move to an accessible place for all plugins
+class BookInfoWrapper(QtCore.QObject):
+    def __init__(self, bookdata):
+        QtCore.QObject.__init__(self)
+        self._data = bookdata.entries[0]
+
+    def _title(self):
+        return self._data.title
+
+    @QtCore.Signal
+    def changed(self): pass
+
+    title = QtCore.Property(unicode, _title, notify=changed)
+
+
 class ItemModel(QtCore.QAbstractListModel):
     COLUMNS=('item',)
     def __init__(self, items):
@@ -90,7 +105,12 @@ class Catalog(BookStore):
         print "Opening:",url
 
         if self.isDetailsURL(url):
-            return "details: "+url
+            data = urllib2.urlopen(url).read()
+            print "Parsing the details page:", url
+            t1 = time.time()
+            data = parse(data)
+            print "Parsed branch in: %s seconds"%(time.time()-t1)
+            return BookInfoWrapper(data)
 
         if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
@@ -183,7 +203,8 @@ class Catalog(BookStore):
                 icon_url = link.links[1].href
             else:
                 icon_url = 'ADDMISSING.jpg'            
-            items.append(ItemWrapper(icon=icon_url, title=title, subtitle=subtitle, url=self.fixURL(url)))
+            if url:
+                items.append(ItemWrapper(icon=icon_url, title=title, subtitle=subtitle, url=self.fixURL(url)))
             
         for book in books:
             icon_url = ""
@@ -194,7 +215,8 @@ class Catalog(BookStore):
             subtitle = u'by '+ author
             for l in book.links:
                 #Non-acquisition links
-                if l.rel == "alternate" and l.type == "text/html":
+                print l.type
+                if l.rel == "alternate" and l.type == "application/atom+xml;type=entry":
                     url = l.href
                 if l.rel == "http://opds-spec.org/image/thumbnail":
                     icon_url = l.href
@@ -205,8 +227,8 @@ class Catalog(BookStore):
 
             print icon_url
             print title
-            
-            items.append(ItemWrapper(icon=icon_url, title=title, subtitle=subtitle, url=self.fixURL(url)))
+            if url:
+                items.append(ItemWrapper(icon=icon_url, title=title, subtitle=subtitle, url=self.fixURL(url)))
         print "Rendered in: %s seconds"%(time.time()-t1)
         return ItemModel(items)
 

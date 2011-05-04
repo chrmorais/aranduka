@@ -16,11 +16,11 @@ Rectangle {
     }
 
     function setDetailsModel (model) {
-        console.log(model)
+//         console.log(model)
         bookdetails.width= width
-        bookdetails.text= model
-        currentPage = pages.length()
-        bookstores.x = -1 * currentPage * width
+        bookdetails.text= model.title
+        bookstores.x = -1 * (currentPage+1) * width
+        currentPage = 7
     }
 
     clip: true
@@ -114,14 +114,22 @@ Rectangle {
         anchors.left: leftside.right
         next: bookdetails
     }
-    Text {
-        anchors.left: bcs7
-        id: bookdetails
+    Rectangle {
+        property alias text: details.text
         width: 0
         clip: true
         anchors.top: bookstores.top
         anchors.bottom: bookstores.bottom
-        text: "No text"
+        anchors.left: bsc7.right
+        color: "red"
+        radius: 5
+        id: bookdetails
+        Text {
+            anchors.fill: parent
+            id: details
+            color: "white"
+            text: "No text"
+        }
     }
     states: [
         State {

@@ -23,6 +23,7 @@ ListView {
                 clip: true
                 Image {
                     id: cover
+                    fillMode: Image.PreserveAspectFit
                     source: model.item.icon
                     sourceSize {
                         width: height

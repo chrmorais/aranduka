@@ -15,6 +15,7 @@ import epubparser
 import epubviewer
 import network
 
+
 class BookWrapper(QtCore.QObject):
     def __init__(self, book):
         QtCore.QObject.__init__(self)
@@ -81,8 +82,6 @@ class BookStoreListModel(QtCore.QAbstractListModel):
             return self._bookstores[index.row()]
         return None
         
-
-
 
 class Controller(QtCore.QObject):
 
