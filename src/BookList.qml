@@ -82,7 +82,7 @@ ListView {
             name: "Hidden"
             PropertyChanges {
                 target: bookListView
-                opacity: 0.001
+                opacity: 0.1
             }
         }
     ]

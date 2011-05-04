@@ -32,107 +32,109 @@ Rectangle {
         source: "icons/118222-Just_Green_Curls.svgz"
     }
 
-//     Rectangle {
-//         id: actions
-//         height: 65
-//         width: parent.width / 3
-//         y: 5
-//         z: 100
-//         Row {
-//             Button {
-//                 text: "Books"
-//                 width: 80
-//                 height: 60
-//                 z: 101
-//                 onClicked: { main.state="Books"; actions.state="Hidden"}
-//             }
-//             Button {
-//                 text: "Bookstores"
-//                 width: 80
-//                 height: 60
-//                 z: 101
-//                 onClicked: { main.state="Bookstores"; actions.state="Hidden"}
-//             }
-//             Button {
-//                 text: "Bookstore2"
-//                 width: 80
-//                 height: 60
-//                 z: 101
-//                 onClicked: { main.state="Bookstore2"; actions.state="Hidden"}
-//             }
-//             Button {
-//                 text: "Contents"
-//                 width: 80
-//                 height: 60
-//                 z: 101
-//                 onClicked: { main.state="Contents"; actions.state="Hidden"}
-//             }
-//             Button {
-//                 text: "Read"
-//                 width: 80
-//                 height: 60
-//                 z: 101
-//                 onClicked: { main.state="Text"; actions.state="Hidden"}
-//             }
-//         }
-//         states: [
-//             State {
-//                 name: "Shown"
-//                 PropertyChanges {
-//                     target: actions
-//                     y: 0
-//                 }
-//             },
-//             State {
-//                 name: "Hidden"
-//                 PropertyChanges {
-//                     target: actions
-//                     y: -60
-//                 }
-//             }
-//         ]
-//         transitions: [
-//             Transition {
-//                 PropertyAnimation {
-//                     properties: "y,opacity"
-//                     duration: 300
-//                 }
-//             }
-//         ]
-//         MouseArea {
-//             anchors.fill: parent
-//             hoverEnabled: true
-//             onEntered: { parent.state="Shown" }
-//             onExited: { parent.state="Hidden" }
-//             acceptedButtons: Qt.NoButton
-//         }
-//     }
+    Row {
+        id: leftmodes
+        anchors.left: main.left
+        anchors.right: webview.left
+        anchors.bottom: main.bottom
+        anchors.rightMargin: 15
+        anchors.leftMargin: 5
+        anchors.bottomMargin: 5
+        height: 60
+        spacing: 5
+        state: "Books"
+        
+        Button {
+            height: 60
+            width: parent.width / 3
+            id: booksbutton
+            text: "Books"
+            onClicked: parent.state = "Books"
+        }
+        Button {
+            height: 60
+            width: parent.width / 3
+            id: storesbutton
+            text: "Stores"
+            onClicked: parent.state = "Stores"
+        }
+        Button {
+            height: 60
+            width: parent.width / 3
+            id: infobutton
+            text: "Info"
+            onClicked: parent.state = "Info"
+        }
+        states: [
+            State {
+                name: "Books"
+                PropertyChanges {
+                    target: booksbutton
+                    opacity: .8 }
+                PropertyChanges {
+                    target: storesbutton
+                    opacity: .4 }
+                PropertyChanges {
+                    target: infobutton
+                    opacity: .4 }
+                PropertyChanges {
+                    target: booklist
+                    opacity: 1 }
+                PropertyChanges {
+                    target: bookstores
+                    opacity: 0 }
+            },
+            State {
+                name: "Stores"
+                PropertyChanges {
+                    target: booksbutton 
+                    opacity: .4 }
+                PropertyChanges {
+                    target: storesbutton 
+                    opacity: .8 }
+                PropertyChanges {
+                    target: infobutton
+                    opacity: .4 }
+                PropertyChanges {
+                    target: booklist
+                    opacity: 0 }
+                PropertyChanges {
+                    target: bookstores
+                    opacity: 1 }
+            },
+            State {
+                name: "Info"
+                PropertyChanges {
+                    target: booksbutton
+                    opacity: .4 }
+                PropertyChanges {
+                    target: storesbutton
+                    opacity: .4 }
+                PropertyChanges {
+                    target: infobutton
+                    opacity: .8 }
+            }
+        ]
+        transitions: [
+            Transition {
+                PropertyAnimation {
+                    properties: "x,y,opacity"
+                    duration: 500
+                }
+            }
+        ]
+    }
 
     BookList {
-        id: booklist
-        model: bookList
-        contr: controller
+        height: parent.height
         anchors.right: webview.left
         anchors.left: parent.left
         anchors.top: parent.top
-        height: parent.height
-        opacity: 0.001
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: { parent.state="Shown" }
-            onExited: { parent.state="Hidden" }
-            acceptedButtons: Qt.NoButton
-        }
-    }
-    BookContents {
-        id: contents
+        anchors.bottom: leftmodes.top
+        id: booklist
+        model: bookList
         contr: controller
-        anchors.left: webview.right
-        anchors.right: parent.right
-        anchors.top: parent.top
-        height: parent.height
-        opacity: 0.001
+        state: "Shown"
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
@@ -143,14 +145,41 @@ Rectangle {
     }
 
     BookStoreView {
+        height: parent.height
+        anchors.right: webview.left
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: leftmodes.top
         id: bookstores
         model: bookStoreList
         contr: controller
-        width: 800
-        height: parent.height-40
-        x: (main.width-800) / 2
-        y:20
+        state: "Shown"
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: { parent.state="Shown" }
+            onExited: { parent.state="Hidden" }
+            acceptedButtons: Qt.NoButton
+        }
     }
+    
+    BookContents {
+        id: contents
+        contr: controller
+        anchors.left: webview.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: parent.height
+        state: "Hidden"
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: { parent.state="Shown" }
+            onExited: { parent.state="Hidden" }
+            acceptedButtons: Qt.NoButton
+        }
+    }
+
 
     BookStoreContents {
         id: bookstorecontents
@@ -179,51 +208,5 @@ Rectangle {
         y:0
     }
 
-    states: [
-    State {
-        name: "Books"
-        PropertyChanges {
-            target: booklist
-        }
-    },
-    State {
-        name: "Bookstores"
-        PropertyChanges {
-            target: booklist
-        }
-    },
-    State {
-        name: "Bookstore2"
-        PropertyChanges {
-            target: booklist
-        }
-    },
-    State {
-        name: "Bookstore3"
-        PropertyChanges {
-            target: booklist
-        }
-    },
-    State {
-        name: "Contents"
-        PropertyChanges {
-            target: booklist
-        }
-    },
-    State {
-        name: "Text"
-        PropertyChanges {
-            target: booklist
-        }
-    }
-    ]
-    transitions: [
-        Transition {
-            PropertyAnimation {
-                properties: "x,y,opacity"
-                duration: 500
-            }
-        }
-    ]
 }
 

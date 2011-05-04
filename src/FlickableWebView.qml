@@ -54,7 +54,6 @@
      property alias html: webView.html
 
      id: flickable
-     width: parent.width
      contentWidth: Math.min(parent.width,webView.width)
      contentHeight: Math.max(parent.height,webView.height)
      pressDelay: 200
@@ -71,6 +70,7 @@
          transformOrigin: Item.TopLeft
          smooth: false // We don't want smooth scaling, since we only scale during (fast) transitions
          focus: true
+         html: "<body style=\"background-color: black; height: 9000px;\"></body>"
          onAlert: console.log(message)
          onLoadFailed: {console.log("FAILED "+url)}
          onLoadFinished: {
