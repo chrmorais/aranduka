@@ -16,11 +16,13 @@ Rectangle {
     }
 
     function setDetailsModel (model) {
-//         console.log(model)
-        bookdetails.width= width
-        bookdetails.text= model.title
+        bookdetails.width = width
         bookstores.x = -1 * (currentPage+1) * width
         currentPage = 7
+        bookdetails.title = "<b>"+(model.title || "No title")+"</b>"
+        bookdetails.subtitle = model.subtitle || ""
+        bookdetails.rights = model.rights || ""
+        console.log(model.rights)
     }
 
     clip: true
@@ -99,7 +101,7 @@ Rectangle {
         anchors.left: leftside.right
         width: 0
         next: bsc6
-}
+    }
     BookStoreContents {
         id: bsc6
         leftside: bsc5
@@ -114,21 +116,67 @@ Rectangle {
         anchors.left: leftside.right
         next: bookdetails
     }
-    Rectangle {
-        property alias text: details.text
+    Column {
+        id: bookdetails
         width: 0
         clip: true
         anchors.top: bookstores.top
         anchors.bottom: bookstores.bottom
         anchors.left: bsc7.right
-        color: "red"
-        radius: 5
-        id: bookdetails
-        Text {
-            anchors.fill: parent
-            id: details
-            color: "white"
-            text: "No text"
+        property alias title: _title.text
+        property alias subtitle: _subtitle.text
+        property alias rights: _rights.text
+        spacing: 5
+        Rectangle {
+            color: "red"
+            radius: 5
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: _title.height + 20
+            Text {
+                transformOrigin: Item.TopLeft
+                id: _title
+                color: "white"
+                text: "No text"
+                x: 10
+                y: (parent.height - height) / 2
+                wrapMode: Text.Wrap
+            }
+        }
+        Rectangle {
+            color: "green"
+            radius: 5
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: _subtitle.height + 20
+            visible: true ? _subtitle.text!="": false
+            Text {
+                transformOrigin: Item.TopLeft
+                id: _subtitle
+                color: "white"
+                text: ""
+                x: 10
+                y: (parent.height - height) / 2
+                wrapMode: Text.Wrap
+            }
+        }
+        Rectangle {
+            color: "blue"
+            radius: 5
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: _rights.height + 20
+            visible: true
+            clip: true
+            Text {
+                transformOrigin: Item.TopLeft
+                id: _rights
+                color: "white"
+                text: ""
+                x: 10
+                y: (parent.height - height) / 2
+                wrapMode: Text.WordWrap
+            }
         }
     }
     states: [
