@@ -47,14 +47,14 @@ Rectangle {
                     color: ListView.isCurrentItem ? "steelblue" : ((index % 2 == 0)?"#222":"#111")
                     clip: true
                     Text {
+                        transformOrigin: Item.TopLeft
                         color: "white"
                         id: title
                         elide: Text.ElideRight
                         text: model.store.name
-                        height: 16
-                        anchors.fill: parent
-                        anchors.margins: 10
-                        verticalAlignment: Text.AlignBottom
+                        y: (parent.height - height) / 2
+                        x: 5
+                        width: parent.width - 10
                     }
                     MouseArea {
                         anchors.fill: parent
