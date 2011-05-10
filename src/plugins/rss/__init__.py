@@ -97,6 +97,7 @@ class RSSStore(BookStore):
 
     title = "RSS Feeds"
     itemText = "RSS Feeds"
+    icon = "http://upload.wikimedia.org/wikipedia/commons/4/43/Feed-icon.svg"
 
     def __init__(self):
         print "INIT:", self.title

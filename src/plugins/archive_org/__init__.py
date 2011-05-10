@@ -23,6 +23,7 @@ class Catalog(BookStore):
 
     title = "Archive.org: Free and Public Domain Books"
     itemText = "Archive.org"
+    icon = "http://archive.org/favicon.ico"
     
     def __init__(self):
         BookStore.__init__(self)

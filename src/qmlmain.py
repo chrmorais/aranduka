@@ -60,10 +60,14 @@ class BookStoreWrapper(QtCore.QObject):
     def _name(self):
         return self._bookstore.title
 
+    def _icon(self):
+        return self._bookstore.icon
+
     @QtCore.Signal
     def changed(self): pass
 
     name = QtCore.Property(unicode, _name, notify=changed)
+    icon = QtCore.Property(unicode, _icon, notify=changed)
 
 
 class BookStoreListModel(QtCore.QAbstractListModel):

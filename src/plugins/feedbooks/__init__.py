@@ -84,6 +84,7 @@ class Catalog(BookStore):
 
     title = "FeedBooks.com"
     url = 'http://www.feedbooks.com/catalog.atom'
+    icon = 'http://www.feedbooks.com/favicon.ico'
     
     def __init__(self):
         BookStore.__init__(self)
