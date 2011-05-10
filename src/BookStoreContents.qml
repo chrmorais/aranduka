@@ -45,6 +45,7 @@ ListView {
                     anchors.top: parent.top
                     anchors.left: cover.right
                     anchors.bottom: parent.verticalCenter
+                    anchors.right: parent.right
                     anchors.leftMargin: 10
                     verticalAlignment: Text.AlignBottom
                 }
@@ -56,6 +57,7 @@ ListView {
                     font.pointSize: 10
                     anchors.top: title.bottom
                     anchors.left: cover.right
+                    anchors.right: parent.right
                     anchors.leftMargin: 10
                     verticalAlignment: Text.AlignTop
                 }
