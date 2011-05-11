@@ -48,7 +48,9 @@ Rectangle {
                     clip: true
                     Image {
                         id: icon
-                        source: model.store.icon
+                        // FIXME: If I enable this, the webview for book reading segfaults
+                        // WTF? But really, WTF?
+                        // source: model.store.icon
                         height: 40
                         width: 40
                         y: 5
