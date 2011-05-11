@@ -46,6 +46,14 @@ Rectangle {
                     x: 5
                     color: ListView.isCurrentItem ? "steelblue" : ((index % 2 == 0)?"#222":"#111")
                     clip: true
+                    Image {
+                        id: icon
+                        source: model.store.icon
+                        height: 40
+                        width: 40
+                        y: 5
+                        x: 5
+                    }
                     Text {
                         transformOrigin: Item.TopLeft
                         color: "white"
@@ -54,7 +62,9 @@ Rectangle {
                         text: model.store.name
                         y: (parent.height - height) / 2
                         x: 5
-                        width: parent.width - 10
+                        anchors.right: parent.right
+                        anchors.left: icon.right
+                        anchors.margins: 5
                     }
                     MouseArea {
                         anchors.fill: parent
