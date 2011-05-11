@@ -21,6 +21,7 @@ class BookInfoWrapper(QtCore.QObject):
         print bookdata
         QtCore.QObject.__init__(self)
         self._data = bookdata.entries[0]
+        icon = "http://archive.org/favicon.ico"
 
     def _title(self):
         return self._data.get("title")
