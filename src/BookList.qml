@@ -67,29 +67,5 @@ ListView {
             }
         }
     }
-    states: [
-        State {
-            name: "Shown"
-            PropertyChanges {
-                target: bookListView
-                opacity: 1
-            }
-        },
-        State {
-            name: "Hidden"
-            PropertyChanges {
-                target: bookListView
-                opacity: 0.1
-            }
-        }
-    ]
-    transitions: [
-        Transition {
-            PropertyAnimation {
-                properties: "y,opacity"
-                duration: 300
-            }
-        }
-    ]
 }
         
