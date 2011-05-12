@@ -17,10 +17,11 @@ Rectangle {
     function setDetailsModel (model) {
         bookdetails.width = width
         bsc1.width = 0 
+        bsc1.visible = false
+        bookstores.width = 0
         bookdetails.title = "<b>"+(model.title || "No title")+"</b>"
         bookdetails.subtitle = model.subtitle || ""
         bookdetails.rights = model.rights || ""
-        console.log(model.rights)
         main.currentpanel = bookdetails
     }
 
@@ -81,13 +82,11 @@ Rectangle {
     BookStoreContents {
         visible: true ? parent.currentpanel == bsc1: false
         id: bsc1
-        leftside: bookstores
-        anchors.left: leftside.right
+        anchors.left: bookstore.right
         width: 0
-        next: bookdetails
     }
     Column {
-        visible: true ? parent.currentpanel == bookdetails: false
+//         visible: true ? parent.currentpanel == bookdetails: false
         id: bookdetails
         width: 0
         clip: true

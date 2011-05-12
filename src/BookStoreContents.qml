@@ -3,8 +3,6 @@ import QtQuick 1.0
 ListView {
     id: bookstorecontents
     property variant contr
-    property variant leftside
-    property variant next
     width: parent.width
     anchors.top: bookstores.top
     anchors.bottom: bookstores.bottom
