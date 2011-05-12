@@ -238,20 +238,8 @@ Rectangle {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: rightmodes.top
-        state: "Hidden"
         model: bookContents
         clip: true
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: { 
-                parent.state="Shown"; 
-                rightmodes.state="Shown"; 
-                main.state="Focused" 
-            }
-            onExited: { parent.state="Hidden" }
-            acceptedButtons: Qt.NoButton
-        }
     }
 
 
@@ -265,7 +253,7 @@ Rectangle {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: main.state="Focused"
-            onExited: main.state="Busy"
+            onExited: {console.log("Leaving webview"); main.state="Busy"; }
             acceptedButtons: Qt.NoButton
         }
     }
