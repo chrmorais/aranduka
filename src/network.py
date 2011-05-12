@@ -31,7 +31,7 @@ class DownloadReply(QtNetwork.QNetworkReply):
     def __init__(self, parent, url, operation, w):
         self._w = w
         QtNetwork.QNetworkReply.__init__(self, parent)
-        self.content = self._w._doc.getData(unicode(url.path())[1:])
+        self.content = self._w.getData(unicode(url.path())[1:])
         self.open(self.ReadOnly | self.Unbuffered)
         self.setUrl(url)
         QtCore.QTimer.singleShot(0, self.readyRead.emit)

@@ -17,10 +17,10 @@ ListView {
                 color: ListView.isCurrentItem ? "steelblue" : ((index % 2 == 0)?"#222":"#111")
                 clip: true
                 Text {
+                    id: _title
+                    text: model.entry.title
                     color: "white"
-                    id: title
                     elide: Text.ElideRight
-                    text: model.title
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.margins: 5
@@ -32,7 +32,7 @@ ListView {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        contents.contr.gotoChapter(model.fname)
+                         contents.contr.gotoChapter(model.entry.fname)
                         contents.currentIndex=index
                     }
                 }

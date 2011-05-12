@@ -15,6 +15,43 @@ import epubparser
 import epubviewer
 import network
 
+class TocEntryWrapper(QtCore.QObject):
+    def __init__(self, entry):
+        QtCore.QObject.__init__(self)
+        self._entry = entry
+
+    def _title(self):
+        return self._entry[0]
+
+    def _fname(self):
+        return self._entry[1]
+
+    @QtCore.Signal
+    def changed(self): pass
+
+    title = QtCore.Property(unicode, _title, notify=changed)
+    fname = QtCore.Property(unicode, _fname, notify=changed)
+
+
+class ContentsModel(QtCore.QAbstractListModel):
+    COLUMNS = ('entry',)
+    def __init__(self, contents=[]):
+        QtCore.QAbstractListModel.__init__(self)
+        self.setContents(contents)
+        self.setRoleNames(dict(enumerate(ContentsModel.COLUMNS)))
+
+    def setContents(self, contents):
+        self._contents = [TocEntryWrapper(x) for x in contents]
+        self.modelReset.emit()
+
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        return len(self._contents)
+
+    def data(self, index, role):
+        if index.isValid() and role == ContentsModel.COLUMNS.index('entry'):
+            return self._contents[index.row()]
+        return None
+
 
 class BookWrapper(QtCore.QObject):
     def __init__(self, book):
@@ -108,11 +145,13 @@ class Controller(QtCore.QObject):
         self.controller = self
         self.bookList = BookListModel()
         self.bookStoreList = BookStoreListModel()
+        self.bookContents = ContentsModel([])
 
         rc = self.view.rootContext()
         rc.setContextProperty('controller', self.controller)
         rc.setContextProperty('bookList', self.bookList)
         rc.setContextProperty('bookStoreList', self.bookStoreList)
+        rc.setContextProperty('bookContents', self.bookContents)
         js = """
             var b = document.getElementsByTagName("body")[0];
             b.style.backgroundColor = "#000";
@@ -129,11 +168,10 @@ class Controller(QtCore.QObject):
     def bookSelected(self, wrapper):
         self.view.rootObject().setProperty("state", "Contents")
         # TODO: display the book & contents
-        self._doc = epubviewer.EPubWrapper(wrapper._book.files_for_format('.epub')[0])
-        self._contentModel = self._doc.model()
-        self.view.rootObject().setContents(self._contentModel)
+        self._doc = epubparser.EpubDocument(wrapper._book.files_for_format('.epub')[0])
+        self.bookContents.setContents(self._doc.tocentries)
         self.view.engine().networkAccessManager()._w = self._doc
-        self.gotoChapter(self._contentModel._contents[0][1])
+        self.gotoChapter(self.bookContents._contents[0].fname)
 
     @QtCore.Slot(unicode)
     def gotoChapter(self, fname):

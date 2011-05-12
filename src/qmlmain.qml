@@ -26,6 +26,7 @@ Rectangle {
     }
 
     function setContents(mod) {
+        console.log(mod)
         contents.model = mod
     }
 
@@ -156,6 +157,7 @@ Rectangle {
         anchors.top: parent.top
         height: parent.height
         state: "Hidden"
+        model: bookContents
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true

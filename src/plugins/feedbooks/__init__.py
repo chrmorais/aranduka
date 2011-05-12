@@ -18,7 +18,6 @@ EBOOK_EXTENSIONS=['epub','mobi','pdf']
 # FIXME: these classes should move to an accessible place for all plugins
 class BookInfoWrapper(QtCore.QObject):
     def __init__(self, bookdata):
-        print bookdata
         QtCore.QObject.__init__(self)
         self._data = bookdata.entries[0]
 
