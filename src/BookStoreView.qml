@@ -150,28 +150,4 @@ Rectangle {
             }
         }
     }
-    states: [
-        State {
-            name: "StoreList"
-            PropertyChanges {
-                target: bookstores
-                x: 0
-            }
-        },
-        State {
-            name: "StoreContents"
-            PropertyChanges {
-                target: bookstores
-                x: -1 * bookstores.width
-            }
-        }
-    ]
-    transitions: [
-        Transition {
-            PropertyAnimation {
-                properties: "x,opacity"
-                duration: 300
-            }
-        }
-    ]
 }

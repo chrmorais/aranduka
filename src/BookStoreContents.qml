@@ -8,6 +8,7 @@ ListView {
     width: parent.width
     anchors.top: bookstores.top
     anchors.bottom: bookstores.bottom
+    clip: true
     delegate: Component {
         Rectangle {
             height: 60
