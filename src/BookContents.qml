@@ -39,22 +39,6 @@ ListView {
             }
         }
     }
-    states: [
-        State {
-            name: "Shown"
-            PropertyChanges {
-                target: list
-                opacity: 1
-            }
-        },
-        State {
-            name: "Hidden"
-            PropertyChanges {
-                target: list
-                opacity: 0.1
-            }
-        }
-    ]
     transitions: [
         Transition {
             PropertyAnimation {

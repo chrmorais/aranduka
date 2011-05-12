@@ -14,6 +14,7 @@ from pluginmgr import manager, isPluginEnabled
 import epubparser
 import epubviewer
 import network
+import bookinfo
 
 class TocEntryWrapper(QtCore.QObject):
     def __init__(self, entry):
@@ -146,12 +147,15 @@ class Controller(QtCore.QObject):
         self.bookList = BookListModel()
         self.bookStoreList = BookStoreListModel()
         self.bookContents = ContentsModel([])
+        self.storeContents = bookinfo.ItemModel([])
 
         rc = self.view.rootContext()
         rc.setContextProperty('controller', self.controller)
         rc.setContextProperty('bookList', self.bookList)
         rc.setContextProperty('bookStoreList', self.bookStoreList)
         rc.setContextProperty('bookContents', self.bookContents)
+        rc.setContextProperty('storeContents', self.storeContents)
+        
         js = """
             var b = document.getElementsByTagName("body")[0];
             b.style.backgroundColor = "#000";
@@ -183,14 +187,17 @@ class Controller(QtCore.QObject):
     def openStore(self, store):
         self._store = store
         self.fac._store = store
-        self.view.rootObject().setBookStoreModel(store._bookstore.modelForURL(store._bookstore.url))
+        self.openStoreURL(store._bookstore.url)
         
     @QtCore.Slot(unicode)
     def openStoreURL(self, url):
+        print 'OSU:', url
         if self._store._bookstore.isDetailsURL(url):
             self.view.rootObject().setBookDetailsModel(self._store._bookstore.modelForURL(url))
         else:
-            self.view.rootObject().setBookStoreModel(self._store._bookstore.modelForURL(url))
+            items = self._store._bookstore.modelForURL(url)
+            self.storeContents.setItems(items)
+            print 'ITEMS:', self.storeContents.rowCount()
 
 
 def main():

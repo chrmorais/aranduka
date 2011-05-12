@@ -5,20 +5,16 @@ Rectangle {
     property alias contr: bookstores.contr
     property variant currentPage
     property variant pages
-    currentPage: 0
-    pages : [bsc1, bsc2, bsc3, bsc4, bsc5, bsc6, bsc7, bookdetails]
+    pages : [bsc1, bookdetails]
     
-    function newModel (model) {
-        pages[currentPage].model = model
-        pages[currentPage].width = width
-        currentPage = currentPage +1
-        bookstores.x = -1 * currentPage * width
+    function newModel () {
+        bsc1.width = width
+        bookstores.x = -1 * width
     }
 
     function setDetailsModel (model) {
         bookdetails.width = width
-        bookstores.x = -1 * (currentPage+1) * width
-        currentPage = 7
+        bookstores.x = -2 * width
         bookdetails.title = "<b>"+(model.title || "No title")+"</b>"
         bookdetails.subtitle = model.subtitle || ""
         bookdetails.rights = model.rights || ""
@@ -84,48 +80,6 @@ Rectangle {
         leftside: bookstores
         anchors.left: leftside.right
         width: 0
-        next: bsc2
-    }
-    BookStoreContents {
-        id: bsc2
-        leftside: bsc1
-        anchors.left: leftside.right
-        width: 0
-        next: bsc3
-    }
-    BookStoreContents {
-        id: bsc3
-        leftside: bsc2
-        anchors.left: leftside.right
-        width: 0
-        next: bsc4
-    }
-    BookStoreContents {
-        id: bsc4
-        leftside: bsc3
-        anchors.left: leftside.right
-        width: 0
-        next: bsc5
-    }
-    BookStoreContents {
-        id: bsc5
-        leftside: bsc4
-        anchors.left: leftside.right
-        width: 0
-        next: bsc6
-    }
-    BookStoreContents {
-        id: bsc6
-        leftside: bsc5
-        anchors.left: leftside.right
-        width: 0
-        next: bsc7
-    }
-    BookStoreContents {
-        id: bsc7
-        leftside: bsc6
-        width: 0
-        anchors.left: leftside.right
         next: bookdetails
     }
     Column {
@@ -134,7 +88,7 @@ Rectangle {
         clip: true
         anchors.top: bookstores.top
         anchors.bottom: bookstores.bottom
-        anchors.left: bsc7.right
+        anchors.left: bsc1.right
         property alias title: _title.text
         property alias subtitle: _subtitle.text
         property alias rights: _rights.text

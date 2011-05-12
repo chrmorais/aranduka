@@ -17,8 +17,8 @@ Rectangle {
         webview.html = ht
     }
     
-    function setBookStoreModel(model) {
-        bookstores.newModel (model)
+    function setBookStoreModel() {
+        bookstores.newModel ()
     }
     
     function setBookDetailsModel(model) {
@@ -43,7 +43,7 @@ Rectangle {
         anchors.left: main.left
         anchors.right: webview.left
         anchors.bottom: main.bottom
-        anchors.rightMargin: 15
+        anchors.rightMargin: 5
         anchors.leftMargin: 5
         anchors.bottomMargin: 5
         height: 60
@@ -118,6 +118,87 @@ Rectangle {
         ]
     }
 
+    Row {
+        id: rightmodes
+        anchors.left: webview.right
+        anchors.right: main.right
+        anchors.bottom: main.bottom
+        anchors.rightMargin: 5
+        anchors.leftMargin: 5
+        anchors.bottomMargin: 5
+        height: 60
+        spacing: 5
+        state: "Contents"
+        
+        Button {
+            height: 60
+            width: parent.width / 2
+            id: contentsbutton
+            text: "Contents"
+            onClicked: parent.state = "Contents"
+        }
+        Button {
+            height: 60
+            width: parent.width / 2
+            id: infobutton
+            text: "Info"
+            onClicked: parent.state = "Info"
+        }
+        states: [
+            State {
+                name: "Contents"
+                PropertyChanges {
+                    target: contentsbutton
+                    opacity: .8 }
+                PropertyChanges {
+                    target: infobutton
+                    opacity: .4 }
+                PropertyChanges {
+                    target: contents
+                    z: 10
+                    visible: true }
+/*                PropertyChanges {
+                    target: infowidget
+                    z: 0
+                    visible: false }*/
+/*                PropertyChanges {
+                    target: main
+                    currentpanel2: contentsbutton
+                }*/
+            },
+            State {
+                name: "Info"
+                PropertyChanges {
+                    target: contentsbutton 
+                    opacity: .4 }
+                PropertyChanges {
+                    target: infobutton 
+                    opacity: .8 }
+                PropertyChanges {
+                    target: contents
+                    z: 0
+                    visible: false }
+/*                PropertyChanges {
+                    target: infowidget
+                    z: 10
+                    visible: true }*/
+/*                PropertyChanges {
+                    target: main
+                    currentpanel2: contents
+                }*/
+            }
+        ]
+        transitions: [
+            Transition {
+                PropertyAnimation {
+                    properties: "x,y,opacity"
+                    duration: 500
+                }
+            }
+        ]
+    }
+
+
     BookList {
         height: parent.height
         anchors.right: webview.left
@@ -147,6 +228,7 @@ Rectangle {
         anchors.bottom: leftmodes.top
         id: bookstorecontents
         contr: controller
+        model: storeContents
     }
     
     BookContents {
@@ -155,13 +237,18 @@ Rectangle {
         anchors.left: webview.right
         anchors.right: parent.right
         anchors.top: parent.top
-        height: parent.height
+        anchors.bottom: rightmodes.top
         state: "Hidden"
         model: bookContents
+        clip: true
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
-            onEntered: { parent.state="Shown"; main.state="Focused" }
+            onEntered: { 
+                parent.state="Shown"; 
+                rightmodes.state="Shown"; 
+                main.state="Focused" 
+            }
             onExited: { parent.state="Hidden" }
             acceptedButtons: Qt.NoButton
         }
@@ -189,7 +276,13 @@ Rectangle {
                 target: leftmodes
                 opacity: .1 }
             PropertyChanges {
+                target: rightmodes
+                opacity: .1 }
+            PropertyChanges {
                 target: main.currentpanel
+                opacity: .1 }
+            PropertyChanges {
+                target: contents
                 opacity: .1 }
             PropertyChanges {
                 target: webview
@@ -201,7 +294,13 @@ Rectangle {
                 target: leftmodes
                 opacity: 1 }
             PropertyChanges {
+                target: rightmodes
+                opacity: 1 }
+            PropertyChanges {
                 target: main.currentpanel
+                opacity: 1 }
+            PropertyChanges {
+                target: contents
                 opacity: 1 }
             PropertyChanges {
                 target: webview
