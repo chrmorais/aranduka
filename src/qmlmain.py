@@ -155,6 +155,7 @@ class Controller(QtCore.QObject):
         rc.setContextProperty('bookStoreList', self.bookStoreList)
         rc.setContextProperty('bookContents', self.bookContents)
         rc.setContextProperty('storeContents', self.storeContents)
+        rc.setContextProperty('controller', self)
         
         js = """
             var b = document.getElementsByTagName("body")[0];
@@ -197,8 +198,7 @@ class Controller(QtCore.QObject):
         else:
             items = self._store._bookstore.modelForURL(url)
             self.storeContents.setItems(items)
-            print 'ITEMS:', self.storeContents.rowCount()
-
+            self.view.rootObject().setBookStoreModel()
 
 def main():
     # Init the database before doing anything else

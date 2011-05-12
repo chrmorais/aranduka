@@ -9,16 +9,19 @@ Rectangle {
     
     function newModel () {
         bsc1.width = width
-        bookstores.x = -1 * width
+        bookstores.width = 0
+        console.log(bookstores.width)
+        main.currentpanel = bsc1
     }
 
     function setDetailsModel (model) {
         bookdetails.width = width
-        bookstores.x = -2 * width
+        bsc1.width = 0 
         bookdetails.title = "<b>"+(model.title || "No title")+"</b>"
         bookdetails.subtitle = model.subtitle || ""
         bookdetails.rights = model.rights || ""
         console.log(model.rights)
+        main.currentpanel = bookdetails
     }
 
     clip: true
@@ -76,6 +79,7 @@ Rectangle {
         }
     }
     BookStoreContents {
+        visible: true ? parent.currentpanel == bsc1: false
         id: bsc1
         leftside: bookstores
         anchors.left: leftside.right
@@ -83,6 +87,7 @@ Rectangle {
         next: bookdetails
     }
     Column {
+        visible: true ? parent.currentpanel == bookdetails: false
         id: bookdetails
         width: 0
         clip: true

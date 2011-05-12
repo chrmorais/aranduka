@@ -14,7 +14,7 @@ ListView {
             width: bookstores.width
             color: "#00000000"
             Rectangle {
-                width: contents.width -10
+                width: parent.width -10
                 height: 50
                 radius: 5
                 y: 5
@@ -63,7 +63,10 @@ ListView {
                 }
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {bookstores.contr.openStoreURL(model.item.url)}
+                    onClicked: {
+                        console.log("clicked");
+                        controller.openStoreURL(model.item.url)
+                    }
                 }
             }
         }
