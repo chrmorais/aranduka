@@ -25,10 +25,6 @@ ListView {
                     id: cover
                     fillMode: Image.PreserveAspectFit
                     source: model.book.cover
-                    sourceSize {
-                        width: height
-                        height: height
-                    }
                     width: 50
                     height: 50
                     anchors.left: parent.left
