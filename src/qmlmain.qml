@@ -227,7 +227,6 @@ Rectangle {
         anchors.top: parent.top
         anchors.bottom: leftmodes.top
         id: bookstorecontents
-        contr: controller
         model: storeContents
     }
     

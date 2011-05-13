@@ -17,7 +17,7 @@ Rectangle {
     function setDetailsModel (model) {
         bookdetails.width = width
         bsc1.width = 0 
-        bsc1.visible = false
+        console.log(bsc1)
         bookstores.width = 0
         bookdetails.title = "<b>"+(model.title || "No title")+"</b>"
         bookdetails.subtitle = model.subtitle || ""
