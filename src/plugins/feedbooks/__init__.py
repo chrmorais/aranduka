@@ -162,7 +162,6 @@ class Catalog(BookStore):
             subtitle = u'by '+ author
             for l in book.links:
                 #Non-acquisition links
-                print l.type
                 if l.rel == "alternate" and l.type == "application/atom+xml;type=entry":
                     url = l.href
                 if l.rel == "http://opds-spec.org/image/thumbnail":
@@ -172,8 +171,6 @@ class Catalog(BookStore):
                 #if l.rel == "http://opds-spec.org/acquisition":
                     #acq_links.append('<a href="%s">%s</a>'%(l.href, l.href.split('.')[-1]))
 
-            print icon_url
-            print title
             if url:
                 items.append(ItemWrapper(icon=icon_url, title=title, subtitle=subtitle, url=self.fixURL(url)))
         print "Rendered in: %s seconds"%(time.time()-t1)
