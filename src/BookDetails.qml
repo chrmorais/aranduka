@@ -27,13 +27,13 @@ Column {
             wrapMode: Text.Wrap
         }
     }
-    Rectangle {
+/*    Rectangle {
         color: "green"
         radius: 5
         anchors.left: parent.left
         anchors.right: parent.right
         height: _subtitle.height + 20
-        visible: true ? _subtitle.text!="": false
+        visible: _subtitle.text!=""? true: false
         Text {
             transformOrigin: Item.TopLeft
             id: _subtitle
@@ -43,7 +43,7 @@ Column {
             y: (parent.height - height) / 2
             wrapMode: Text.Wrap
         }
-    }
+    }*/
     Rectangle {
         color: "blue"
         radius: 5

@@ -59,6 +59,7 @@ Rectangle {
             width: parent.width / 2
             id: booksbutton
             text: "Books"
+            checked: true
             onClicked: parent.state = "Books"
         }
         Button {
