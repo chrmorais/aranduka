@@ -7,8 +7,9 @@ Rectangle {
     property variant pages
     
     function setDetailsModel (model) {
+        bookdetails.cover = model.cover
         bookdetails.title = "<b>"+(model.title || "No title")+"</b>"
-        bookdetails.subtitle = model.subtitle || ""
+//         bookdetails.subtitle = model.subtitle || ""
         bookdetails.rights = model.rights || ""
     }
 

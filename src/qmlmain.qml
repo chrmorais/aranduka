@@ -327,9 +327,9 @@ Rectangle {
 
     FlickableWebView {
         id: webview
-        width: 860
+        width: parent.width * .6
         height: parent.height
-        x: (main.width-860) / 2
+        x: (main.width-width) / 2
         y:0
         MouseArea {
             anchors.fill: parent

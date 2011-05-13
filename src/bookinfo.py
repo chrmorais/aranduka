@@ -9,6 +9,11 @@ class BookInfoWrapper(QtCore.QObject):
     def _title(self):
         return self._data.get("title")
 
+    def _cover(self):
+        for l in self._data.links:
+            if l.rel == u'http://opds-spec.org/image':
+                return l.href
+
     def _subtitle(self):
         return self._data.get("subtitle")
 
@@ -19,6 +24,7 @@ class BookInfoWrapper(QtCore.QObject):
     def changed(self): pass
 
     title = QtCore.Property(unicode, _title, notify=changed)
+    cover = QtCore.Property(unicode, _cover, notify=changed)
     subtitle = QtCore.Property(unicode, _title, notify=changed)
     rights = QtCore.Property(unicode, _rights, notify=changed)
 

@@ -56,6 +56,7 @@ class Catalog(BookStore):
             print "Parsing the details page:", url
             t1 = time.time()
             data = parse(data)
+            print data
             print "Parsed branch in: %s seconds"%(time.time()-t1)
             return BookInfoWrapper(data)
 
