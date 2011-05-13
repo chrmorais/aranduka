@@ -17,12 +17,16 @@ Rectangle {
         webview.html = ht
     }
     
-    function setBookStoreModel() {
-        bookstores.newModel ()
-    }
-    
     function setBookDetailsModel(model) {
         bookstores.setDetailsModel (model)
+        leftmodes.state= "BookDetails"
+    }
+
+    function setBookStoreModel() {
+        currentpanel = bookstorecontents
+        leftmodes.state= "StoreContents"
+        console.log("Switched to state:")
+        console.log(state)
     }
 
     function setContents(mod) {
@@ -82,6 +86,10 @@ Rectangle {
                     z: 0
                     visible: false }
                 PropertyChanges {
+                    target: bookdetails
+                    z: 0
+                    visible: false }
+                PropertyChanges {
                     target: main
                     currentpanel: booklist
                 }
@@ -103,8 +111,74 @@ Rectangle {
                     z: 10
                     visible: true }
                 PropertyChanges {
+                    target: bookstorecontents
+                    z: 0
+                    visible: false }
+                PropertyChanges {
+                    target: bookdetails
+                    z: 0
+                    visible: false }
+                PropertyChanges {
                     target: main
                     currentpanel: bookstores
+                }
+            },
+            State {
+                name: "StoreContents"
+                PropertyChanges {
+                    target: booksbutton 
+                    opacity: .4 }
+                PropertyChanges {
+                    target: storesbutton 
+                    opacity: .8 }
+                PropertyChanges {
+                    target: booklist
+                    z: 0
+                    visible: false }
+                PropertyChanges {
+                    target: bookstores
+                    z: 0
+                    visible: false }
+                PropertyChanges {
+                    target: bookstorecontents
+                    z: 10
+                    visible: true }
+                PropertyChanges {
+                    target: bookdetails
+                    z: 0
+                    visible: false }
+                PropertyChanges {
+                    target: main
+                    currentpanel: bookstorecontents
+                }
+            },
+            State {
+                name: "BookDetails"
+                PropertyChanges {
+                    target: booksbutton 
+                    opacity: .4 }
+                PropertyChanges {
+                    target: storesbutton 
+                    opacity: .8 }
+                PropertyChanges {
+                    target: booklist
+                    z: 0
+                    visible: false }
+                PropertyChanges {
+                    target: bookstores
+                    z: 0
+                    visible: false }
+                PropertyChanges {
+                    target: bookstorecontents
+                    z: 0
+                    visible: false }
+                PropertyChanges {
+                    target: bookdetails
+                    z: 10
+                    visible: true }
+                PropertyChanges {
+                    target: main
+                    currentpanel: bookstorecontents
                 }
             }
         ]
@@ -221,13 +295,21 @@ Rectangle {
         contr: controller
     }
     BookStoreContents {
+        id: bookstorecontents
         height: parent.height
         anchors.right: webview.left
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: leftmodes.top
-        id: bookstorecontents
         model: storeContents
+    }
+    BookDetails {
+        height: parent.height
+        anchors.right: webview.left
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: leftmodes.top
+        id: bookdetails
     }
     
     BookContents {

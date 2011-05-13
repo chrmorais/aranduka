@@ -194,8 +194,10 @@ class Controller(QtCore.QObject):
     def openStoreURL(self, url):
         print 'OSU:', url
         if self._store._bookstore.isDetailsURL(url):
+            print 'Opening Details'
             self.view.rootObject().setBookDetailsModel(self._store._bookstore.modelForURL(url))
         else:
+            print 'Opening Store contents'
             items = self._store._bookstore.modelForURL(url)
             self.storeContents.setItems(items)
             self.view.rootObject().setBookStoreModel()
