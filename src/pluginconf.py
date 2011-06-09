@@ -52,3 +52,5 @@ class PluginWidget(QtGui.QWidget):
         self.enabled.setChecked(enabled)
         if not plugin.plugin_object.configurable:
             self.configure.setVisible(False)
+        if plugin.plugin_object.configurable:
+            self.configure.clicked.connect (self.plugin.plugin_object.configure)
