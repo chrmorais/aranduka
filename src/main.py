@@ -30,10 +30,10 @@ class DeleteBook (QtGui.QDialog):
         uifile = ui.path('delete_book.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        self.setWindowTitle(u'Confirm book delete')
-        self.label.setText(u'Are you sure you want to delete the book "%s"?' % title)
+        self.setWindowTitle(self.tr(u'Confirm book delete'))
+        self.label.setText(unicode(self.tr(u'Are you sure you want to delete the book "%s"?')) % title)
         self.label.setWordWrap(True)
-        self.checkBox.setText(u'Delete book files')
+        self.checkBox.setText(self.tr(u'Delete book files'))
         self.checkBox.setChecked(True)
         self.setModal(True)
 
@@ -236,8 +236,8 @@ class Main(QtGui.QMainWindow):
             viewer = CbzViewer(fname)
         except ValueError, e:
             QtGui.QMessageBox.critical(self, \
-                                      u'Failed to open CBZ file', \
-                                      u'The document you are trying to open is not a valid CBZ file.')
+                                      self.tr(u'Failed to open CBZ file'), \
+                                      self.tr(u'The document you are trying to open is not a valid CBZ file.'))
             return
         self.viewers.append(viewer)
         viewer.show()
@@ -247,16 +247,16 @@ class Main(QtGui.QMainWindow):
             viewer = EpubViewer(fname)
         except ValueError, e:
             QtGui.QMessageBox.critical(self, \
-                                      u'Failed to open ePub file', \
-                                      u'The document you are trying to open is not a valid ePub file.')
+                                      self.tr(u'Failed to open ePub file'), \
+                                      self.tr(u'The document you are trying to open is not a valid ePub file.'))
             return
         self.viewers.append(viewer)
         viewer.show()
         
     def show_invalid_file (self, filename):
         QtGui.QMessageBox.critical(self, \
-                                  u'Invalid file', \
-                                  u'The file "%s" is empty or has an invalid format.' % filename)
+                                  self.tr(u'Invalid file'), \
+                                  unicode(self.tr(u'The file "%s" is empty or has an invalid format.')) % filename)
 
 
     def _check_file (self, filename):
@@ -290,7 +290,7 @@ class Main(QtGui.QMainWindow):
         menu.addAction(self.actionDelete_Book)
 
         # Create menu with files for this book
-        open_menu = QtGui.QMenu(u'Open book')
+        open_menu = QtGui.QMenu(self.tr(u'Open book'))
         formats = book.available_formats(True)
         if len(formats) == 1:
             # A single file
@@ -346,7 +346,7 @@ class Main(QtGui.QMainWindow):
             convert_menu = QtGui.QMenu("Convert")
             for plugin, formats in converters:
                 for f in formats:
-                    convert_menu.addAction("%s via %s"%(f, plugin.name),
+                    convert_menu.addAction(unicode(self.tr("%s via %s"))%(f, plugin.name),
                         lambda f = f : plugin.convert(book, f))
 
             menu.addMenu(convert_menu)
@@ -367,7 +367,7 @@ class Main(QtGui.QMainWindow):
         if not self.currentBook:
             return
         self.book_editor.load_data(self.currentBook.id)
-        self.title.setText(u'Editing properties of "%s"'%self.currentBook.title)
+        self.title.setText(unicode(self.tr(u'Editing properties of "%s"')) % self.currentBook.title)
         self.stack.setCurrentIndex(1)
 
     @QtCore.pyqtSlot()
@@ -375,7 +375,7 @@ class Main(QtGui.QMainWindow):
         if not self.currentBook:
             return
         self.about_book.load_data(self.currentBook.id)
-        self.title.setText(u'Properties of "%s"'%self.currentBook.title)
+        self.title.setText(unicode(self.tr(u'Properties of "%s"')) % self.currentBook.title)
         self.stack.setCurrentIndex(4)
 
 
@@ -396,7 +396,7 @@ class Main(QtGui.QMainWindow):
     def on_books_itemActivated(self, item):
         self.currentBook = item.book
         self.about_book.load_data(item.book.id)
-        self.title.setText(u'Properties of "%s"'%item.book.title)
+        self.title.setText(unicode(self.tr(u'Properties of "%s"')) % item.book.title)
         self.stack.setCurrentIndex(4)
         
     def about_book_openLink(self, url):
@@ -406,7 +406,10 @@ class Main(QtGui.QMainWindow):
             # We need to merge with integrate branch to make this work!
             # self.on_actionDelete_Book_triggered()
         elif url.toString().startsWith(u"del:"):
-            answer = QtGui.QMessageBox.question(self, u"Delete File", u"Are you sure you want to delete the file <b>%s</b>?" % filename,QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
+            answer = QtGui.QMessageBox.question(self, \
+                                                self.tr(u"Delete File"), \
+                                                unicode(self.tr(u"Are you sure you want to delete the file <b>%s</b>?")) % \
+                                                        filename,QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
             if answer == QtGui.QMessageBox.Yes:
                 f = models.File.get_by(file_name=filename)
                 if f:
@@ -425,7 +428,27 @@ class Main(QtGui.QMainWindow):
     def on_actionAbout_triggered(self):
         about = AboutDialog()
         about.exec_()
-                    
+    
+def get_translators ():
+    translators = []
+    locale = unicode(QtCore.QLocale.system().name())
+    print "Loading translations for '%s'" % locale
+   
+    # Aranduka's translations
+    translator = QtCore.QTranslator()
+    translator.load(u'aranduka_%s' % locale, 
+                    os.path.join(os.path.abspath(
+                            os.path.dirname(__file__)),
+                    'translations'))
+    translators.append(translator)
+
+    # Qt's standard dialog's translations
+    qtTranslator = QtCore.QTranslator()
+    qtTranslator.load(u'qt_%s' % locale, 
+                      QtCore.QLibraryInfo.location(
+                          QtCore.QLibraryInfo.TranslationsPath))
+    translators.append(qtTranslator)
+    return translators
 
 def main():
     # Init the database before doing anything else
@@ -434,6 +457,8 @@ def main():
     # Again, this is boilerplate, it's going to be the same on
     # almost every app you write
     app = QtGui.QApplication(sys.argv)
+    for translator in get_translators():
+        app.installTranslator(translator)
     window=Main()
     window.show()
     # It's exec_ because exec is a reserved word in Python

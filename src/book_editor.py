@@ -41,7 +41,7 @@ class GuessDialog(QtGui.QDialog):
         uifile = ui.path('guess.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        self.setWindowTitle('Guess book information')
+        self.setWindowTitle(self.tr('Guess book information'))
         self._query = None
         self.md=[]
         self.currentMD=None
@@ -91,8 +91,8 @@ class GuessDialog(QtGui.QDialog):
            query['authors'] is None and \
            query['isbn'] is None:
            QtGui.QMessageBox.warning(self, \
-                                     u'Select something to search', \
-                                     u'You need to select at least one field to search')
+                                     self.tr(u'Select something to search'), \
+                                     self.tr(u'You need to select at least one field to search'))
            return
 
         self._query = BookMetadata(title=query['title'],
@@ -109,9 +109,11 @@ class GuessDialog(QtGui.QDialog):
             except Exception, e:
                 print "Guesser exception: %s"%str(e)
                 QtGui.QMessageBox.warning(self, \
-                                          u'Failed to load data', \
+                                          self.tr(u'Failed to load data'), \
                                           str(e))
                 return
+
+            update_txt = unicode(self.tr('Update'))
 
             if self.md:
             
@@ -140,7 +142,7 @@ ${
     ${for identifier in identifiers:}$
         <small>${identifier[0]}$:${identifier[1]}$</small><br>
     ${:end-for}$
-    <a href="/${i}$/" id="submit-${i}$" >Update</a>
+    <a href="/${i}$/" id="submit-${i}$" >${update_txt}$</a>
     </form>
     </div>
 </div>
@@ -149,13 +151,15 @@ ${:end-for}$
                 self.template = Templite(tpl)
                 t1 = time.time()
                 html = self.template.render(
-                    md = self.md
+                    md = self.md,
+                    update_txt = update_txt
                     )
                 print "Rendered in: %s seconds"%(time.time()-t1)
                 self.candidates.page().mainFrame().setHtml(html)
             
             else:
-                self.candidates.page().mainFrame().setHtml(u"<h3>No matches found for the selected criteria</h3>")
+                self.candidates.page().mainFrame().setHtml(u"<h3>%s</h3>" % \
+                     unicode(self.tr(u'No matches found for the selected criteria')))
             
     def updateWithCandidate(self, url):
         cId = int(url.path()[1:-1])
@@ -263,7 +267,7 @@ class BookEditor(QtGui.QWidget):
 
     @QtCore.pyqtSlot()
     def on_add_file_clicked(self):
-        file_name = unicode(QtGui.QFileDialog.getOpenFileName(self, 'Add File'))
+        file_name = unicode(QtGui.QFileDialog.getOpenFileName(self, self.tr(u'Add File')))
         if file_name and not self.fileList.findItems(file_name, QtCore.Qt.MatchExactly):
             self.fileList.addItem(file_name)
 
@@ -325,7 +329,7 @@ class BookEditor(QtGui.QWidget):
         if datos == -1:
             QtGui.QMessageBox.critical(self,
                                        self.trUtf8("Error"),
-                                       self.trUtf8("Por favor revise el ISBN, parece ser erróneo."),
+                                       self.trUtf8("Please check the ISBN, it seems wrong."),
                                        QtGui.QMessageBox.StandardButtons(QtGui.QMessageBox.Ok)
                                        )
 
@@ -372,7 +376,7 @@ class BookEditor(QtGui.QWidget):
             self.txp_1.appendPlainText('')
             QtGui.QMessageBox.critical(self,
                                        self.trUtf8("Error"),
-                                       self.trUtf8("El ISBN parece ser válido, pero no se encontró libro con el número indicado."),
+                                       self.trUtf8("The ISBN seems to be valid, but no book was found with that number."),
                                        QtGui.QMessageBox.StandardButtons(QtGui.QMessageBox.Ok)
                                        )
 
