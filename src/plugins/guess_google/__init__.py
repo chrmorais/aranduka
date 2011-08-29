@@ -15,11 +15,11 @@ class GoogleGuesser(Guesser):
     def _translateQuery (self, query):
         q = ''
         if query.title is not None:
-            q += 'TITLE %s '%query.title
+            q += 'TITLE %s '%query.title.encode('utf-8')
         if query.authors is not None:
-            q += 'AUTHOR %s '%query.authors
+            q += 'AUTHOR %s '%query.authors.encode('utf-8')
         if query.identifiers[0] is not None:
-            q += 'ISBN %s '%query.identifiers[0]
+            q += 'ISBN %s '%query.identifiers[0].encode('utf-8')
         return q
 
     def guess(self, query):

@@ -30,11 +30,11 @@ class AlibrisGuesser(Guesser):
     def _translateQuery (self, query):
         q = []
         if query.title is not None:
-            q.append(('qtit', query.title))
+            q.append(('qtit', query.title.encode('utf-8')))
         if query.authors is not None:
-            q.append(('qauth', query.authors))
-        if query.identifiers is not None:
-            q.append(('qisbn', query.identifiers[0]))
+            q.append(('qauth', query.authors.encode('utf-8')))
+        if query.identifiers[0] is not None:
+            q.append(('qisbn', query.identifiers[0].encode('utf-8')))
         return q
 
     def _get_url (self, query):
