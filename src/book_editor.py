@@ -14,6 +14,8 @@ from pluginmgr import manager, isPluginEnabled
 from templite import Templite
 import time
 
+import traceback
+
 class IdentifierDialog(QtGui.QDialog):
     def __init__(self, id_key, id_value, *args):
         QtGui.QDialog.__init__(self,*args)
@@ -108,6 +110,7 @@ class GuessDialog(QtGui.QDialog):
                 self.md = self.guesser.guess(self._query) or []
             except Exception, e:
                 print "Guesser exception: %s"%str(e)
+                traceback.print_exc()
                 QtGui.QMessageBox.warning(self, \
                                           u'Failed to load data', \
                                           str(e))
