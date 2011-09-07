@@ -433,7 +433,14 @@ def get_translators ():
     translators = []
     locale = unicode(QtCore.QLocale.system().name())
     print "Loading translations for '%s'" % locale
-   
+    # We have to add the translators in this specific order to make them work.
+    # Qt's standard dialog's translations
+    qtTranslator = QtCore.QTranslator()
+    qtTranslator.load(u'qt_%s' % locale, 
+                      QtCore.QLibraryInfo.location(
+                          QtCore.QLibraryInfo.TranslationsPath))
+    translators.append(qtTranslator)
+
     # Aranduka's translations
     translator = QtCore.QTranslator()
     translator.load(u'aranduka_%s' % locale, 
@@ -442,12 +449,6 @@ def get_translators ():
                     'translations'))
     translators.append(translator)
 
-    # Qt's standard dialog's translations
-    qtTranslator = QtCore.QTranslator()
-    qtTranslator.load(u'qt_%s' % locale, 
-                      QtCore.QLibraryInfo.location(
-                          QtCore.QLibraryInfo.TranslationsPath))
-    translators.append(qtTranslator)
     return translators
 
 def main():
