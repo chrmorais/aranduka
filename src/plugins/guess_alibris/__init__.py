@@ -68,7 +68,7 @@ class AlibrisGuesser(Guesser):
                 for book in md['book']:
                     if 'isbn' in book and book['isbn'] in _isbn:
                         continue
-                    title = book.get('title', 'No Title').decode('utf-8')
+                    title = book.get('title', 'No Title')
                     thumbnail = book.get('imageurl','')
                     date = datetime.date(1970,1,1)
                     subjects = []
