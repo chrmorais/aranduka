@@ -12,7 +12,7 @@ from pluginmgr import manager, isPluginEnabled
 from pluginconf import PluginSettings
 from about import AboutDialog
 from epubviewer import Main as EpubViewer
-from cbzviewer import Main as CbzViewer
+from comicbookviewer import Main as CBViewer
 import downloader
 
 class SearchWidget(QtGui.QWidget):
@@ -206,13 +206,13 @@ class Main(QtGui.QMainWindow):
         self.searchBar.show()
         self.searchWidget.text.setFocus(True)
         
-    def openCBZ(self, fname):
+    def openCB(self, fname):
         try:
-            viewer = CbzViewer(fname)
+            viewer = CBViewer(fname)
         except ValueError, e:
             QtGui.QMessageBox.critical(self, \
-                                      u'Failed to open CBZ file', \
-                                      u'The document you are trying to open is not a valid CBZ file.')
+                                      u'Failed to open Comic Book file', \
+                                      u'The document you are trying to open is not a valid Comic Book file.')
             return
         self.viewers.append(viewer)
         viewer.show()
@@ -247,9 +247,9 @@ class Main(QtGui.QMainWindow):
             if f.file_name.endswith('epub'):
                 action = menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: self.openEpub(f.file_name))
-            elif f.file_name.endswith('cbz'):
+            elif f.file_name.endswith('cbz') or f.file_name.endswith('cbr') :
                 action = menu.addAction("Open %s"%os.path.basename(f.file_name),
-                    lambda f = f: self.openCBZ(f.file_name))
+                    lambda f = f: self.openCB(f.file_name))
             else:
                 action = menu.addAction("Open %s"%os.path.basename(f.file_name),
                     lambda f = f: QtGui.QDesktopServices.openUrl(url))

@@ -1,6 +1,6 @@
 from PyQt4 import QtNetwork, QtCore, QtGui, uic
 import os, sys
-from cbzparser import CBZDocument
+from comicbookparser import CBDocument
 import ui
 
 class Main(QtGui.QMainWindow):
@@ -11,11 +11,12 @@ class Main(QtGui.QMainWindow):
     def __init__(self, fname):
         QtGui.QMainWindow.__init__(self)
 
-        self.doc = CBZDocument(fname)
+        self.doc = CBDocument(fname)
         uifile = ui.path('epubviewer.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.addAction(self.actionPageDown)
+        self.setWindowTitle('Comic Book Viewer')
 
 
         for n in self.doc.tocentries:

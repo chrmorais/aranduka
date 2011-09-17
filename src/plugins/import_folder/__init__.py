@@ -6,7 +6,7 @@ from pprint import pprint
 from utils import VALID_EXTENSIONS
 from pluginmgr import Importer
 from progress import progress
-import cbzparser
+import comicbookparser
 
 COMPRESSED_EXTENSIONS = ['gz','bz2','lzma']
 
@@ -129,8 +129,9 @@ def import_file(fname):
     splitted = fname.split('.')
     extension = splitted[-1]
     print extension
-    if extension == u"cbz":
-        parser = cbzparser.CBZDocument(fname)
+    comics = ['cbz', 'cbr']
+    if extension in comics:
+        parser = comicbookparser.CBDocument(fname)
         parser.fetchCover(b.id)
     
     return 2
