@@ -55,11 +55,8 @@ class Catalog(BookStore):
         BookStore.__init__(self)
         self.widget = None
         self.w = None
-        self.cover_cache={}
-        self.author_cache={}
-        self.id_cache={}
-        self.title_cache={}
-        
+        self.cache = {}
+       
     def setWidget (self, widget):
         tplfile = os.path.join(
             os.path.abspath(
@@ -119,9 +116,11 @@ class Catalog(BookStore):
         if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
             # Metadata is cached
-            title = self.title_cache[url]
-            _author = self.author_cache[url]
-            book_id = self.id_cache[url]
+            cache = self.cache[self.get_url_key(url)]
+            title = cache['title']
+            _author = cache['author']
+            book_id = cache['id']
+            cover_url = cache['cover'][0]
             self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
             book_tid = url.split('/')[-2]
@@ -141,7 +140,6 @@ class Catalog(BookStore):
             # Get the file
             fname = os.path.abspath(os.path.join("ebooks", str(book.id) + '.' + extension))
             book.fetch_file(url, extension)
-            cover_url = self.cover_cache.get(url,None)
             if cover_url:
                 book.fetch_cover(cover_url)
             
@@ -220,9 +218,9 @@ class Catalog(BookStore):
         self.showCrumbs()
 
         # FIXME: this leaks memory forever (not very much, though)
-        self.cover_cache={}
-        self.id_cache={}
-        self.author_cache={}
+        # REVIEW: I don't know where the leak was, but maybe my latest
+        #         change helped (or not).
+        self.cache = {}
         
         books = []
         links = []        
@@ -236,14 +234,16 @@ class Catalog(BookStore):
                     entry.cover_url = cover_url[0]
                 if len(acq_links) == 1:
                     entry.links = self._generate_links(acq_links[0])
-                    #entry.links.extend(self._generate_links(acq_links[0]))
                 # A book
                 books.append(entry)
                 for href in acq_links:
-                    self.cover_cache[href]=cover_url
-                    self.id_cache[href]=entry.get('id')
-                    self.author_cache[href]=entry.author
-                    self.title_cache[href]=entry.title
+                    key = self.get_url_key(href)
+                    self.cache[key] = { \
+                        'cover': cover_url, \
+                        'id': entry.get('id'), \
+                        'author': entry.author, \
+                        'title': entry.title \
+                    }
             else:
                 # A category
                 links.append(entry)
@@ -261,6 +261,10 @@ class Catalog(BookStore):
         # open('x.html','w+').write(html)        
         self.w.store_web.setHtml(html)
         self.w.store_web.setUpdatesEnabled(True)
+
+    def get_url_key (self, url):
+        """Takes a book URL and extracts the product key"""
+        return url.split('/')[-1].split('.')[0]
 
     def on_catalog_itemExpanded(self, item):
         if item.childCount()==0:
