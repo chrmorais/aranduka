@@ -172,6 +172,8 @@ class BookEditor(QtGui.QWidget):
         uifile = ui.path('book_editor.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+        # This flag will keep track of unsaved changes
+        self.unsaved = False
         if book_id is not None:
             self.load_data(book_id)
 
@@ -197,7 +199,40 @@ class BookEditor(QtGui.QWidget):
         cname = self.book.cover()
         self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
 
+    def hideEvent(self, event):
+        """Hide event
+           When the BookEditor is about to be closed,
+           we check that there are no unsaved changes.
+        """
+        # FIXME: This is a work in progress on issue #63
+        print "Hiding widget..."
+        return
+        if self.unsaved:
+            print "There is unsaved data..."
+            reply = QtGui.QMessageBox.question(self, \
+                        'Save changes?', \
+                        "This book has been modified. Do you want to save your changes?", \
+                        QtGui.QMessageBox.Yes, \
+                        QtGui.QMessageBox.No)
+            if reply==QtGui.QMessageBox.No:
+                print "Ignoring event..."
+                # FIXME: ignoring the event isn't working
+                event.ignore()
+        else:
+            print "No unsaved data. Accepting event..."
+        event.accept()
 
+    @QtCore.pyqtSlot()
+    def on_title_textChanged (self, string):
+        print "Changed...", string
+        self.unsaved = True
+
+    def on_cancel_clicked (self):
+        # Discard unsaved changes if the user presses 
+        # the Cancel button
+        self.unsaved = False
+        self.close()
+    
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
 
@@ -259,6 +294,7 @@ class BookEditor(QtGui.QWidget):
             self.book.tags.append(t)
 
         models.session.commit()
+        self.unsaved = False
         self.updateBook.emit(self.book)
 
     @QtCore.pyqtSlot()
