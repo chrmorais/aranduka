@@ -52,7 +52,10 @@ class ManyBooksNetConverter(Converter):
             return []
 
     def _get_extension (self, file_format):
-        return _FILE_FORMATS[file_format].split(':')[2]
+        if _FILE_FORMATS[file_format] == 'mnybksjar':
+            return '.jar'
+        else:
+            return _FILE_FORMATS[file_format].split(':')[2]
 
     def _get_file_url (self, book_id, file_format):
         if file_format not in SUPPORTED:

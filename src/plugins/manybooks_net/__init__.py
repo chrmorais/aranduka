@@ -12,7 +12,38 @@ import urlparse
 
 # This gets the main catalog from ManyBooks.net.
 
-EBOOK_EXTENSIONS=['epub','mobi','pdf']
+EBOOK_EXTENSIONS=['epub', \
+                 'pdb', \
+                 'fb2', \
+                 'zip', \
+                 'azw', \
+                 'mobi', \
+                 'prc', \
+                 'lit', \
+                 'pdf', \
+                 'rb', \
+                 'rtf', \
+                 'lrf', \
+                 'tcr', \
+                 'jar']
+_FILE_FORMATS = ['1:epub:.epub:epub', \
+                 '1:pml:.pdb:pml', \
+                 '1:fb2:.fb2:fb2', \
+                 '1:ipod:.zip:ipod', \
+                 '1:isiloX:.pdb:isiloX', \
+                 '1:kindle:.azw:kindle', \
+                 '1:mobi2:.mobi:mobi2', \
+                 '1:mobi:.prc:mobi', \
+                 '1:lit:.lit:lit', \
+                 '1:doc:.pdb:doc', \
+                 '1:pdf:.pdf:pdf', \
+                 '1:plkr:.pdb:plkr', \
+                 '1:rbk:.rb:rbk', \
+                 '1:rtf:.rtf:rtf', \
+                 '1:librie:.lrf:librie', \
+                 '1:tcr:.tcr:tcr', \
+                 '1:wr:.pdb:w', \
+                 'mnybksjar']
 
 class Catalog(BookStore):
 
@@ -24,11 +55,8 @@ class Catalog(BookStore):
         BookStore.__init__(self)
         self.widget = None
         self.w = None
-        self.cover_cache={}
-        self.author_cache={}
-        self.id_cache={}
-        self.title_cache={}
-        
+        self.cache = {}
+       
     def setWidget (self, widget):
         tplfile = os.path.join(
             os.path.abspath(
@@ -59,17 +87,24 @@ class Catalog(BookStore):
             self.w.store_web.loadStarted.connect(self.loadStarted)
             self.w.store_web.loadProgress.connect(self.loadProgress)
             self.w.store_web.loadFinished.connect(self.loadFinished)
+            self.w.store_web.page().mainFrame().javaScriptWindowObjectCleared.connect(self.addJSObject)
            
         self.widget.stack.setCurrentIndex(self.pageNumber)
         
     showGrid = operate
     showList = operate
+
+    def addJSObject(self):
+        print "DEBUG: JS Window Object Cleared"
+        self.w.store_web.page().mainFrame().addToJavaScriptWindowObject(QtCore.QString('catalog'), self)
         
     def search (self, terms):
         url = "http://manybooks.net/opds/search.php?"+urllib.urlencode(dict(q=terms))
         self.crumbs=[self.crumbs[0],["Search: %s"%terms, url]]
         self.openUrl(QtCore.QUrl(url))
 
+    @QtCore.pyqtSlot(QtCore.QString)
+    @QtCore.pyqtSlot(QtCore.QUrl)    
     def openUrl(self, url):
         print "openURL:", url
         if isinstance(url, QtCore.QUrl):
@@ -81,9 +116,11 @@ class Catalog(BookStore):
         if extension in EBOOK_EXTENSIONS:
             # It's a book, get metadata, file and download
             # Metadata is cached
-            title = self.title_cache[url]
-            _author = self.author_cache[url]
-            book_id = self.id_cache[url]
+            cache = self.cache[self.get_url_key(url)]
+            title = cache['title']
+            _author = cache['author']
+            book_id = cache['id']
+            cover_url = cache['cover'][0]
             self.setStatusMessage.emit(u"Downloading: "+title)
             book = Book.get_by(title = title)
             book_tid = url.split('/')[-2]
@@ -103,7 +140,6 @@ class Catalog(BookStore):
             # Get the file
             fname = os.path.abspath(os.path.join("ebooks", str(book.id) + '.' + extension))
             book.fetch_file(url, extension)
-            cover_url = self.cover_cache.get(url,None)
             if cover_url:
                 book.fetch_cover(cover_url)
             
@@ -127,6 +163,21 @@ class Catalog(BookStore):
         self.setStatusMessage.emit(u"Loading: "+url)
         self.w.store_web.page().loadFinished.connect(self.parseBranch)
         return
+
+    def _generate_links (self, epub_url):
+        """Takes the link for an epub file and returns the list
+           of links to download the ebook in all the formats that
+           are supported by ManyBooks.net"""
+        links = []
+        book_tid = epub_url.split('/')[-2]
+        for fmt in _FILE_FORMATS:
+            if fmt == 'mnybksjar':
+                ext = '.jar'
+            else:
+                ext = fmt.split(':')[2]
+            links.append(u'http://manybooks.net/send/%s/%s/%s%s' % \
+                         (fmt, book_tid, book_tid, ext))
+        return links
         
     @QtCore.pyqtSlot()
     def parseBranch(self):
@@ -138,7 +189,10 @@ class Catalog(BookStore):
         print "Parsing the branch:", url
         t1 = time.time()
         data = parse(unicode(self.w.store_web.page().mainFrame().toHtml()).encode('utf-8'))
-        
+        if not data.entries:
+            QtGui.QMessageBox.critical(None, \
+                                      u'Failed to load ManyBooks.net', \
+                                      u'An error ocurred and the ManyBooks.net catalog could not be loaded.')
         nextPage = ''
         prevPage = ''
         for l in data.feed.get('links',[]):
@@ -164,9 +218,9 @@ class Catalog(BookStore):
         self.showCrumbs()
 
         # FIXME: this leaks memory forever (not very much, though)
-        self.cover_cache={}
-        self.id_cache={}
-        self.author_cache={}
+        # REVIEW: I don't know where the leak was, but maybe my latest
+        #         change helped (or not).
+        self.cache = {}
         
         books = []
         links = []        
@@ -175,16 +229,21 @@ class Catalog(BookStore):
             acq_links = [l.href for l in entry.get('links',[]) if l.rel=='http://opds-spec.org/acquisition']
 
             if acq_links:
-                # A book
                 cover_url = [l.href for l in entry.links if l.rel==u'http://opds-spec.org/cover']
                 if cover_url:
-                    cover_url = cover_url[0]
+                    entry.cover_url = cover_url[0]
+                if len(acq_links) == 1:
+                    entry.links = self._generate_links(acq_links[0])
+                # A book
                 books.append(entry)
                 for href in acq_links:
-                    self.cover_cache[href]=cover_url
-                    self.id_cache[href]=entry.get('id')
-                    self.author_cache[href]=entry.author
-                    self.title_cache[href]=entry.title
+                    key = self.get_url_key(href)
+                    self.cache[key] = { \
+                        'cover': cover_url, \
+                        'id': entry.get('id'), \
+                        'author': entry.author, \
+                        'title': entry.title \
+                    }
             else:
                 # A category
                 links.append(entry)
@@ -202,6 +261,10 @@ class Catalog(BookStore):
         # open('x.html','w+').write(html)        
         self.w.store_web.setHtml(html)
         self.w.store_web.setUpdatesEnabled(True)
+
+    def get_url_key (self, url):
+        """Takes a book URL and extracts the product key"""
+        return url.split('/')[-1].split('.')[0]
 
     def on_catalog_itemExpanded(self, item):
         if item.childCount()==0:
