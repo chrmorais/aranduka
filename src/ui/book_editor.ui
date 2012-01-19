@@ -173,7 +173,7 @@
        </rect>
       </property>
       <attribute name="label">
-       <string>Shelves</string>
+       <string>Tags</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_2">
        <property name="margin">
@@ -182,7 +182,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Shelves:</string>
+          <string>Tags:</string>
          </property>
         </widget>
        </item>
