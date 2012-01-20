@@ -59,11 +59,18 @@ class Catalog(BookStore):
             self.w.store_web.loadStarted.connect(self.loadStarted)
             self.w.store_web.loadProgress.connect(self.loadProgress)
             self.w.store_web.loadFinished.connect(self.loadFinished)
+            self.w.search.returnPressed.connect(self.doSearch)
            
         self.widget.stack.setCurrentIndex(self.pageNumber)
         
     showGrid = operate
     showList = operate
+
+    def doSearch (self):
+        term = unicode(self.w.search.text())
+        if term == 'Search':
+            return False
+        self.search(term)
         
     def search (self, terms):
         url = "http://manybooks.net/opds/search.php?"+urllib.urlencode(dict(q=terms))
@@ -193,6 +200,7 @@ class Catalog(BookStore):
         html = self.template.render(
             title = title,
             books = books,
+            results = len(data.entries)>0,
             links = links,
             url = url,
             nextPage = nextPage,

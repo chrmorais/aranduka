@@ -21,6 +21,10 @@ ${print pager()}$
 </div>
 ${:endif}$
 
+${ if not results: }$
+<p>No books were found matching your criteria.</p>
+${:endif}$
+
 ${for book in books:}$
 ${
     if not book.get('links',[]):
