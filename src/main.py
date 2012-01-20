@@ -11,6 +11,7 @@ from about_book import AboutBook
 import rc_icons
 from pluginmgr import manager, isPluginEnabled
 from pluginconf import PluginSettings
+from networkconf import NetworkSettings
 from about import AboutDialog
 from epubviewer import Main as EpubViewer
 from cbzviewer import Main as CbzViewer
@@ -194,6 +195,11 @@ class Main(QtGui.QMainWindow):
     @QtCore.pyqtSlot()
     def on_actionPlugins_triggered(self):
         dlg = PluginSettings(self)
+        dlg.exec_()
+
+    @QtCore.pyqtSlot()
+    def on_actionNetwork_triggered(self):
+        dlg = NetworkSettings(self)
         dlg.exec_()
 
     @QtCore.pyqtSlot()

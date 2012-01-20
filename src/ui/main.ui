@@ -295,6 +295,7 @@ padding: .5em;
      <string>Settings</string>
     </property>
     <addaction name="actionPlugins"/>
+    <addaction name="actionNetwork"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -356,6 +357,11 @@ padding: .5em;
   <action name="actionPlugins">
    <property name="text">
     <string>Plugins...</string>
+   </property>
+  </action>
+  <action name="actionNetwork">
+   <property name="text">
+    <string>Network...</string>
    </property>
   </action>
   <action name="actionHelp">
