@@ -41,13 +41,13 @@ class Main(QtGui.QMainWindow):
     updateShelves = QtCore.pyqtSignal()
     updateBook = QtCore.pyqtSignal(models.Book)
     
-    def __init__(self):
+    def __init__(self, app):
         QtGui.QMainWindow.__init__(self)
         uifile = ui.path('main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.viewers=[]
-
+        self.app = app
         self.currentBook = None
 
         # Set default stylesheet for all web views in the app
@@ -112,14 +112,25 @@ class Main(QtGui.QMainWindow):
             return
         config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
         QtGui.QMainWindow.closeEvent(self, event)
-        
+
+    def _loadPluginTranslations(self, manager):
+        locale = unicode(QtCore.QLocale.system().name())
+        print "Loading plugin translations for '%s'" % locale
+        for plugin in manager.getAllPlugins():
+            path = os.path.join(plugin.path, 'translations')
+            if os.path.exists(path):
+                translator = QtCore.QTranslator()
+                if translator.load(locale, path):
+                    self.app.installTranslator(translator)
+                else:
+                    print "Failed to load translator for plugin %s"%plugin.name
 
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
 
         # Plugins
-        manager.locatePlugins()
-        manager.loadPlugins()
+        manager.collectPlugins()
+        self._loadPluginTranslations(manager)
 
         enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
         if enabled_plugins == set([None]):
@@ -170,7 +181,6 @@ class Main(QtGui.QMainWindow):
             dev_menu = QtGui.QMenu(plugin.plugin_object.name, self)
             print "Adding menu:", plugin.plugin_object.name
             for a in plugin.plugin_object.deviceActions():
-                print a
                 dev_menu.addAction(a)
             dev_menu.addSeparator()
             dev_menu.addAction(plugin.plugin_object.actionNew())
@@ -477,7 +487,7 @@ def main():
     for translator in get_translators():
         print "Installing translator %s"%str(translator)
         app.installTranslator(translator)
-    window=Main()
+    window=Main(app)
     window.show()
     # It's exec_ because exec is a reserved word in Python
     sys.exit(app.exec_())

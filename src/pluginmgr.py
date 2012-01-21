@@ -12,8 +12,7 @@ import utils
 import config
 
 class ArandukaPlugin(IPlugin):
-    def __init__(self):
-        print dir(self)
+    pass
 
 # These classes define our plugin categories
 
