@@ -121,6 +121,7 @@ class Main(QtGui.QMainWindow):
             if os.path.exists(path):
                 translator = QtCore.QTranslator()
                 if translator.load(locale, path):
+                    print "Installing translator for plugin %s: %s"%(plugin.name, locale)
                     self.app.installTranslator(translator)
                 else:
                     print "Failed to load translator for plugin %s"%plugin.name

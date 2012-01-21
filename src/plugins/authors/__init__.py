@@ -9,8 +9,8 @@ EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
 class Catalog(ShelfView):
 
-    title = "Books By Author"
-    itemText = "Authors"
+    title = QtGui.qApp.tr("Books By Author")
+    itemText = QtGui.qApp.tr("Authors")
     items = {}
 
     def showList(self, search = None):
