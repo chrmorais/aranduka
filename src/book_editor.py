@@ -172,6 +172,8 @@ class BookEditor(QtGui.QWidget):
         uifile = ui.path('book_editor.ui')
         uic.loadUi(uifile, self)
         self.ui = self
+        # This flag will keep track of unsaved changes
+        self.unsaved = False
         if book_id is not None:
             self.load_data(book_id)
 
@@ -182,6 +184,10 @@ class BookEditor(QtGui.QWidget):
             print "Wrong book ID"
         self.title.setText(self.book.title)
         self.authors.setText('|'.join([a.name for a in self.book.authors]))
+        if self.book.comments:            
+            self.description.setPlainText(unicode(self.book.comments))
+        else:
+            self.description.setPlainText("")
         self.ids.clear()
         for i in self.book.identifiers:
             self.ids.addItem("%s: %s"%(i.key,i.value))
@@ -196,8 +202,49 @@ class BookEditor(QtGui.QWidget):
 
         cname = self.book.cover()
         self.cover.setPixmap(QtGui.QPixmap(cname).scaledToHeight(200,QtCore.Qt.SmoothTransformation))
+        # This is to make sure that loading data is not
+        # considered a change (i.e., this happens with QPlainTextEdit)
+        self.unsaved = False
 
+    def is_saved(self, parent=None):
+        if self.unsaved:
+            print "There is unsaved data..."
+            parent = parent if parent is not None else self
+            msgBox = QtGui.QMessageBox(parent)
+            msgBox.setWindowTitle('Save changes?')
+            msgBox.setText('This book has been modified.')
+            msgBox.setInformativeText('Do you want to save your changes?')
+            msgBox.setStandardButtons(QtGui.QMessageBox.Save | \
+                                      QtGui.QMessageBox.Discard | \
+                                      QtGui.QMessageBox.Cancel)
+            msgBox.setDefaultButton(QtGui.QMessageBox.Save)
+            msgBox.setWindowModality(QtCore.Qt.ApplicationModal)
+            msgBox.setFocus()
+            reply = msgBox.exec_()
+            if reply == QtGui.QMessageBox.Save:
+                self.on_save_clicked()
+            elif reply == QtGui.QMessageBox.Discard:
+                self.on_cancel_clicked()
+            else:
+                return False
+        else:
+            print "No unsaved data. Accepting event..."
+        return True
 
+    def on_title_textEdited(self, string):
+        self.unsaved = True
+
+    def on_authors_textEdited(self, string):
+        self.unsaved = True
+
+    def on_description_textChanged(self):
+        self.unsaved = True
+
+    def on_cancel_clicked (self):
+        # Discard unsaved changes if the user presses 
+        # the Cancel button
+        self.unsaved = False
+    
     @QtCore.pyqtSlot()
     def on_guess_clicked(self):
 
@@ -233,6 +280,7 @@ class BookEditor(QtGui.QWidget):
     def on_save_clicked(self):
         # Save the data first
         self.book.title = unicode(self.title.text())
+        self.book.comments = unicode(self.description.toPlainText())
 
         self.book.authors = []
         authors = unicode(self.authors.text()).split('|')
@@ -259,6 +307,7 @@ class BookEditor(QtGui.QWidget):
             self.book.tags.append(t)
 
         models.session.commit()
+        self.unsaved = False
         self.updateBook.emit(self.book)
 
     @QtCore.pyqtSlot()
@@ -266,10 +315,12 @@ class BookEditor(QtGui.QWidget):
         file_name = unicode(QtGui.QFileDialog.getOpenFileName(self, 'Add File'))
         if file_name and not self.fileList.findItems(file_name, QtCore.Qt.MatchExactly):
             self.fileList.addItem(file_name)
+            self.unsaved = True
 
     @QtCore.pyqtSlot()
     def on_remove_file_clicked(self):
         self.fileList.takeItem(self.fileList.currentRow())
+        self.unsaved = True
 
     @QtCore.pyqtSlot()
     def on_add_id_clicked(self):
@@ -278,10 +329,12 @@ class BookEditor(QtGui.QWidget):
         if not r == dlg.Accepted:
             return
         self.ids.addItem("%s: %s"%(dlg.id_key.text(), dlg.id_value.text()))
+        self.unsaved = True
 
     @QtCore.pyqtSlot()
     def on_remove_id_clicked(self):
         self.ids.removeItem(self.ids.currentIndex())
+        self.unsaved = True
 
     @QtCore.pyqtSlot()
     def on_edit_id_clicked(self):
@@ -292,6 +345,7 @@ class BookEditor(QtGui.QWidget):
             return
         self.ids.setItemText(self.ids.currentIndex(), "%s: %s"%(
             dlg.id_key.text(), dlg.id_value.text()))
+        self.unsaved = True
 
     @QtCore.pyqtSlot()
     def on_add_tag_clicked(self):
@@ -300,10 +354,12 @@ class BookEditor(QtGui.QWidget):
         if not r == dlg.Accepted:
             return
         self.tags.addItem(dlg.tag_name.currentText())
+        self.unsaved = True
 
     @QtCore.pyqtSlot()
     def on_remove_tag_clicked(self):
         self.tags.takeItem(self.tags.currentRow())
+        self.unsaved = True
 
     def findBook(self):
         """

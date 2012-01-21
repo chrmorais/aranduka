@@ -107,6 +107,9 @@ class Main(QtGui.QMainWindow):
         self.progBar.setVisible(False)
         
     def closeEvent(self, event):
+        if not self.book_editor.is_saved(self):
+            event.ignore()
+            return
         config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
         QtGui.QMainWindow.closeEvent(self, event)
         
@@ -216,7 +219,13 @@ class Main(QtGui.QMainWindow):
         if not item: return
         self.on_treeWidget_itemClicked(item)
 
+    def on_treeWidget_currentItemChanged (self, new, old):
+        self._lastTreeItem = old
+
     def on_treeWidget_itemClicked(self, item):
+        if not self.book_editor.is_saved():
+            self.treeWidget.setCurrentItem(self._lastTreeItem)
+            return
         try:
             self.searchWidget.doSearch.clicked.disconnect()
         except TypeError: # Happens when there's no connections
