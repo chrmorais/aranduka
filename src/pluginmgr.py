@@ -6,16 +6,14 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 import os
-from yapsy.PluginManager import PluginManager
+from yapsy.PluginManager import PluginManager, PluginManagerSingleton
 from yapsy.IPlugin import IPlugin
 import utils
 import config
 
 class ArandukaPlugin(IPlugin):
-    def __init__ (self):
-        print "CALLED!"
-        print "Plugin debug"
-        print self
+    def __init__(self):
+        print dir(self)
 
 # These classes define our plugin categories
 
@@ -27,7 +25,7 @@ class Guesser(ArandukaPlugin):
     name = "Base Guesser"
     configurable = False
     def __init__(self):
-        super(ArandukaPlugin, self).__init__()
+        ArandukaPlugin.__init__(self)
         print "INIT: ", self.name
 
     def can_guess(self, book):
@@ -54,19 +52,19 @@ class Device(ArandukaPlugin):
     configurable = False
 
     def __init__(self):
-        super(ArandukaPlugin, self).__init__()
+        ArandukaPlugin.__init__(self)
 
 class Tool(ArandukaPlugin):
     """A plugin that gets added to the Tools menu in the main.ui"""
     configurable = False
     def __init__(self):
-        super(ArandukaPlugin, self).__init__()
+        ArandukaPlugin.__init__(self)
 
 class Importer(ArandukaPlugin):
     """A plugin that gets added to the Tools menu in the main.ui"""
     configurable = False
     def __init__(self):
-        super(ArandukaPlugin, self).__init__()
+        ArandukaPlugin.__init__(self)
     
 class ShelfView(ArandukaPlugin, QtCore.QObject):
     """Plugins that inherit this class display the contents
@@ -77,7 +75,7 @@ class ShelfView(ArandukaPlugin, QtCore.QObject):
     configurable = False
     
     def __init__(self):
-        super(ArandukaPlugin, self).__init__()
+        ArandukaPlugin.__init__(self)
         print "INIT: ", self.title
         self.widget = None
         QtCore.QObject.__init__(self)
@@ -150,7 +148,7 @@ class BookStore(ArandukaPlugin, QtCore.QObject):
     setStatusMessage = QtCore.pyqtSignal("PyQt_PyObject")
     
     def __init__(self):
-        super(ArandukaPlugin, self).__init__()
+        ArandukaPlugin.__init__(self)
         print "INIT:", self.title
         self.widget = None
         super(QtCore.QObject, self).__init__(None)    
@@ -180,7 +178,7 @@ class BookStore(ArandukaPlugin, QtCore.QObject):
 class Converter(ArandukaPlugin):
     configurable = False
     def __init__(self):
-        super(ArandukaPlugin, self).__init__()
+        ArandukaPlugin.__init__(self)
 
 def isPluginEnabled (name):
     enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))

@@ -433,22 +433,29 @@ def get_translators ():
     translators = []
     locale = unicode(QtCore.QLocale.system().name())
     print "Loading translations for '%s'" % locale
-    # We have to add the translators in this specific order to make them work.
+   
     # Qt's standard dialog's translations
     qtTranslator = QtCore.QTranslator()
-    qtTranslator.load(u'qt_%s' % locale, 
+    b = qtTranslator.load(u'qt_%s' % locale, 
                       QtCore.QLibraryInfo.location(
                           QtCore.QLibraryInfo.TranslationsPath))
+    if b:
+        print "Loaded QT translator for %s"%locale
+    else:
+        print "Failed to load QT translator for %s"%locale
     translators.append(qtTranslator)
 
     # Aranduka's translations
     translator = QtCore.QTranslator()
-    translator.load(u'aranduka_%s' % locale, 
+    b = translator.load(u'aranduka_%s' % locale, 
                     os.path.join(os.path.abspath(
                             os.path.dirname(__file__)),
                     'translations'))
+    if b:
+        print "Loaded Aranduka's translator for %s"%locale
+    else:
+        print "Failed to load Aranduka's translator for %s"%locale
     translators.append(translator)
-
     return translators
 
 def main():
@@ -459,6 +466,7 @@ def main():
     # almost every app you write
     app = QtGui.QApplication(sys.argv)
     for translator in get_translators():
+        print "Installing translator %s"%str(translator)
         app.installTranslator(translator)
     window=Main()
     window.show()
