@@ -215,9 +215,9 @@ class BookEditor(QtGui.QWidget):
             print "There is unsaved data..."
             parent = parent if parent is not None else self
             msgBox = QtGui.QMessageBox(parent)
-            msgBox.setWindowTitle(self.tr(u'Save changes?'))
-            msgBox.setText(self.tr(u'This book has been modified.'))
-            msgBox.setInformativeText(self.tr(u'Do you want to save your changes?'))
+            msgBox.setWindowTitle(self.tr('Save changes?'))
+            msgBox.setText(self.tr('This book has been modified.'))
+            msgBox.setInformativeText(self.tr('Do you want to save your changes?'))
             msgBox.setStandardButtons(QtGui.QMessageBox.Save | \
                                       QtGui.QMessageBox.Discard | \
                                       QtGui.QMessageBox.Cancel)

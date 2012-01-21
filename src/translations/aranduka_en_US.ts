@@ -6,31 +6,26 @@
     <message>
         <location filename="about.py" line="17"/>
         <source>UNDER DEVELOPMENT</source>
-        <translatorcomment>UNDER DEVELOPMENT</translatorcomment>
         <translation>UNDER DEVELOPMENT</translation>
     </message>
     <message>
         <location filename="about.py" line="22"/>
         <source>About Aranduka</source>
-        <translatorcomment>About Aranduka</translatorcomment>
         <translation>About Aranduka</translation>
     </message>
     <message>
         <location filename="about.py" line="33"/>
         <source>Like Calibre but easy...</source>
-        <translatorcomment>Like Calibre but easy...</translatorcomment>
         <translation>Like Calibre but easy...</translation>
     </message>
     <message>
         <location filename="about.py" line="34"/>
         <source>Version: %s</source>
-        <translatorcomment>Version: %s</translatorcomment>
         <translation>Version: %s</translation>
     </message>
     <message>
         <location filename="about.py" line="35"/>
         <source>Website: &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</source>
-        <translatorcomment>Website: &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</translatorcomment>
         <translation>Website: &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</translation>
     </message>
 </context>
@@ -39,20 +34,32 @@
     <message>
         <location filename="book_editor.py" line="433"/>
         <source>Error</source>
-        <translatorcomment>Error</translatorcomment>
         <translation>Error</translation>
     </message>
     <message>
         <location filename="book_editor.py" line="386"/>
         <source>Please check the ISBN, it seems wrong.</source>
-        <translatorcomment>Please check the ISBN, it seems wrong.</translatorcomment>
         <translation>Please check the ISBN, it seems wrong.</translation>
     </message>
     <message>
         <location filename="book_editor.py" line="433"/>
         <source>The ISBN seems to be valid, but no book was found with that number.</source>
-        <translatorcomment>The ISBN seems to be valid, but no book was found with that number.</translatorcomment>
         <translation>The ISBN seems to be valid, but no book was found with that number.</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="218"/>
+        <source>Save changes?</source>
+        <translation>Save changes?</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="219"/>
+        <source>This book has been modified.</source>
+        <translation>This book has been modified.</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="220"/>
+        <source>Do you want to save your changes?</source>
+        <translation>Do you want to save your changes?</translation>
     </message>
 </context>
 <context>
@@ -60,103 +67,86 @@
     <message>
         <location filename="identifier.ui" line="14"/>
         <source>Dialog</source>
-        <translatorcomment>Dialog</translatorcomment>
         <translation>Dialog</translation>
     </message>
     <message>
         <location filename="delete_book.ui" line="42"/>
         <source>Text</source>
-        <translatorcomment>Text</translatorcomment>
         <translation>Text</translation>
     </message>
     <message>
         <location filename="delete_book.ui" line="55"/>
         <source>CheckBox</source>
-        <translatorcomment>CheckBox</translatorcomment>
         <translation>CheckBox</translation>
     </message>
     <message>
         <location filename="guess.ui" line="20"/>
         <source>Which of the following data are you sure is correct?</source>
-        <translatorcomment>Which of the following data are you sure is correct?</translatorcomment>
         <translation>Which of the following data are you sure is correct?</translation>
     </message>
     <message>
         <location filename="guess.ui" line="29"/>
         <source>Title:</source>
-        <translatorcomment>Title:</translatorcomment>
         <translation>Title:</translation>
     </message>
     <message>
         <location filename="guess.ui" line="39"/>
         <source>Author:</source>
-        <translatorcomment>Author:</translatorcomment>
         <translation>Author:</translation>
     </message>
     <message>
         <location filename="guess.ui" line="49"/>
         <source>ISBN:</source>
-        <translatorcomment>ISBN:</translatorcomment>
         <translation>ISBN:</translation>
     </message>
     <message>
         <location filename="guess.ui" line="61"/>
         <source>Candidates:</source>
-        <translatorcomment>Candidates:</translatorcomment>
         <translation>Candidates:</translation>
     </message>
     <message>
         <location filename="guess.ui" line="69"/>
         <source>about:blank</source>
-        <translatorcomment>about:blank</translatorcomment>
         <translation>about:blank</translation>
     </message>
     <message>
         <location filename="guess.ui" line="95"/>
         <source>Guess</source>
-        <translatorcomment>Guess</translatorcomment>
         <translation>Guess</translation>
     </message>
     <message>
         <location filename="tag.ui" line="76"/>
         <source>Cancel</source>
-        <translatorcomment>Cancel</translatorcomment>
         <translation>Cancel</translation>
     </message>
     <message>
         <location filename="identifier.ui" line="25"/>
         <source>Identifier:</source>
-        <translatorcomment>Identifier:</translatorcomment>
         <translation>Identifier:</translation>
     </message>
     <message>
         <location filename="identifier.ui" line="35"/>
         <source>Value:</source>
-        <translatorcomment>Value:</translatorcomment>
         <translation>Value:</translation>
     </message>
     <message>
         <location filename="tag.ui" line="69"/>
         <source>Ok</source>
-        <translatorcomment>Ok</translatorcomment>
         <translation>Ok</translation>
     </message>
     <message>
         <location filename="pluginconf.ui" line="14"/>
         <source>Configure Plugins</source>
-        <translatorcomment>Configure Plugins</translatorcomment>
         <translation>Configure Plugins</translation>
     </message>
     <message>
         <location filename="pluginconf.ui" line="32"/>
         <source>Page 2</source>
-        <translatorcomment>Page 2</translatorcomment>
         <translation>Page 2</translation>
     </message>
     <message>
         <location filename="pluginconf.ui" line="55"/>
         <source>&amp;Done</source>
-        <translatorcomment>&amp;Done</translatorcomment>
         <translation>&amp;Done</translation>
     </message>
     <message>
@@ -177,7 +167,6 @@
     <message>
         <location filename="tag.ui" line="25"/>
         <source>Tag:</source>
-        <translatorcomment>Tag:</translatorcomment>
         <translation>Tag:</translation>
     </message>
 </context>

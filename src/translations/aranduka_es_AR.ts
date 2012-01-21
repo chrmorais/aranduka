@@ -46,6 +46,21 @@
         <source>The ISBN seems to be valid, but no book was found with that number.</source>
         <translation>El ISBN parece válido, pero no se encontró ningun libro con ese número.</translation>
     </message>
+    <message>
+        <location filename="book_editor.py" line="218"/>
+        <source>Save changes?</source>
+        <translation>¿Desea guardar los cambios?</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="219"/>
+        <source>This book has been modified.</source>
+        <translation>Este libro ha sido modificado.</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="220"/>
+        <source>Do you want to save your changes?</source>
+        <translation>¿Desea guardar los cambios?</translation>
+    </message>
 </context>
 <context>
     <name>Dialog</name>
