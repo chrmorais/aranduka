@@ -14,6 +14,24 @@ import time
 
 EBOOK_EXTENSIONS=['epub','mobi','pdf']
 
+class Search(QtGui.QLineEdit):
+    """Custom search widget"""
+    def __init__(self, *args):
+        QtGui.QLineEdit.__init__(self, *args)
+        self.defText = self.tr(u'Search')
+        self.setText(self.defText)
+
+    def focusInEvent(self, e):
+        if unicode(self.text()) == self.defText:
+            self.setText('')
+        else:
+            # this doesn't seem to work...
+            self.selectAll()
+
+    def focusOutEvent(self,e):
+        if unicode(self.text()) == "":
+            self.setText(self.defText)
+
 class Catalog(BookStore):
 
     title = "FeedBooks: Free and Public Domain Books"
@@ -52,7 +70,10 @@ class Catalog(BookStore):
             self.w.store_web.loadStarted.connect(self.loadStarted)
             self.w.store_web.loadProgress.connect(self.loadProgress)
             self.w.store_web.loadFinished.connect(self.loadFinished)
+            self.w.search = Search()
+            self.w.verticalLayout.insertWidget(1, self.w.search)
             self.w.search.returnPressed.connect(self.doSearch)
+
         self.widget.stack.setCurrentIndex(self.pageNumber)
 
     showGrid = operate
@@ -60,7 +81,7 @@ class Catalog(BookStore):
 
     def doSearch (self):
         term = unicode(self.w.search.text())
-        if term == 'Search':
+        if term == self.w.search.defText:
             return False
         self.search(term)
             

@@ -35,13 +35,6 @@
     </layout>
    </item>
    <item>
-    <widget class="QLineEdit" name="search">
-     <property name="text">
-      <string>Search</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWebView" name="store_web" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
