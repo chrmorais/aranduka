@@ -334,12 +334,12 @@ class Main(QtGui.QMainWindow):
         menu.addAction(self.actionDelete_Book)
 
         # Create menu with files for this book
-        open_menu = QtGui.QMenu(self.tr(u'Open book'))
+        title = self.tr(u'Open book')
+        open_menu = QtGui.QMenu(title)
         formats = book.available_formats(True)
         if len(formats) == 1:
             # A single file
             f = book.files[0]
-            title = u'Open book'
             if not self._check_file(f.file_name):
                 filename = os.path.basename(f.file_name)
                 action = menu.addAction(title,

@@ -1,11 +1,11 @@
-from PyQt4 import QtGui, QtCore
-import sys, os
 import models
+from PyQt4 import QtGui, QtCore
 from pluginmgr import ShelfView
 
 # This plugin lists the books by author
 
-EBOOK_EXTENSIONS=['epub','mobi','pdf']
+EBOOK_EXTENSIONS = ['epub', 'mobi', 'pdf']
+
 
 class Catalog(ShelfView):
 
@@ -13,7 +13,7 @@ class Catalog(ShelfView):
     itemText = QtGui.qApp.tr("Authors")
     items = {}
 
-    def showList(self, search = None):
+    def showList(self, search=None):
         """Get all books from the DB and show them"""
 
         if not self.widget:
@@ -39,7 +39,7 @@ class Catalog(ShelfView):
         self.shelf.setDragEnabled(False)
         self.shelf.setSelectionMode(self.shelf.NoSelection)
         self.shelf.setStyleSheet(css)
-        self.shelf.setIconSize(QtCore.QSize(48,48))
+        self.shelf.setIconSize(QtCore.QSize(48, 48))
         # Hook the shelf context menu
         self.shelf.customContextMenuRequested.connect(self.shelfContextMenu)
 
@@ -48,14 +48,18 @@ class Catalog(ShelfView):
 
         # Fill the shelf
         if search:
-            authors = models.Author.query.order_by("name").filter(models.Author.name.like("%%%s%%"%search))
+            authors = models.Author.query.order_by("name").filter(
+                                models.Author.name.like("%%%s%%" % search))
         else:
             authors = models.Author.query.order_by("name").all()
-        
+
         for a in authors:
             a_item = QtGui.QListWidgetItem(a.name, self.shelf)
+            print a_item
             for b in a.books:
-                icon = QtGui.QIcon(QtGui.QPixmap(b.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                icon = QtGui.QIcon(
+                        QtGui.QPixmap(b.cover()).scaledToHeight(128,
+                                            QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, self.shelf)
                 item.book = b
                 self.items[b.id] = item
@@ -63,16 +67,15 @@ class Catalog(ShelfView):
         self.shelvesLayout.addStretch(1)
         self.widget.shelfStack.setWidget(self.shelf)
 
-
-    def showGrid(self, search = None):
+    def showGrid(self, search=None):
         """Get all books from the DB and show them"""
-        
+
         if not self.widget:
             print "Call setWidget first"
             return
         self.operate = self.showGrid
         self.items = {}
-            
+
         self.widget.title.setText(self.title)
         css = '''
         ::item {
@@ -88,9 +91,10 @@ class Catalog(ShelfView):
         self.shelves = QtGui.QWidget()
         self.shelvesLayout = QtGui.QVBoxLayout()
         self.shelves.setLayout(self.shelvesLayout)
-        
+
         if search:
-            authors = models.Author.query.order_by("name").filter(models.Author.name.like("%%%s%%"%search))
+            authors = models.Author.query.order_by("name").filter(
+                                models.Author.name.like("%%%s%%" % search))
         else:
             authors = models.Author.query.order_by("name").all()
         for a in authors:
@@ -103,11 +107,11 @@ class Catalog(ShelfView):
             shelf.setStyleSheet(css)
             shelf.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
             shelf.setFrameShape(shelf.NoFrame)
-            shelf.setIconSize(QtCore.QSize(128,128))
+            shelf.setIconSize(QtCore.QSize(128, 128))
             shelf.setViewMode(shelf.IconMode)
             shelf.setMinimumHeight(153)
             shelf.setMaximumHeight(153)
-            shelf.setMinimumWidth(153*len(a.books))
+            shelf.setMinimumWidth(153 * len(a.books))
             shelf.setFlow(shelf.LeftToRight)
             shelf.setWrapping(False)
             shelf.setDragEnabled(False)
@@ -118,13 +122,14 @@ class Catalog(ShelfView):
 
             # Hook book editor
             shelf.itemActivated.connect(self.widget.on_books_itemActivated)
-            
+
             # Fill the shelf
             for b in a.books:
                 pixmap = QtGui.QPixmap(b.cover())
                 if pixmap.isNull():
                     pixmap = QtGui.QPixmap(b.default_cover())
-                icon =  QtGui.QIcon(pixmap.scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+                icon = QtGui.QIcon(pixmap.scaledToHeight(128,
+                                            QtCore.Qt.SmoothTransformation))
                 item = QtGui.QListWidgetItem(icon, b.title, shelf)
                 item.book = b
                 self.items[b.id] = item
@@ -132,14 +137,16 @@ class Catalog(ShelfView):
 
         self.shelvesLayout.addStretch(1)
         self.widget.shelfStack.setWidget(self.shelves)
-        
+
     def updateBook(self, book):
         # This may get called when no books
         # have been loaded in this view, so make it cheap
         if self.items and book.id in self.items:
             item = self.items[book.id]
-            icon = QtGui.QIcon(QtGui.QPixmap(book.cover()).scaledToHeight(128, QtCore.Qt.SmoothTransformation))
+            icon = QtGui.QIcon(
+                        QtGui.QPixmap(
+                            book.cover()).scaledToHeight(128,
+                                            QtCore.Qt.SmoothTransformation))
             item.setText(book.title)
             item.setIcon(icon)
             item.book = book
-
