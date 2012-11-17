@@ -1,7 +1,8 @@
 from PyQt4 import QtNetwork, QtCore, QtGui, uic
-import os, sys
+import sys
 from cbzparser import CBZDocument
 import ui
+
 
 class Main(QtGui.QMainWindow):
 
@@ -17,12 +18,11 @@ class Main(QtGui.QMainWindow):
         self.ui = self
         self.addAction(self.actionPageDown)
 
-
         for n in self.doc.tocentries:
             item = QtGui.QListWidgetItem(n)
             item.contents = n
             self.chapters.addItem(item)
-        
+
         self.cur_path = ''
 
         self.old_manager = self.view.page().networkAccessManager()
@@ -32,7 +32,7 @@ class Main(QtGui.QMainWindow):
         self.openPath(self.doc.tocentries[0])
         self.actionClose.triggered.connect(self.close)
         self.actionShow_Contents.toggled.connect(self.chapters.setVisible)
-        
+
     @QtCore.pyqtSlot("bool")
     def on_actionFull_Screen_toggled(self, b):
         if b:
@@ -41,7 +41,7 @@ class Main(QtGui.QMainWindow):
         else:
             self.showNormal()
             # self.actionShow_Contents.setChecked(True)
-        
+
     @QtCore.pyqtSlot()
     def on_actionPageDown_triggered(self):
         frame = self.view.page().mainFrame()
@@ -49,45 +49,45 @@ class Main(QtGui.QMainWindow):
             frame.scrollPosition().y():
                 self.on_actionNext_Chapter_triggered()
         else:
-            frame.scroll(0,self.view.height())
+            frame.scroll(0, self.view.height())
 
     @QtCore.pyqtSlot()
     def on_actionNext_Chapter_triggered(self):
         # Find where on the spine we are
         frame = self.view.page().mainFrame()
-        curTocEntry= unicode(frame.url().toString())[12:]
+        curTocEntry = unicode(frame.url().toString())[12:]
         try:
             curIdx = self.doc.tocentries.index(curTocEntry)
         except ValueError:
             curIdx = -1
         if curIdx < len(self.doc.tocentries):
-            self.chapters.setCurrentRow(curIdx+1)
-            self.openPath(self.doc.tocentries[curIdx+1])
-            
+            self.chapters.setCurrentRow(curIdx + 1)
+            self.openPath(self.doc.tocentries[curIdx + 1])
+
     @QtCore.pyqtSlot()
     def on_actionPrevious_Chapter_triggered(self):
         # Find where on the spine we are
         frame = self.view.page().mainFrame()
-        curTocEntry= unicode(frame.url().toString())[12:]
+        curTocEntry = unicode(frame.url().toString())[12:]
         try:
             curIdx = self.doc.tocentries.index(curTocEntry)
         except ValueError:
             curIdx = -1
         if curIdx > 0:
-            self.chapters.setCurrentRow(curIdx-1)
-            self.openPath(self.doc.tocentries[curIdx-1])
+            self.chapters.setCurrentRow(curIdx - 1)
+            self.openPath(self.doc.tocentries[curIdx - 1])
 
-            
     def on_chapters_itemClicked(self, item):
         self.openPath(item.contents)
 
     def openPath(self, path, fragment=None):
         print "Opening:", path
         path = QtCore.QUrl.fromPercentEncoding(path)
-        if self.cur_path <> path:
+        if self.cur_path != path:
             self.cur_path = path
-            self.view.page().mainFrame().setHtml(self.adjWidthTpl%path, QtCore.QUrl("epub://book/"+path))
-                
+            self.view.page().mainFrame().setHtml(
+                self.adjWidthTpl % path, QtCore.QUrl("epub://book/" + path))
+
     def javascript(self, string, typ=None):
         ans = self.view.page().mainFrame().evaluateJavaScript(string)
         if typ == 'int':
@@ -100,10 +100,11 @@ class Main(QtGui.QMainWindow):
         return ans
 
     def linkClicked(self, url):
-        if url.isRelative(): #They all should be
+        if url.isRelative():  # They all should be
             frag = unicode(url.fragment())
             path = unicode(url.path())
             self.openPath(path, frag)
+
 
 class DownloadReply(QtNetwork.QNetworkReply):
 
@@ -113,8 +114,10 @@ class DownloadReply(QtNetwork.QNetworkReply):
         self.content = self._w.doc.getData(unicode(url.path())[1:])
         self.offset = 0
 
-        self.setHeader(QtNetwork.QNetworkRequest.ContentTypeHeader, QtCore.QVariant("application/binary"))
-        self.setHeader(QtNetwork.QNetworkRequest.ContentLengthHeader, QtCore.QVariant(len(self.content)))
+        self.setHeader(QtNetwork.QNetworkRequest.ContentTypeHeader,
+                       QtCore.QVariant("application/binary"))
+        self.setHeader(QtNetwork.QNetworkRequest.ContentLengthHeader,
+                       QtCore.QVariant(len(self.content)))
         QtCore.QTimer.singleShot(0, self, QtCore.SIGNAL("readyRead()"))
         QtCore.QTimer.singleShot(0, self, QtCore.SIGNAL("finished()"))
         self.open(self.ReadOnly | self.Unbuffered)
@@ -136,6 +139,7 @@ class DownloadReply(QtNetwork.QNetworkReply):
             self.offset = end
             return data
 
+
 class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
 
     def __init__(self, old_manager, w):
@@ -149,18 +153,21 @@ class NetworkAccessManager(QtNetwork.QNetworkAccessManager):
 
     def createRequest(self, operation, request, data):
         if operation == self.GetOperation:
-            reply = DownloadReply(self, request.url(), self.GetOperation, self._w)
+            reply = DownloadReply(self, request.url(),
+                                  self.GetOperation, self._w)
             return reply
         else:
-            return QtNetwork.QNetworkAccessManager.createRequest(self, operation, request, data)
-
+            return QtNetwork.QNetworkAccessManager.createRequest(self,
+                                                                 operation,
+                                                                 request,
+                                                                 data)
 
 
 def main():
     # Again, this is boilerplate, it's going to be the same on
     # almost every app you write
     app = QtGui.QApplication(sys.argv)
-    window=Main(sys.argv[1])
+    window = Main(sys.argv[1])
     window.show()
     # It's exec_ because exec is a reserved word in Python
     sys.exit(app.exec_())

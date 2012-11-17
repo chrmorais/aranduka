@@ -1,12 +1,12 @@
-import os
-from PyQt4 import QtCore, QtGui, uic
-from utils import SCRIPTPATH
+from PyQt4 import QtGui, uic
 from pluginmgr import manager, isPluginEnabled
 import config
 import ui
 
+
 class PluginSettings(QtGui.QDialog):
-    def __init__(self, parent = None):
+
+    def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
 
         uifile = ui.path('pluginconf.ui')
@@ -20,7 +20,7 @@ class PluginSettings(QtGui.QDialog):
             w._widget = QtGui.QWidget()
             w.setWidget(w._widget)
             self.toolBox.addItem(w, category)
-            
+
             l = QtGui.QVBoxLayout()
             for plugin in manager.getPluginsOfCategory(category):
                 pw = PluginWidget(plugin, isPluginEnabled(plugin.name))
@@ -37,11 +37,13 @@ class PluginSettings(QtGui.QDialog):
         for pw in self.plugin_widgets:
             if pw.enabled.isChecked():
                 enabled_plugins.append(pw.plugin.name)
-        config.setValue("general","enabledPlugins", enabled_plugins)
+        config.setValue("general", "enabledPlugins", enabled_plugins)
         return QtGui.QDialog.accept(self)
 
+
 class PluginWidget(QtGui.QWidget):
-    def __init__(self, plugin, enabled, parent = None):
+
+    def __init__(self, plugin, enabled, parent=None):
         QtGui.QWidget.__init__(self, parent)
 
         uifile = ui.path('pluginwidget.ui')
@@ -53,4 +55,4 @@ class PluginWidget(QtGui.QWidget):
         if not plugin.plugin_object.configurable:
             self.configure.setVisible(False)
         if plugin.plugin_object.configurable:
-            self.configure.clicked.connect (self.plugin.plugin_object.configure)
+            self.configure.clicked.connect(self.plugin.plugin_object.configure)

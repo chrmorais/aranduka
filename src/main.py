@@ -1,14 +1,15 @@
 """The user interface for our app"""
 
-import os,sys
-import models, config, ui
+import sys
+import os
+import models
+import config
+import ui
 
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic, QtWebKit
-from progress import progress
 from book_editor import BookEditor
 from about_book import AboutBook
-import rc_icons
 from pluginmgr import manager, isPluginEnabled
 from pluginconf import PluginSettings
 from about import AboutDialog
@@ -16,37 +17,44 @@ from epubviewer import Main as EpubViewer
 from cbzviewer import Main as CbzViewer
 import downloader
 
+
 class SearchWidget(QtGui.QWidget):
+
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         uifile = ui.path('searchwidget.ui')
         uic.loadUi(uifile, self)
         self.ui = self
 
+
 class DeleteBook (QtGui.QDialog):
     """Dialog to confirm the removal of a book and its files"""
+
     def __init__(self, parent, title, *args):
         QtGui.QDialog.__init__(self, parent, *args)
         uifile = ui.path('delete_book.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.setWindowTitle(self.tr(u'Confirm book delete'))
-        self.label.setText(unicode(self.tr(u'Are you sure you want to delete the book "%s"?')) % title)
+        self.label.setText(
+                unicode(self.tr(u'Are you sure you want to delete '
+                                 'the book "%s"?')) % title)
         self.label.setWordWrap(True)
         self.checkBox.setText(self.tr(u'Delete book files'))
         self.checkBox.setChecked(True)
         self.setModal(True)
 
+
 class Main(QtGui.QMainWindow):
     updateShelves = QtCore.pyqtSignal()
     updateBook = QtCore.pyqtSignal(models.Book)
-    
+
     def __init__(self, app):
         QtGui.QMainWindow.__init__(self)
         uifile = ui.path('main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
-        self.viewers=[]
+        self.viewers = []
         self.app = app
         self.currentBook = None
 
@@ -54,10 +62,10 @@ class Main(QtGui.QMainWindow):
         wksettings = QtWebKit.QWebSettings.globalSettings()
         # FIXME: this doesn't work
         wksettings.setMaximumPagesInCache(0)
-        ssurl = QtCore.QUrl().fromLocalFile(os.path.join(os.path.dirname(__file__), 'master.css'))
+        ssurl = QtCore.QUrl().fromLocalFile(
+                        os.path.join(os.path.dirname(__file__), 'master.css'))
         wksettings.setUserStyleSheetUrl(ssurl)
-        
-        
+
         # View types toggles
         self.viewGroup = QtGui.QButtonGroup(self)
         self.viewGroup.setExclusive(True)
@@ -87,14 +95,16 @@ class Main(QtGui.QMainWindow):
         self.about.setLayout(self._layout2)
         self.about_book = AboutBook(None)
         self.about_book.closeButton.clicked.connect(self.viewModeChanged)
-        self.about_book.editButton.clicked.connect(self.on_actionEdit_Book_triggered)
-        self.about_book.about_web_view.linkClicked.connect(self.about_book_openLink)
+        self.about_book.editButton.clicked.connect(
+                                        self.on_actionEdit_Book_triggered)
+        self.about_book.about_web_view.linkClicked.connect(
+                                        self.about_book_openLink)
         self._layout2.addWidget(self.about_book)
-        
+
         print "Finished initializing main window"
 
         self.loadPlugins()
-        geom = config.getValue("general", "geometry",None)
+        geom = config.getValue("general", "geometry", None)
         if geom is not None:
             self.restoreGeometry(geom.decode('base64'))
 
@@ -105,12 +115,13 @@ class Main(QtGui.QMainWindow):
         self.progBar.setMaximumWidth(100)
         self.statusBar.addPermanentWidget(self.progBar)
         self.progBar.setVisible(False)
-        
+
     def closeEvent(self, event):
         if not self.book_editor.is_saved(self):
             event.ignore()
             return
-        config.setValue("general","geometry",str(self.saveGeometry()).encode('base64'))
+        config.setValue("general", "geometry",
+                        str(self.saveGeometry()).encode('base64'))
         QtGui.QMainWindow.closeEvent(self, event)
 
     def _loadPluginTranslations(self, manager):
@@ -121,10 +132,12 @@ class Main(QtGui.QMainWindow):
             if os.path.exists(path):
                 translator = QtCore.QTranslator()
                 if translator.load(locale, path):
-                    print "Installing translator for plugin %s: %s"%(plugin.name, locale)
+                    print "Installing translator for plugin %s: %s" % \
+                          (plugin.name, locale)
                     self.app.installTranslator(translator)
                 else:
-                    print "Failed to load translator for plugin %s"%plugin.name
+                    print "Failed to load translator for plugin %s" % \
+                          plugin.name
 
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
@@ -133,7 +146,9 @@ class Main(QtGui.QMainWindow):
         manager.collectPlugins()
         self._loadPluginTranslations(manager)
 
-        enabled_plugins = set(config.getValue("general","enabledPlugins", [None]))
+        enabled_plugins = set(config.getValue("general",
+                                              "enabledPlugins",
+                                              [None]))
         if enabled_plugins == set([None]):
             enabled_plugins = set()
             #Never configured... enable everything! (will change later ;-)
@@ -165,8 +180,9 @@ class Main(QtGui.QMainWindow):
             plugin.plugin_object.loadStarted.connect(self.loadStarted)
             plugin.plugin_object.loadFinished.connect(self.loadFinished)
             plugin.plugin_object.loadProgress.connect(self.loadProgress)
-            plugin.plugin_object.setStatusMessage.connect(self.setStatusMessage)
-            
+            plugin.plugin_object.setStatusMessage.connect(
+                                                        self.setStatusMessage)
+
             # Add to the Store list
             item = plugin.plugin_object.treeItem()
             item.handler = plugin.plugin_object
@@ -190,21 +206,23 @@ class Main(QtGui.QMainWindow):
     @QtCore.pyqtSlot()
     def loadStarted(self):
         self.progBar.setVisible(True)
+
     @QtCore.pyqtSlot()
     def loadFinished(self):
         self.progBar.setVisible(False)
         self.statusBar.clearMessage()
+
     @QtCore.pyqtSlot("int")
     def loadProgress(self, p):
         self.progBar.setVisible(True)
         self.progBar.setValue(p)
         if p == 100:
             self.statusBar.clearMessage()
+
     @QtCore.pyqtSlot("PyQt_PyObject")
     def setStatusMessage(self, msg):
         self.statusBar.showMessage(msg)
 
-            
     @QtCore.pyqtSlot()
     def on_actionPlugins_triggered(self):
         dlg = PluginSettings(self)
@@ -224,13 +242,14 @@ class Main(QtGui.QMainWindow):
             if isPluginEnabled(plugin.name):
                 for a in plugin.plugin_object.actions():
                     self.menuImport.addAction(a)
-        
+
     def viewModeChanged(self):
         item = self.treeWidget.currentItem()
-        if not item: return
+        if not item:
+            return
         self.on_treeWidget_itemClicked(item)
 
-    def on_treeWidget_currentItemChanged (self, new, old):
+    def on_treeWidget_currentItemChanged(self, new, old):
         self._lastTreeItem = old
 
     def on_treeWidget_itemClicked(self, item):
@@ -239,7 +258,7 @@ class Main(QtGui.QMainWindow):
             return
         try:
             self.searchWidget.doSearch.clicked.disconnect()
-        except TypeError: # Happens when there's no connections
+        except TypeError:  # Happens when there's no connections
             pass
         self.searchWidget.doSearch.clicked.connect(item.handler.doSearch)
         if self.gridMode.isChecked():
@@ -250,14 +269,16 @@ class Main(QtGui.QMainWindow):
     def on_actionFind_triggered(self):
         self.searchBar.show()
         self.searchWidget.text.setFocus(True)
-        
+
     def openCBZ(self, fname):
         try:
             viewer = CbzViewer(fname)
-        except ValueError, e:
-            QtGui.QMessageBox.critical(self, \
-                                      self.tr(u'Failed to open CBZ file'), \
-                                      self.tr(u'The document you are trying to open is not a valid CBZ file.'))
+        except ValueError:
+            QtGui.QMessageBox.critical(self,
+                                      self.tr(u'Failed to open CBZ file'),
+                                      self.tr(u'The document you are trying '
+                                               'to open is not a valid '
+                                               'CBZ file.'))
             return
         self.viewers.append(viewer)
         viewer.show()
@@ -265,21 +286,24 @@ class Main(QtGui.QMainWindow):
     def openEpub(self, fname):
         try:
             viewer = EpubViewer(fname)
-        except ValueError, e:
-            QtGui.QMessageBox.critical(self, \
-                                      self.tr(u'Failed to open ePub file'), \
-                                      self.tr(u'The document you are trying to open is not a valid ePub file.'))
+        except ValueError:
+            QtGui.QMessageBox.critical(self,
+                                      self.tr(u'Failed to open ePub file'),
+                                      self.tr(u'The document you are trying '
+                                               'to open is not a valid '
+                                               'ePub file.'))
             return
         self.viewers.append(viewer)
         viewer.show()
-        
-    def show_invalid_file (self, filename):
-        QtGui.QMessageBox.critical(self, \
-                                  self.tr(u'Invalid file'), \
-                                  unicode(self.tr(u'The file "%s" is empty or has an invalid format.')) % filename)
 
+    def show_invalid_file(self, filename):
+        QtGui.QMessageBox.critical(self,
+                                  self.tr(u'Invalid file'),
+                                  unicode(self.tr(u'The file "%s" is empty or '
+                                                   'has an invalid format.')) %
+                                                   filename)
 
-    def _check_file (self, filename):
+    def _check_file(self, filename):
         """Checks that a file exists"""
         # Issue 20: don't show files that are not there
         # FIXME: add more validation
@@ -293,12 +317,12 @@ class Main(QtGui.QMainWindow):
             return False
         return True
 
-    def _shorten_filename (self, filename, ext):
+    def _shorten_filename(self, filename, ext):
         """Returns an abbreviated version of a filename"""
         if len(filename) > 20:
             return '%s....%s' % (filename[:20], ext)
         return filename
-        
+
     def bookContextMenuRequested(self, book, point):
         """Given a book, and a place in the screen,
         shows a proper context menu for it"""
@@ -318,38 +342,41 @@ class Main(QtGui.QMainWindow):
             title = u'Open book'
             if not self._check_file(f.file_name):
                 filename = os.path.basename(f.file_name)
-                action = menu.addAction(title, lambda f = filename: self.show_invalid_file(f))
+                action = menu.addAction(title,
+                                lambda f=filename: self.show_invalid_file(f))
             else:
                 if f.file_name.endswith('epub'):
                     action = menu.addAction(title,
-                        lambda f = f: self.openEpub(f.file_name))
+                        lambda f=f: self.openEpub(f.file_name))
                 elif f.file_name.endswith('cbz'):
                     action = menu.addAction(title,
-                        lambda f = f: self.openCBZ(f.file_name))
+                        lambda f=f: self.openCBZ(f.file_name))
                 else:
                     url = QtCore.QUrl.fromLocalFile(f.file_name)
                     action = menu.addAction(title,
-                        lambda f = f: QtGui.QDesktopServices.openUrl(url))
-            
+                        lambda f=f: QtGui.QDesktopServices.openUrl(url))
+
         elif formats:
             for f in book.files:
                 action = None
                 filename = os.path.basename(f.file_name)
                 _, ext = os.path.splitext(filename)
-                title = u'In %s'%ext[1:].title() if formats.count(ext) == 1 else self._shorten_filename(filename, ext)
+                title = u'In %s' % ext[1:].title() if formats.count(ext) == 1 \
+                                    else self._shorten_filename(filename, ext)
                 if not self._check_file(f.file_name):
-                    action = open_menu.addAction(title, lambda f = filename: self.show_invalid_file(f))
+                    action = open_menu.addAction(title,
+                            lambda f=filename: self.show_invalid_file(f))
                 else:
                     if ext == '.epub':
                         action = open_menu.addAction(title,
-                            lambda f = f: self.openEpub(f.file_name))
+                            lambda f=f: self.openEpub(f.file_name))
                     elif ext == '.cbz':
                         action = open_menu.addAction(title,
-                            lambda f = f: self.openCBZ(f.file_name))
+                            lambda f=f: self.openCBZ(f.file_name))
                     else:
                         url = QtCore.QUrl.fromLocalFile(f.file_name)
                         action = open_menu.addAction(title,
-                            lambda f = f: QtGui.QDesktopServices.openUrl(url))
+                            lambda f=f: QtGui.QDesktopServices.openUrl(url))
                 action.setToolTip(filename)
             menu.addMenu(open_menu)
 
@@ -366,11 +393,12 @@ class Main(QtGui.QMainWindow):
             convert_menu = QtGui.QMenu("Convert")
             for plugin, formats in converters:
                 for f in formats:
-                    convert_menu.addAction(unicode(self.tr("%s via %s"))%(f, plugin.name),
-                        lambda f = f : plugin.convert(book, f))
+                    convert_menu.addAction(unicode(self.tr("%s via %s")) %
+                                            (f, plugin.name),
+                        lambda f=f: plugin.convert(book, f))
 
             menu.addMenu(convert_menu)
-            
+
         menu.exec_(point)
 
     @QtCore.pyqtSlot()
@@ -378,7 +406,8 @@ class Main(QtGui.QMainWindow):
         if not self.currentBook:
             return
         if self.currentBook.files:
-            url = QtCore.QUrl.fromLocalFile(self.currentBook.files[0].file_name)
+            url = QtCore.QUrl.fromLocalFile(
+                            self.currentBook.files[0].file_name)
             print "Opening:", url
             QtGui.QDesktopServices.openUrl(url)
 
@@ -387,7 +416,8 @@ class Main(QtGui.QMainWindow):
         if not self.currentBook:
             return
         self.book_editor.load_data(self.currentBook.id)
-        self.title.setText(unicode(self.tr(u'Editing properties of "%s"')) % self.currentBook.title)
+        self.title.setText(unicode(self.tr(u'Editing properties of "%s"')) %
+                                                    self.currentBook.title)
         self.stack.setCurrentIndex(1)
 
     @QtCore.pyqtSlot()
@@ -395,9 +425,9 @@ class Main(QtGui.QMainWindow):
         if not self.currentBook:
             return
         self.about_book.load_data(self.currentBook.id)
-        self.title.setText(unicode(self.tr(u'Properties of "%s"')) % self.currentBook.title)
+        self.title.setText(unicode(self.tr(u'Properties of "%s"')) %
+                                                    self.currentBook.title)
         self.stack.setCurrentIndex(4)
-
 
     @QtCore.pyqtSlot()
     def on_actionDelete_Book_triggered(self):
@@ -407,18 +437,19 @@ class Main(QtGui.QMainWindow):
         rsp = dlg.exec_()
         if rsp == dlg.Accepted:
             # Delete the book files
-            print "Deleting book: %s"%self.currentBook.title
+            print "Deleting book: %s" % self.currentBook.title
             self.currentBook.delete(dlg.checkBox.isChecked())
             models.session.commit()
             self.currentBook = None
             self.viewModeChanged()
-            
+
     def on_books_itemActivated(self, item):
         self.currentBook = item.book
         self.about_book.load_data(item.book.id)
-        self.title.setText(unicode(self.tr(u'Properties of "%s"')) % item.book.title)
+        self.title.setText(unicode(self.tr(u'Properties of "%s"')) %
+                                                            item.book.title)
         self.stack.setCurrentIndex(4)
-        
+
     def about_book_openLink(self, url):
         filename = unicode(url.toString().remove(u"open:").remove(u"del:"))
         if url.toString() == u"del:book":
@@ -426,10 +457,14 @@ class Main(QtGui.QMainWindow):
             # We need to merge with integrate branch to make this work!
             # self.on_actionDelete_Book_triggered()
         elif url.toString().startsWith(u"del:"):
-            answer = QtGui.QMessageBox.question(self, \
-                                                self.tr(u"Delete File"), \
-                                                unicode(self.tr(u"Are you sure you want to delete the file <b>%s</b>?")) % \
-                                                        filename,QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
+            answer = QtGui.QMessageBox.question(self,
+                                    self.tr(u"Delete File"),
+                                    unicode(self.tr(u"Are you sure you want "
+                                                     "to delete the file "
+                                                     "<b>%s</b>?")) %
+                                            filename,
+                                            QtGui.QMessageBox.No,
+                                            QtGui.QMessageBox.Yes)
             if answer == QtGui.QMessageBox.Yes:
                 f = models.File.get_by(file_name=filename)
                 if f:
@@ -437,7 +472,7 @@ class Main(QtGui.QMainWindow):
                     models.session.commit()
                     self.actionAbout_Book.trigger()
         if url.toString().startsWith(u"open:"):
-            if url.toString().toLower().endsWith(u".epub"): 
+            if url.toString().toLower().endsWith(u".epub"):
                 self.openEpub(filename)
             elif url.toString().toLower().endsWith(u".cbz"):
                 self.openEpub(filename)
@@ -448,35 +483,37 @@ class Main(QtGui.QMainWindow):
     def on_actionAbout_triggered(self):
         about = AboutDialog()
         about.exec_()
-    
-def get_translators ():
+
+
+def get_translators():
     translators = []
     locale = unicode(QtCore.QLocale.system().name())
     print "Loading translations for '%s'" % locale
-   
+
     # Qt's standard dialog's translations
     qtTranslator = QtCore.QTranslator()
-    b = qtTranslator.load(u'qt_%s' % locale, 
+    b = qtTranslator.load(u'qt_%s' % locale,
                       QtCore.QLibraryInfo.location(
                           QtCore.QLibraryInfo.TranslationsPath))
     if b:
-        print "Loaded QT translator for %s"%locale
+        print "Loaded QT translator for %s" % locale
     else:
-        print "Failed to load QT translator for %s"%locale
+        print "Failed to load QT translator for %s" % locale
     translators.append(qtTranslator)
 
     # Aranduka's translations
     translator = QtCore.QTranslator()
-    b = translator.load(u'aranduka_%s' % locale, 
+    b = translator.load(u'aranduka_%s' % locale,
                     os.path.join(os.path.abspath(
                             os.path.dirname(__file__)),
                     'translations'))
     if b:
-        print "Loaded Aranduka's translator for %s"%locale
+        print "Loaded Aranduka's translator for %s" % locale
     else:
-        print "Failed to load Aranduka's translator for %s"%locale
+        print "Failed to load Aranduka's translator for %s" % locale
     translators.append(translator)
     return translators
+
 
 def main():
     # Init the database before doing anything else
@@ -486,9 +523,9 @@ def main():
     # almost every app you write
     app = QtGui.QApplication(sys.argv)
     for translator in get_translators():
-        print "Installing translator %s"%str(translator)
+        print "Installing translator %s" % str(translator)
         app.installTranslator(translator)
-    window=Main(app)
+    window = Main(app)
     window.show()
     # It's exec_ because exec is a reserved word in Python
     sys.exit(app.exec_())
