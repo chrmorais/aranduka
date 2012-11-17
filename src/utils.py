@@ -4,10 +4,13 @@ import os
 import string
 import re
 
+
 def slugify(value):
-    "Converts to lowercase, removes non-alpha chars and converts spaces to hyphens"
+    """Converts to lowercase, removes non-alpha chars
+    and converts spaces to hyphens"""
     value = re.sub('[^\w\s-]', '', value).strip().lower()
     return re.sub('[-\s]+', '-', value)
+
 
 def validate_ISBN10(isbn):
     """
@@ -27,12 +30,14 @@ def validate_ISBN10(isbn):
         else:
             return False
 
+
 def validate_ISBN13(isbn):
     """
     Validate ISBN13 code. Returns the ISBN or False if is not valid.
     """
-    #El chequeo para ISBN de 13 digitos sale de:
-    #ref: http://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-13
+    # El chequeo para ISBN de 13 digitos sale de:
+    # ref:
+    # http://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-13
 
     isbn = isbn.replace("-", "").replace(" ", "")
 
@@ -41,13 +46,16 @@ def validate_ISBN13(isbn):
         total = 0
         for n in isbn[:-1]:
             total = total + i * int(n)
-            if i == 1: i = 3
-            else: i = 1
-        check = 10 - ( total % 10 )
+            if i == 1:
+                i = 3
+            else:
+                i = 1
+        check = 10 - (total % 10)
         if check == int(isbn[-1]):
             return isbn
         else:
             return False
+
 
 def validate_ISBN(isbn):
     """
@@ -56,15 +64,15 @@ def validate_ISBN(isbn):
     return validate_ISBN10(isbn) or validate_ISBN13(isbn)
 
 SCRIPTPATH = os.path.abspath(os.path.dirname(__file__))
-BASEPATH = os.path.expanduser(os.path.join('~','.aranduka'))
-BOOKPATH = os.path.join(BASEPATH,'ebooks')
-COVERPATH = os.path.join(BASEPATH,'covers')
-PLUGINPATH = [os.path.join(BASEPATH,'plugins'),
-    os.path.join(SCRIPTPATH,'plugins')]
+BASEPATH = os.path.expanduser(os.path.join('~', '.aranduka'))
+BOOKPATH = os.path.join(BASEPATH, 'ebooks')
+COVERPATH = os.path.join(BASEPATH, 'covers')
+PLUGINPATH = [os.path.join(BASEPATH, 'plugins'),
+              os.path.join(SCRIPTPATH, 'plugins')]
 
-for P in [SCRIPTPATH,BASEPATH,BOOKPATH,COVERPATH]+PLUGINPATH:
+for P in [SCRIPTPATH, BASEPATH, BOOKPATH, COVERPATH] + PLUGINPATH:
     if not os.path.isdir(P):
-        os.makedirs(P)
+        os.makedir(P)
 
-VALID_EXTENSIONS = ['epub','fb2','mobi','pdf','txt','lit','html','htm','cbz','cbr','cb7']
-
+VALID_EXTENSIONS = ['epub', 'fb2', 'mobi', 'pdf', 'txt',
+                    'lit', 'html', 'htm', 'cbz', 'cbr', 'cb7']
