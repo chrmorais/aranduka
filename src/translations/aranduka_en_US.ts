@@ -1,65 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="en_US">
+<!DOCTYPE TS><TS version="2.0">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="about.py" line="17"/>
-        <source>UNDER DEVELOPMENT</source>
-        <translation>UNDER DEVELOPMENT</translation>
-    </message>
-    <message>
-        <location filename="about.py" line="22"/>
         <source>About Aranduka</source>
-        <translation>About Aranduka</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="about.py" line="33"/>
+        <location filename="about.py" line="28"/>
         <source>Like Calibre but easy...</source>
-        <translation>Like Calibre but easy...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="about.py" line="34"/>
+        <location filename="about.py" line="29"/>
         <source>Version: %s</source>
-        <translation>Version: %s</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="about.py" line="35"/>
+        <location filename="about.py" line="31"/>
         <source>Website: &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</source>
-        <translation>Website: &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about.py" line="38"/>
+        <source>UNDER DEVELOPMENT</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>BookEditor</name>
     <message>
-        <location filename="book_editor.py" line="433"/>
-        <source>Error</source>
-        <translation>Error</translation>
-    </message>
-    <message>
-        <location filename="book_editor.py" line="386"/>
-        <source>Please check the ISBN, it seems wrong.</source>
-        <translation>Please check the ISBN, it seems wrong.</translation>
-    </message>
-    <message>
-        <location filename="book_editor.py" line="433"/>
-        <source>The ISBN seems to be valid, but no book was found with that number.</source>
-        <translation>The ISBN seems to be valid, but no book was found with that number.</translation>
-    </message>
-    <message>
-        <location filename="book_editor.py" line="218"/>
+        <location filename="book_editor.py" line="241"/>
         <source>Save changes?</source>
-        <translation>Save changes?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="219"/>
+        <location filename="book_editor.py" line="242"/>
         <source>This book has been modified.</source>
-        <translation>This book has been modified.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="220"/>
+        <location filename="book_editor.py" line="243"/>
         <source>Do you want to save your changes?</source>
-        <translation>Do you want to save your changes?</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="345"/>
+        <source>Add File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="471"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="419"/>
+        <source>Please check the ISBN, it seems wrong.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="471"/>
+        <source>The ISBN seems to be valid, but no book was found with that number.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DeleteBook</name>
+    <message>
+        <location filename="main.py" line="39"/>
+        <source>Confirm book delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="40"/>
+        <source>Are you sure you want to delete the book &quot;%s&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="44"/>
+        <source>Delete book files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -67,107 +89,97 @@
     <message>
         <location filename="identifier.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="delete_book.ui" line="42"/>
         <source>Text</source>
-        <translation>Text</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="delete_book.ui" line="55"/>
         <source>CheckBox</source>
-        <translation>CheckBox</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="guess.ui" line="20"/>
         <source>Which of the following data are you sure is correct?</source>
-        <translation>Which of the following data are you sure is correct?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="guess.ui" line="29"/>
         <source>Title:</source>
-        <translation>Title:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="guess.ui" line="39"/>
         <source>Author:</source>
-        <translation>Author:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="guess.ui" line="49"/>
         <source>ISBN:</source>
-        <translation>ISBN:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="guess.ui" line="61"/>
         <source>Candidates:</source>
-        <translation>Candidates:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="guess.ui" line="69"/>
         <source>about:blank</source>
-        <translation>about:blank</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="guess.ui" line="95"/>
         <source>Guess</source>
-        <translation>Guess</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="tag.ui" line="76"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="identifier.ui" line="25"/>
         <source>Identifier:</source>
-        <translation>Identifier:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="identifier.ui" line="35"/>
         <source>Value:</source>
-        <translation>Value:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="tag.ui" line="69"/>
         <source>Ok</source>
-        <translation>Ok</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="pluginconf.ui" line="14"/>
         <source>Configure Plugins</source>
-        <translation>Configure Plugins</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="pluginconf.ui" line="32"/>
         <source>Page 2</source>
-        <translation>Page 2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="pluginconf.ui" line="55"/>
         <source>&amp;Done</source>
-        <translation>&amp;Done</translation>
-    </message>
-    <message>
-        <location filename="pluginconf.ui" line="0"/>
-        <source>Add Shelf</source>
-        <translation type="obsolete">Add Shelf</translation>
-    </message>
-    <message>
-        <location filename="pluginconf.ui" line="0"/>
-        <source>Shelf:</source>
-        <translation type="obsolete">Shelf:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="tag.ui" line="14"/>
         <source>Add Tag</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="tag.ui" line="25"/>
         <source>Tag:</source>
-        <translation>Tag:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -175,153 +187,218 @@
     <message>
         <location filename="searchwidget.ui" line="14"/>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="about_book.ui" line="35"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Edit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="about_book.ui" line="42"/>
         <source>&amp;Close</source>
-        <translation>&amp;Close</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="60"/>
         <source>Book Details</source>
-        <translation>Book Details</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="66"/>
         <source>Title:</source>
-        <translation>Title:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="76"/>
         <source>Authors:</source>
-        <translation>Authors:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="86"/>
         <source>Identifiers:</source>
-        <translation>Identifiers:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="262"/>
         <source>+</source>
-        <translation>+</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="269"/>
         <source>-</source>
-        <translation>-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="112"/>
         <source>Edit</source>
-        <translation>Edit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="121"/>
         <source>Description:</source>
-        <translation>Description:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="138"/>
         <source>Cover:</source>
-        <translation>Cover:</translation>
-    </message>
-    <message>
-        <location filename="book_editor.ui" line="0"/>
-        <source>Shelves</source>
-        <translation type="obsolete">Shelves</translation>
-    </message>
-    <message>
-        <location filename="book_editor.ui" line="0"/>
-        <source>Shelves:</source>
-        <translation type="obsolete">Shelves:</translation>
-    </message>
-    <message>
-        <location filename="book_editor.ui" line="239"/>
-        <source>Files</source>
-        <translation>Files</translation>
-    </message>
-    <message>
-        <location filename="book_editor.ui" line="248"/>
-        <source>Files:</source>
-        <translation>Files:</translation>
-    </message>
-    <message>
-        <location filename="book_editor.ui" line="312"/>
-        <source>&amp;Guess</source>
-        <translation>&amp;Guess</translation>
-    </message>
-    <message>
-        <location filename="book_editor.ui" line="319"/>
-        <source>&amp;Cancel</source>
-        <translation>&amp;Cancel</translation>
-    </message>
-    <message>
-        <location filename="book_editor.ui" line="326"/>
-        <source>&amp;Save</source>
-        <translation>&amp;Save</translation>
-    </message>
-    <message>
-        <location filename="pluginwidget.ui" line="38"/>
-        <source>CheckBox</source>
-        <translation>CheckBox</translation>
-    </message>
-    <message>
-        <location filename="searchwidget.ui" line="23"/>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <location filename="searchwidget.ui" line="30"/>
-        <source>Esc</source>
-        <translation>Esc</translation>
-    </message>
-    <message>
-        <location filename="searchwidget.ui" line="40"/>
-        <source>&amp;Find:</source>
-        <translation>&amp;Find:</translation>
-    </message>
-    <message>
-        <location filename="searchwidget.ui" line="60"/>
-        <source>&amp;Next</source>
-        <translation>&amp;Next</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="176"/>
         <source>Tags</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="book_editor.ui" line="185"/>
         <source>Tags:</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.ui" line="239"/>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.ui" line="248"/>
+        <source>Files:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.ui" line="312"/>
+        <source>&amp;Guess</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.ui" line="319"/>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.ui" line="326"/>
+        <source>&amp;Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="pluginwidget.ui" line="38"/>
+        <source>CheckBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="searchwidget.ui" line="23"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="searchwidget.ui" line="30"/>
+        <source>Esc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="searchwidget.ui" line="40"/>
+        <source>&amp;Find:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="searchwidget.ui" line="60"/>
+        <source>&amp;Next</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>GuessDialog</name>
     <message>
-        <location filename="book_editor.py" line="44"/>
+        <location filename="book_editor.py" line="52"/>
         <source>Guess book information</source>
-        <translation>Guess book information</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="116"/>
+        <location filename="book_editor.py" line="104"/>
+        <source>Select something to search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="104"/>
+        <source>You need to select at least one field to search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="123"/>
+        <source>Failed to load data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="128"/>
         <source>Update</source>
-        <translation>Update</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="181"/>
+        <source>No matches found for the selected criteria</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Main</name>
     <message>
-        <location filename="main.py" line="358"/>
+        <location filename="main.py" line="269"/>
+        <source>Failed to open CBZ file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="269"/>
+        <source>The document you are trying to open is not a valid CBZ file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="282"/>
+        <source>Failed to open ePub file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="282"/>
+        <source>The document you are trying to open is not a valid ePub file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="292"/>
+        <source>Invalid file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="292"/>
+        <source>The file &quot;%s&quot; is empty or has an invalid format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="329"/>
+        <source>Open book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="388"/>
         <source>%s via %s</source>
-        <translation>%s via %s</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="411"/>
+        <source>Editing properties of &quot;%s&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="441"/>
+        <source>Properties of &quot;%s&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="452"/>
+        <source>Delete File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="main.py" line="452"/>
+        <source>Are you sure you want to delete the file &lt;b&gt;%s&lt;/b&gt;?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -329,182 +406,182 @@
     <message>
         <location filename="epubviewer.ui" line="14"/>
         <source>MainWindow</source>
-        <translation>MainWindow</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="37"/>
         <source>about:blank</source>
-        <translation>about:blank</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="314"/>
         <source>toolBar</source>
-        <translation>toolBar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="76"/>
         <source>PageDown</source>
-        <translation>PageDown</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="79"/>
         <source>Space</source>
-        <translation>Space</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="88"/>
         <source>Next Chapter</source>
-        <translation>Next Chapter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="91"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="100"/>
         <source>Previous Chapter</source>
-        <translation>Previous Chapter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="103"/>
         <source>Ctrl+P</source>
-        <translation>Ctrl+P</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="118"/>
         <source>Show Contents</source>
-        <translation>Show Contents</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="121"/>
         <source>F4</source>
-        <translation>F4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="136"/>
         <source>Close</source>
-        <translation>Close</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="148"/>
         <source>Full Screen</source>
-        <translation>Full Screen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="epubviewer.ui" line="151"/>
         <source>F11</source>
-        <translation>F11</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="14"/>
         <source>Aranduka</source>
-        <translation>Aranduka</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="88"/>
         <source>Ordered</source>
-        <translation>Ordered</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="128"/>
         <source>TextLabel</source>
-        <translation>TextLabel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="261"/>
         <source>Library</source>
-        <translation>Library</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="265"/>
         <source>Import</source>
-        <translation>Import</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="274"/>
         <source>Book</source>
-        <translation>Book</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="285"/>
         <source>Tools</source>
-        <translation>Tools</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="290"/>
         <source>Devices</source>
-        <translation>Devices</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="295"/>
         <source>Settings</source>
-        <translation>Settings</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="301"/>
         <source>Help</source>
-        <translation>Help</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="335"/>
         <source>Edit</source>
-        <translation>Edit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="340"/>
         <source>Delete</source>
-        <translation>Delete</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="345"/>
         <source>Open</source>
-        <translation>Open</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="350"/>
         <source>Find</source>
-        <translation>Find</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="353"/>
         <source>Ctrl+F</source>
-        <translation>Ctrl+F</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="358"/>
         <source>Plugins...</source>
-        <translation>Plugins...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="363"/>
         <source>About</source>
-        <translation>About</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="368"/>
         <source>About...</source>
-        <translation>About...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="373"/>
         <source>Dummy</source>
-        <translation>Dummy</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="378"/>
         <source>About Book</source>
-        <translation>About Book</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="387"/>
         <source>Quit</source>
-        <translation>Quit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="main.ui" line="390"/>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

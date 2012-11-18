@@ -4,27 +4,27 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="about.py" line="17"/>
+        <location filename="about.py" line="38"/>
         <source>UNDER DEVELOPMENT</source>
         <translation>EN DESARROLLO</translation>
     </message>
     <message>
-        <location filename="about.py" line="22"/>
+        <location filename="about.py" line="17"/>
         <source>About Aranduka</source>
         <translation>Acerca de Aranduka</translation>
     </message>
     <message>
-        <location filename="about.py" line="33"/>
+        <location filename="about.py" line="28"/>
         <source>Like Calibre but easy...</source>
         <translation>Como Calibre pero fácil...</translation>
     </message>
     <message>
-        <location filename="about.py" line="34"/>
+        <location filename="about.py" line="29"/>
         <source>Version: %s</source>
         <translation>Versión: %s</translation>
     </message>
     <message>
-        <location filename="about.py" line="35"/>
+        <location filename="about.py" line="31"/>
         <source>Website: &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</source>
         <translation>Sitio web: &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</translation>
     </message>
@@ -32,34 +32,57 @@
 <context>
     <name>BookEditor</name>
     <message>
-        <location filename="book_editor.py" line="433"/>
+        <location filename="book_editor.py" line="471"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="386"/>
+        <location filename="book_editor.py" line="419"/>
         <source>Please check the ISBN, it seems wrong.</source>
         <translation>Por favor verifique el ISBN, parece incorrecto.</translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="433"/>
+        <location filename="book_editor.py" line="471"/>
         <source>The ISBN seems to be valid, but no book was found with that number.</source>
         <translation>El ISBN parece válido, pero no se encontró ningun libro con ese número.</translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="218"/>
+        <location filename="book_editor.py" line="241"/>
         <source>Save changes?</source>
         <translation>¿Desea guardar los cambios?</translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="219"/>
+        <location filename="book_editor.py" line="242"/>
         <source>This book has been modified.</source>
         <translation>Este libro ha sido modificado.</translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="220"/>
+        <location filename="book_editor.py" line="243"/>
         <source>Do you want to save your changes?</source>
         <translation>¿Desea guardar los cambios?</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="345"/>
+        <source>Add File</source>
+        <translation>Agregar archivo</translation>
+    </message>
+</context>
+<context>
+    <name>DeleteBook</name>
+    <message>
+        <location filename="main.py" line="39"/>
+        <source>Confirm book delete</source>
+        <translation>Confirmar eliminación del libro</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="40"/>
+        <source>Are you sure you want to delete the book &quot;%s&quot;?</source>
+        <translation>¿Está seguro que desea liminar el libro &quot;%s&quot;?</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="44"/>
+        <source>Delete book files</source>
+        <translation>Eliminar archivos del libro</translation>
     </message>
 </context>
 <context>
@@ -82,7 +105,7 @@
     <message>
         <location filename="guess.ui" line="20"/>
         <source>Which of the following data are you sure is correct?</source>
-        <translation>Cuál de los siguientes datos está seguro que es correcto?</translation>
+        <translation>¿Cuál de los siguientes datos está seguro que es correcto?</translation>
     </message>
     <message>
         <location filename="guess.ui" line="29"/>
@@ -306,22 +329,97 @@
 <context>
     <name>GuessDialog</name>
     <message>
-        <location filename="book_editor.py" line="44"/>
+        <location filename="book_editor.py" line="52"/>
         <source>Guess book information</source>
         <translation>Adivinar información del libro</translation>
     </message>
     <message>
-        <location filename="book_editor.py" line="116"/>
+        <location filename="book_editor.py" line="128"/>
         <source>Update</source>
         <translation>Actualizar</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="104"/>
+        <source>Select something to search</source>
+        <translation>Seleccione algo para buscar</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="104"/>
+        <source>You need to select at least one field to search</source>
+        <translation>Debe seleccionar al menos un campo para buscar</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="123"/>
+        <source>Failed to load data</source>
+        <translation>No se pudo cargar la información</translation>
+    </message>
+    <message>
+        <location filename="book_editor.py" line="181"/>
+        <source>No matches found for the selected criteria</source>
+        <translation>No se encontraron coincidencias para el criterio seleccionado</translation>
     </message>
 </context>
 <context>
     <name>Main</name>
     <message>
-        <location filename="main.py" line="358"/>
+        <location filename="main.py" line="388"/>
         <source>%s via %s</source>
         <translation>%s via %s</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="269"/>
+        <source>Failed to open CBZ file</source>
+        <translation>No se pudo abrir el archivo CBZ</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="269"/>
+        <source>The document you are trying to open is not a valid CBZ file.</source>
+        <translation>El documento que está tratando de abrir no es un archivo CBZ válido.</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="282"/>
+        <source>Failed to open ePub file</source>
+        <translation>No se puedo abrir el archivo ePub</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="282"/>
+        <source>The document you are trying to open is not a valid ePub file.</source>
+        <translation>El documento que está tratando de abrir no es un archivo ePub válido.</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="292"/>
+        <source>Invalid file</source>
+        <translation>Archivo no válido</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="292"/>
+        <source>The file &quot;%s&quot; is empty or has an invalid format.</source>
+        <translation>El archivo &quot;%s&quot; está vacío o tiene un formato no válido.</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="329"/>
+        <source>Open book</source>
+        <translation>Abrir libro</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="411"/>
+        <source>Editing properties of &quot;%s&quot;</source>
+        <translation>Editando propiedades de &quot;%s&quot;</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="441"/>
+        <source>Properties of &quot;%s&quot;</source>
+        <translation>Propiedades de &quot;%s&quot;</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="452"/>
+        <source>Delete File</source>
+        <translation>Eliminar archivo</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="452"/>
+        <source>Are you sure you want to delete the file &lt;b&gt;%s&lt;/b&gt;?</source>
+        <translation>¿Está seguro que desea eliminar el archivo &lt;b&gt;%s&lt;/b&gt;?</translation>
     </message>
 </context>
 <context>
