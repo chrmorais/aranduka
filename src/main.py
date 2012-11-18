@@ -50,13 +50,12 @@ class Main(QtGui.QMainWindow):
     updateShelves = QtCore.pyqtSignal()
     updateBook = QtCore.pyqtSignal(models.Book)
 
-    def __init__(self, app):
+    def __init__(self):
         QtGui.QMainWindow.__init__(self)
         uifile = ui.path('main.ui')
         uic.loadUi(uifile, self)
         self.ui = self
         self.viewers = []
-        self.app = app
         self.currentBook = None
 
         # Set default stylesheet for all web views in the app
@@ -126,10 +125,11 @@ class Main(QtGui.QMainWindow):
         QtGui.QMainWindow.closeEvent(self, event)
 
     def _loadPluginTranslations(self, manager):
+        app = QtGui.QApplication.instance()
         for plugin in manager.getAllPlugins():
             translator = i18n.get_plugin_translator(plugin.name, plugin.path)
             if translator:
-                self.app.installTranslator(translator)
+                app.installTranslator(translator)
 
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
@@ -487,7 +487,7 @@ def main():
     for translator in i18n.get_translators():
         print "Installing translator %s" % str(translator)
         app.installTranslator(translator)
-    window = Main(app)
+    window = Main()
     window.show()
     # It's exec_ because exec is a reserved word in Python
     sys.exit(app.exec_())

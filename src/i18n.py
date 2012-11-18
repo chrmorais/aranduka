@@ -14,7 +14,7 @@ def _get_translator(locale, path, prefix=None):
         return None
 
     qtTranslator = QtCore.QTranslator()
-    name = u'%s_%s' % (prefix, locale) if path is not None else locale
+    name = u'%s_%s' % (prefix, locale) if prefix is not None else locale
     tname = prefix.capitalize() if prefix is not None else 'Plugin'
     if qtTranslator.load(name, path):
         print "Loaded %s translator for %s" % (tname, locale)
