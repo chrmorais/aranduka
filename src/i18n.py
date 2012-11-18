@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-
 import os.path
 import config
 
 from PyQt4 import QtCore
 
+# Possible names of folders for translation files
 __folder_names = ['translations', 'languages', 'lang']
 
 
@@ -26,7 +26,8 @@ def _get_translator(locale, path, prefix=None):
 
 
 def _get_locale():
-    """Retrieves the configured locale"""
+    """Retrieves the configured locale. It attempts to get it from
+    the configuration file. The default is the system's locale."""
     locale = config.getValue('i18n', 'locale', 'system')
     if locale == 'system':
         return unicode(QtCore.QLocale.system().name())
