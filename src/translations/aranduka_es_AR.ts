@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="es_AR" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="es_AR">
+<context>
+    <name>AboutBook</name>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>Tags for this book</source>
+        <translation>Etiquetas de este libro</translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>Files for this book</source>
+        <translation>Archivos de este libro</translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>Quotes in this book</source>
+        <translation>Citas en este libro</translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>open</source>
+        <translation>abrir</translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>delete</source>
+        <translation>eliminar</translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>Delete Book</source>
+        <translation>Eliminar Libro</translation>
+    </message>
+</context>
 <context>
     <name>AboutDialog</name>
     <message>

@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="2.0">
 <context>
+    <name>AboutBook</name>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>Tags for this book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>Files for this book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>Quotes in this book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>Delete Book</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AboutDialog</name>
     <message>
         <location filename="about.py" line="17"/>

@@ -15,22 +15,22 @@
                     <li>${identifier[0]}$: ${identifier[1]}$</li>
                 ${:end-for}$
                 </ul>
-                <h3>Tags for this book</h3>
+                <h3>${msg_tags}$</h3>
                 <ul>
                 ${for tag in tags:}$
                     <li>${tag}$</li>
                 ${:end-for}$
                 </ul>
-                <h3>Files for this book</h3>
+                <h3>${msg_files}$</h3>
                 <ul>
                 ${for fname in files:}$
-                    <li>${fname}$ | <a href="open:${fname}$">open</a> | <a href="del:${fname}$">delete</a> </li>
+                    <li>${fname}$ | <a href="open:${fname}$">${msg_open}$</a> | <a href="del:${fname}$">${msg_delete}$</a> </li>
                 ${:end-for}$
-                <li><a href="del:book">Delete Book</a></li>
+                <li><a href="del:book">${msg_delete_book}$</a></li>
                 </ul>
                 
                 <!--
-                <h3>Quotes in this Book</h3>
+                <h3>${msg_quotes}$</h3>
                 <ul>
                 ${for quote in quotes:}$
                     <li>&quot;${quote}$&quot;</li>

@@ -76,6 +76,12 @@ class AboutBook(QtGui.QWidget):
             tags=[tag.name for tag in self.book.tags],
             thumb=QtCore.QUrl.fromLocalFile(self.book.cover()).toString(),
             quotes=['Sample Quote #1', 'Sample Quote #2'],
+            msg_tags=self.tr('Tags for this book'),
+            msg_files=self.tr('Files for this book'),
+            msg_quotes=self.tr('Quotes in this book'),
+            msg_open=self.tr('open'),
+            msg_delete=self.tr('delete'),
+            msg_delete_book=self.tr('Delete Book')
             )
         print "Rendered in: %s seconds" % (time.time() - t1)
         self.about_web_view.page().mainFrame().setHtml(html)
