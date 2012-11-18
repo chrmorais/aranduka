@@ -5,6 +5,7 @@ import os
 import models
 import config
 import ui
+import i18n
 
 # Import Qt modules
 from PyQt4 import QtCore, QtGui, uic, QtWebKit
@@ -125,19 +126,10 @@ class Main(QtGui.QMainWindow):
         QtGui.QMainWindow.closeEvent(self, event)
 
     def _loadPluginTranslations(self, manager):
-        locale = unicode(QtCore.QLocale.system().name())
-        print "Loading plugin translations for '%s'" % locale
         for plugin in manager.getAllPlugins():
-            path = os.path.join(plugin.path, 'translations')
-            if os.path.exists(path):
-                translator = QtCore.QTranslator()
-                if translator.load(locale, path):
-                    print "Installing translator for plugin %s: %s" % \
-                          (plugin.name, locale)
-                    self.app.installTranslator(translator)
-                else:
-                    print "Failed to load translator for plugin %s" % \
-                          plugin.name
+            translator = i18n.get_plugin_translator(plugin.name, plugin.path)
+            if translator:
+                self.app.installTranslator(translator)
 
     def loadPlugins(self):
         # FIXME: separate by category so you can load just one
@@ -485,36 +477,6 @@ class Main(QtGui.QMainWindow):
         about.exec_()
 
 
-def get_translators():
-    translators = []
-    locale = unicode(QtCore.QLocale.system().name())
-    print "Loading translations for '%s'" % locale
-
-    # Qt's standard dialog's translations
-    qtTranslator = QtCore.QTranslator()
-    b = qtTranslator.load(u'qt_%s' % locale,
-                      QtCore.QLibraryInfo.location(
-                          QtCore.QLibraryInfo.TranslationsPath))
-    if b:
-        print "Loaded QT translator for %s" % locale
-    else:
-        print "Failed to load QT translator for %s" % locale
-    translators.append(qtTranslator)
-
-    # Aranduka's translations
-    translator = QtCore.QTranslator()
-    b = translator.load(u'aranduka_%s' % locale,
-                    os.path.join(os.path.abspath(
-                            os.path.dirname(__file__)),
-                    'translations'))
-    if b:
-        print "Loaded Aranduka's translator for %s" % locale
-    else:
-        print "Failed to load Aranduka's translator for %s" % locale
-    translators.append(translator)
-    return translators
-
-
 def main():
     # Init the database before doing anything else
     models.initDB()
@@ -522,7 +484,7 @@ def main():
     # Again, this is boilerplate, it's going to be the same on
     # almost every app you write
     app = QtGui.QApplication(sys.argv)
-    for translator in get_translators():
+    for translator in i18n.get_translators():
         print "Installing translator %s" % str(translator)
         app.installTranslator(translator)
     window = Main(app)
