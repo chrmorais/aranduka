@@ -18,11 +18,11 @@ def _get_translator(locale, path, prefix=None):
     tname = prefix.capitalize() if prefix is not None else 'Plugin'
     if qtTranslator.load(name, path):
         print "Loaded %s translator for %s" % (tname, locale)
+        return qtTranslator
     else:
         print "Failed to load %s translator for %s" % \
               (tname, locale)
         return None
-    return qtTranslator
 
 
 def _get_locale():

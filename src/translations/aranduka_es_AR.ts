@@ -33,6 +33,11 @@
         <source>Delete Book</source>
         <translation>Eliminar Libro</translation>
     </message>
+    <message>
+        <location filename="about_book.py" line="70"/>
+        <source>by</source>
+        <translation>de</translation>
+    </message>
 </context>
 <context>
     <name>AboutDialog</name>
