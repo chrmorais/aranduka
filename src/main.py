@@ -485,7 +485,7 @@ def main():
     # almost every app you write
     app = QtGui.QApplication(sys.argv)
     for translator in i18n.get_translators():
-        print "Installing translator %s" % str(translator)
+        print "Installing translator %s" % translator
         app.installTranslator(translator)
     window = Main()
     window.show()
