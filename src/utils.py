@@ -72,7 +72,7 @@ PLUGINPATH = [os.path.join(BASEPATH, 'plugins'),
 
 for P in [SCRIPTPATH, BASEPATH, BOOKPATH, COVERPATH] + PLUGINPATH:
     if not os.path.isdir(P):
-        os.makedir(P)
+        os.makedirs(P)
 
 VALID_EXTENSIONS = ['epub', 'fb2', 'mobi', 'pdf', 'txt',
                     'lit', 'html', 'htm', 'cbz', 'cbr', 'cb7']
